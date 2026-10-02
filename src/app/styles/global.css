@@ -1,15 +1,28 @@
 /* ─── CSS Custom Properties ─────────────────────────────── */
 :root {
   /* Colors */
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
-  --color-bg: #fff;
-  --color-bg-secondary: #f9fafb;
-  --color-text: #111827;
+  --color-bg: #F9FAF7;
+  --color-bg-secondary: #FFF;
+  --color-bg-overlay: rgb(142 142 142 / 60%);
+  --color-text: #253017;
   --color-text-secondary: #6b7280;
-  --color-border: #e5e7eb;
-  --color-error: #ef4444;
-  --color-success: #22c55e;
+  --color-text-placeholder: #69735D;
+  --color-primary: #ABD27A;
+  --color-primary-light: #DEEBC5;
+  --color-link: #508826;
+  --color-border: #253017;
+  --color-border-accent: #ABD27A; 
+  --color-horizon-line: #E4E8DF;
+  --color-error: #BF3920;
+
+  /* Skills */
+  --color-skill-business: #EEE7F7;
+  --color-skill-language: #EBE5C5;
+  --color-skill-house: #F7EBE5;
+  --color-skill-creation: #F7E7F2;
+  --color-skill-education: #E7F2F6;
+  --color-skill-health: #E9F7E7;
+  --color-skill-more: #E8ECF7;
 
   /* Spacing */
   --space-xs: 4px;
@@ -32,9 +45,6 @@
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
-  --shadow-md: 0 4px 6px rgb(0 0 0 / 7%);
 }
 
 /* Тёмная тема — добавить поддержку через data-theme="dark" */
