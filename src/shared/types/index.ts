@@ -31,13 +31,14 @@ export interface User {
   cityId: string
   about: string
   learnSubcategoryIds: string[] // «Хочет научиться»
+  teachSkillId: string // «Может научить», id навыка из skills.json
   likesCount: number // сортировка «Популярное»
   createdAt: string // ISO, дата создания аккаунта, сортировка «Новое»
 }
 
 // ─── Skill ───────────────────────────────────────────────
 // Навык, которому пользователь может научить. У каждого пользователя ровно один,
-// связь через authorId. «Хочет научиться» хранится в User.learnSubcategoryIds.
+// связь через User.teachSkillId. «Хочет научиться» хранится в User.learnSubcategoryIds.
 export interface Skill {
   id: string
   title: string
@@ -45,7 +46,6 @@ export interface Skill {
   categoryId: string
   subcategoryId: string
   images: string[]
-  authorId: string
   createdAt: string // ISO
 }
 
