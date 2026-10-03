@@ -3,8 +3,8 @@
     "id": "business",
     "name": "Бизнес и карьера",
     "subcategories": [
-      { "id": "marketing", "name": "Маркетинг и реклама", "categoryId": "business" },
       { "id": "team-management", "name": "Управление командой", "categoryId": "business" },
+      { "id": "marketing", "name": "Маркетинг и реклама", "categoryId": "business" },
       { "id": "sales", "name": "Продажи и переговоры", "categoryId": "business" },
       { "id": "personal-brand", "name": "Личный бренд", "categoryId": "business" },
       { "id": "resume-interview", "name": "Резюме и собеседование", "categoryId": "business" },
@@ -29,7 +29,7 @@
   },
   {
     "id": "languages",
-    "name": "Языки",
+    "name": "Иностранные языки",
     "subcategories": [
       { "id": "english", "name": "Английский", "categoryId": "languages" },
       { "id": "french", "name": "Французский", "categoryId": "languages" },
@@ -57,6 +57,19 @@
     ]
   },
   {
+    "id": "health",
+    "name": "Здоровье и лайфстайл",
+    "subcategories": [
+      { "id": "yoga-meditation", "name": "Йога и медитация", "categoryId": "health" },
+      { "id": "nutrition", "name": "Питание и ЗОЖ", "categoryId": "health" },
+      { "id": "mental-health", "name": "Ментальное здоровье", "categoryId": "health" },
+      { "id": "mindfulness", "name": "Осознанность", "categoryId": "health" },
+      { "id": "fitness", "name": "Физические тренировки", "categoryId": "health" },
+      { "id": "sleep-recovery", "name": "Сон и восстановление", "categoryId": "health" },
+      { "id": "work-life-balance", "name": "Баланс жизни и работы", "categoryId": "health" }
+    ]
+  },
+  {
     "id": "home",
     "name": "Дом и уют",
     "subcategories": [
@@ -66,19 +79,6 @@
       { "id": "houseplants", "name": "Домашние растения", "categoryId": "home" },
       { "id": "renovation", "name": "Ремонт", "categoryId": "home" },
       { "id": "storage", "name": "Хранение вещей", "categoryId": "home" }
-    ]
-  },
-  {
-    "id": "health",
-    "name": "Здоровье и благополучие",
-    "subcategories": [
-      { "id": "yoga-meditation", "name": "Йога и медитация", "categoryId": "health" },
-      { "id": "nutrition", "name": "Питание и ЗОЖ", "categoryId": "health" },
-      { "id": "mental-health", "name": "Ментальное здоровье", "categoryId": "health" },
-      { "id": "mindfulness", "name": "Осознанность", "categoryId": "health" },
-      { "id": "fitness", "name": "Физические тренировки", "categoryId": "health" },
-      { "id": "sleep-recovery", "name": "Сон и восстановление", "categoryId": "health" },
-      { "id": "work-life-balance", "name": "Баланс жизни и работы", "categoryId": "health" }
     ]
   }
 ]
