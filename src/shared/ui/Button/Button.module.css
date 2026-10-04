@@ -1,4 +1,4 @@
-.button {
+.iconButton {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -24,7 +24,7 @@
 
   &[disabled] {
     background-color: var(--color-horizon-line);
-    color: var(--color-text-placeholder);
+    color: var(--color-text-secondary);
     cursor: not-allowed;
   }
 }
@@ -34,7 +34,7 @@
   background-color: var(--color-bg-secondary);
 
   &:hover {
-    color: var(--color-text-placeholder);
+    color: var(--color-text-secondary);
     border-color: var(--color-primary-light);
   }
 
@@ -45,7 +45,7 @@
 
   &[disabled] {
     border-color: var(--color-horizon-line);
-    color: var(--color-text-disabled);
+    color: var(--color-disabled-text);
     cursor: not-allowed;
   }
 }
@@ -64,7 +64,7 @@
 
   &[disabled] {
     border-color: var(--color-horizon-line);
-    color: var(--color-text-disabled);
+    color: var(--color-disabled-text);
     cursor: not-allowed;
     background-color: var(--color-bg-secondary);
   }

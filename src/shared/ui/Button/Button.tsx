@@ -30,7 +30,7 @@ export const Button: FC<TButtonProps> = ({
       className={`${styles.button}
               ${styles[`variant_${variant}`]}
               ${className}
-              ${fullWidth ? styles.fullWidth : ''}`}
+              ${fullWidth && styles.fullWidth}`}
       onClick={onClick}
       type={type}
     >
