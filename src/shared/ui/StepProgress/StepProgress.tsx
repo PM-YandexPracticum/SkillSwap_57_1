@@ -7,7 +7,7 @@ type TStepsProgress = {
 
 export const StepProgress: FC<TStepsProgress> = ({ currentStep }) => (
   <div className={styles.container}>
-    <span>Шаг {currentStep} из 3</span>
+    <h2>Шаг {currentStep} из 3</h2>
 
     <div className={styles.dots}>
       {Array.from({ length: 3 }, (_, index) => (
