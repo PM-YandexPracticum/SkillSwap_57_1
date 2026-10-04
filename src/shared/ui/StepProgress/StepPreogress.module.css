@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.text {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: bold;
+}
+
+.dots {
+  display: flex;
+  gap: 16px;
+}
+
+.dot {
+  width: 60px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--color-horizon-line);
+}
+
+.dot.active {
+  background-color: var(--color-primary);
+}
