@@ -1,0 +1,40 @@
+.iconButton {
+  width: 24px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  display: flex;
+
+  &:hover {
+    color: var(--color-link);
+  }
+
+  &:active {
+    color: var(--color-primary);
+  }
+}
+
+.iconContainer {
+  width: 100%;
+}
+
+.iconButton.active {
+  color: var(--color-primary);
+
+  &:hover {
+    color: var(--color-link);
+  }
+
+  &:active {
+    color: var(--color-text);
+  }
+}
+
+.badge {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  background-color: var(--color-alarm);
+}
