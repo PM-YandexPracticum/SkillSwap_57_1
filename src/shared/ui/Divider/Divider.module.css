@@ -2,7 +2,7 @@
   width: 100%;
   height: 1px;
   margin: 10px 0;
-  background: var(--color-border-light, #E4E8DF);
+  background: var(--color-horizon-line);
   flex-shrink: 0;
 }
 
@@ -18,7 +18,7 @@
 .line {
   flex: 1;
   height: 1px;
-  background: var(--color-border-light, #E4E8DF);
+  background: var(--color-horizon-line);
 }
 
 .text {

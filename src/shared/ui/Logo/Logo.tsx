@@ -1,4 +1,4 @@
-import logo from '../../../shared/assets/logo/logo.svg'
+import logo from '@/shared/assets/logo/logo.svg'
 
 /*
 Применение в коде:
@@ -6,5 +6,5 @@ import logo from '../../../shared/assets/logo/logo.svg'
 */
 
 export const Logo = () => {
-  return <img src={logo} alt='Logo' width='159px' height='40px'/>
+  return <img src={logo} alt="SkillSwap" width="159px" height="40px" />
 }

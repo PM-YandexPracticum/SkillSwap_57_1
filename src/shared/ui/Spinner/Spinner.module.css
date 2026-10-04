@@ -3,7 +3,7 @@
   padding: 8px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: var(--color-primary, #ABD27A);
+  background: var(--color-primary);
 
   --loader-mask:
     conic-gradient(#0000 10%,#000),
