@@ -6,6 +6,7 @@
   --color-bg-overlay: rgb(142 142 142 / 60%);
   --color-text: #253017;
   --color-text-secondary: #69735D;
+  --color-text-disabled: #9CA197;
   --color-primary: #ABD27A;
   --color-primary-light: #DEEBC5;
   --color-link: #508826;
@@ -13,7 +14,6 @@
   --color-border-accent: #ABD27A;
   --color-horizon-line: #E4E8DF;
   --color-error: #BF3920;
-  --color-disabled-text: #9CA197;
   --color-alarm: #E0796E;
   --color-toggle: #B2B9A9;
 
