@@ -1,1 +1,491 @@
-[]
+[
+  {
+    "id": "s1",
+    "title": "Игра на барабанах",
+    "description": "Играю на барабанах 10 лет. Научу основам техники и любимым ритмам.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-1.jpg",
+      "/images/skills/s1-2.jpg",
+      "/images/skills/s1-3.jpg",
+      "/images/skills/s1-4.jpg",
+      "/images/skills/s1-5.jpg",
+      "/images/skills/s1-6.jpg"
+    ],
+    "createdAt": "2025-08-02T10:15:00.000Z"
+  },
+  {
+    "id": "s2",
+    "title": "Английский язык",
+    "description": "Преподаю английский начинающим и тем, кто хочет наконец заговорить. Разбираем живые диалоги и слова из повседневной жизни.",
+    "categoryId": "languages",
+    "subcategoryId": "english",
+    "images": [
+      "/images/skills/s11-1.jpg",
+      "/images/skills/s11-2.jpg"
+    ],
+    "createdAt": "2026-05-30T12:28:00.000Z"
+  },
+  {
+    "id": "s3",
+    "title": "Бизнес-план",
+    "description": "Помогу составить бизнес-план с нуля: от идеи и анализа рынка до простой финансовой модели.",
+    "categoryId": "business",
+    "subcategoryId": "entrepreneurship",
+    "images": ["/images/skills/s10-1.jpg"],
+    "createdAt": "2026-05-19T00:03:00.000Z"
+  },
+  {
+    "id": "s4",
+    "title": "Английский язык",
+    "description": "Помогаю подтянуть разговорный английский и избавиться от страха говорить. Занимаемся в формате беседы.",
+    "categoryId": "languages",
+    "subcategoryId": "english",
+    "images": [
+      "/images/skills/s11-1.jpg",
+      "/images/skills/s11-2.jpg"
+    ],
+    "createdAt": "2025-08-17T17:57:00.000Z"
+  },
+  {
+    "id": "s5",
+    "title": "Английский язык",
+    "description": "Подтяну грамматику и расширю словарный запас. Подходит для подготовки к собеседованию.",
+    "categoryId": "languages",
+    "subcategoryId": "english",
+    "images": [
+      "/images/skills/s11-1.jpg",
+      "/images/skills/s11-2.jpg"
+    ],
+    "createdAt": "2026-03-12T11:48:00.000Z"
+  },
+  {
+    "id": "s6",
+    "title": "Английский язык",
+    "description": "Готовлю к поездкам и собеседованиям: разговорные фразы, деловая лексика, письмо.",
+    "categoryId": "languages",
+    "subcategoryId": "english",
+    "images": [
+      "/images/skills/s11-1.jpg",
+      "/images/skills/s11-2.jpg"
+    ],
+    "createdAt": "2026-06-17T18:30:00.000Z"
+  },
+  {
+    "id": "s7",
+    "title": "Игра на барабанах",
+    "description": "Играю на барабанах пять лет. Помогу поставить руки и сыграть первую песню.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-1.jpg",
+      "/images/skills/s1-2.jpg"
+    ],
+    "createdAt": "2025-07-09T14:53:00.000Z"
+  },
+  {
+    "id": "s8",
+    "title": "Игра на барабанах",
+    "description": "Играю в группе и учу новичков. Разберём постановку, ритмические рисунки и работу с метрономом.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-3.jpg",
+      "/images/skills/s1-4.jpg"
+    ],
+    "createdAt": "2026-09-02T04:25:00.000Z"
+  },
+  {
+    "id": "s9",
+    "title": "Игра на барабанах",
+    "description": "Играю рок и джаз. Научу чувствовать ритм и импровизировать на установке.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-5.jpg",
+      "/images/skills/s1-6.jpg"
+    ],
+    "createdAt": "2026-03-10T01:53:00.000Z"
+  },
+  {
+    "id": "s10",
+    "title": "Игра на барабанах",
+    "description": "Занимаюсь на ударных с юности. Покажу базовые ритмы и технику рук.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-1.jpg",
+      "/images/skills/s1-2.jpg"
+    ],
+    "createdAt": "2026-08-18T14:05:00.000Z"
+  },
+  {
+    "id": "s11",
+    "title": "Игра на барабанах",
+    "description": "Играю на акустической и электронной установке. Научу играть в группе и записывать партии.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-3.jpg",
+      "/images/skills/s1-4.jpg"
+    ],
+    "createdAt": "2026-09-08T04:14:00.000Z"
+  },
+  {
+    "id": "s12",
+    "title": "Игра на барабанах",
+    "description": "Люблю ритмичную музыку и учу новичков. Начнём с простых рисунков и разберём любимую песню.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-5.jpg",
+      "/images/skills/s1-6.jpg"
+    ],
+    "createdAt": "2025-12-29T07:30:00.000Z"
+  },
+  {
+    "id": "s13",
+    "title": "Игра на барабанах",
+    "description": "Играю на барабанах и перкуссии. Расскажу про постановку и работу с метрономом.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-1.jpg",
+      "/images/skills/s1-2.jpg"
+    ],
+    "createdAt": "2025-09-27T12:56:00.000Z"
+  },
+  {
+    "id": "s14",
+    "title": "Игра на барабанах",
+    "description": "Помогу разобраться с установкой и сыграть первую партию.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-3.jpg",
+      "/images/skills/s1-4.jpg"
+    ],
+    "createdAt": "2026-03-02T07:16:00.000Z"
+  },
+  {
+    "id": "s15",
+    "title": "Игра на барабанах",
+    "description": "Играю на барабанах три года. Научу держать темп и играть под любимый плейлист.",
+    "categoryId": "creative",
+    "subcategoryId": "music-sound",
+    "images": [
+      "/images/skills/s1-5.jpg",
+      "/images/skills/s1-6.jpg"
+    ],
+    "createdAt": "2025-09-23T03:32:00.000Z"
+  },
+  {
+    "id": "s16",
+    "title": "Маркетинг и реклама",
+    "description": "Запускала рекламу для небольших проектов. Расскажу про целевую аудиторию, каналы и оценку результатов.",
+    "categoryId": "business",
+    "subcategoryId": "marketing",
+    "images": [
+      "/images/skills/s4-1.jpg",
+      "/images/skills/s4-2.jpg"
+    ],
+    "createdAt": "2026-05-05T04:23:00.000Z"
+  },
+  {
+    "id": "s17",
+    "title": "Резюме и собеседование",
+    "description": "Помогу собрать резюме и подготовиться к собеседованию: как рассказывать о себе и отвечать на сложные вопросы.",
+    "categoryId": "business",
+    "subcategoryId": "resume-interview",
+    "images": [
+      "/images/skills/s7-1.jpg",
+      "/images/skills/s7-2.jpg"
+    ],
+    "createdAt": "2025-09-07T11:21:00.000Z"
+  },
+  {
+    "id": "s18",
+    "title": "Приготовление еды",
+    "description": "Готовлю дома каждый день. Научу быстрым и недорогим блюдам на неделю вперёд.",
+    "categoryId": "home",
+    "subcategoryId": "cooking",
+    "images": [
+      "/images/skills/s20-1.jpg",
+      "/images/skills/s20-2.jpg",
+      "/images/skills/s20-3.jpg"
+    ],
+    "createdAt": "2026-01-26T23:01:00.000Z"
+  },
+  {
+    "id": "s19",
+    "title": "Видеомонтаж",
+    "description": "Монтирую ролики для соцсетей. Научу собирать видео, работать со звуком и цветом.",
+    "categoryId": "creative",
+    "subcategoryId": "video-editing",
+    "images": [
+      "/images/skills/s25-1.jpg",
+      "/images/skills/s25-2.jpg",
+      "/images/skills/s25-3.jpg"
+    ],
+    "createdAt": "2025-08-13T21:32:00.000Z"
+  },
+  {
+    "id": "s20",
+    "title": "Английский язык",
+    "description": "Учу говорить и писать по-английски в путешествиях и на работе. Много практики и минимум скучной теории.",
+    "categoryId": "languages",
+    "subcategoryId": "english",
+    "images": [
+      "/images/skills/s11-1.jpg",
+      "/images/skills/s11-2.jpg"
+    ],
+    "createdAt": "2026-01-02T17:59:00.000Z"
+  },
+  {
+    "id": "s21",
+    "title": "Йога для начинающих",
+    "description": "Практикую йогу семь лет. Покажу базовые асаны и простую медитацию на утро и вечер.",
+    "categoryId": "health",
+    "subcategoryId": "yoga-meditation",
+    "images": [
+      "/images/skills/s36-1.jpg",
+      "/images/skills/s36-2.jpg"
+    ],
+    "createdAt": "2025-12-05T15:23:00.000Z"
+  },
+  {
+    "id": "s22",
+    "title": "Личный бренд",
+    "description": "Расскажу, как рассказывать о себе в соцсетях и на собеседованиях, чтобы вас запоминали.",
+    "categoryId": "business",
+    "subcategoryId": "personal-brand",
+    "images": [
+      "/images/skills/s6-1.jpg",
+      "/images/skills/s6-2.jpg"
+    ],
+    "createdAt": "2026-02-02T05:49:00.000Z"
+  },
+  {
+    "id": "s23",
+    "title": "Сон и восстановление",
+    "description": "Расскажу, как наладить режим сна, вечерние ритуалы и восстанавливаться после нагрузок.",
+    "categoryId": "health",
+    "subcategoryId": "sleep-recovery",
+    "images": [
+      "/images/skills/s41-1.jpg",
+      "/images/skills/s41-2.jpg"
+    ],
+    "createdAt": "2026-07-14T00:05:00.000Z"
+  },
+  {
+    "id": "s24",
+    "title": "Французский язык",
+    "description": "Учу французскому с нуля: произношение, базовые фразы и чтение. Любимый язык и любимая страна.",
+    "categoryId": "languages",
+    "subcategoryId": "french",
+    "images": [
+      "/images/skills/s12-1.jpg",
+      "/images/skills/s12-2.jpg"
+    ],
+    "createdAt": "2026-09-05T09:10:00.000Z"
+  },
+  {
+    "id": "s25",
+    "title": "Шахматы для начинающих",
+    "description": "Играю в шахматы с детства. Научу правилам, дебютным принципам и простой тактике.",
+    "categoryId": "education",
+    "subcategoryId": "cognitive-techniques",
+    "images": [
+      "/images/skills/s32-1.jpg",
+      "/images/skills/s32-2.jpg"
+    ],
+    "createdAt": "2025-09-04T11:53:00.000Z"
+  },
+  {
+    "id": "s26",
+    "title": "Портретная фотография",
+    "description": "Снимаю портреты в студии и на улице. Покажу, как работать со светом, позой и обработкой.",
+    "categoryId": "creative",
+    "subcategoryId": "photography",
+    "images": [
+      "/images/skills/s24-1.jpg",
+      "/images/skills/s24-2.jpg"
+    ],
+    "createdAt": "2025-07-07T05:00:00.000Z"
+  },
+  {
+    "id": "s27",
+    "title": "Домашние растения",
+    "description": "Выращиваю больше тридцати комнатных растений. Помогу выбрать, пересадить и вылечить.",
+    "categoryId": "home",
+    "subcategoryId": "houseplants",
+    "images": [
+      "/images/skills/s21-1.jpg",
+      "/images/skills/s21-2.jpg"
+    ],
+    "createdAt": "2025-06-20T05:24:00.000Z"
+  },
+  {
+    "id": "s28",
+    "title": "Немецкий язык",
+    "description": "Изучала немецкий в университете и жила в Германии. Помогу с грамматикой и разговорной практикой.",
+    "categoryId": "languages",
+    "subcategoryId": "german",
+    "images": [
+      "/images/skills/s14-1.jpg",
+      "/images/skills/s14-2.jpg"
+    ],
+    "createdAt": "2025-07-29T07:02:00.000Z"
+  },
+  {
+    "id": "s29",
+    "title": "Ремонт своими руками",
+    "description": "Делаю мелкий ремонт дома сам. Научу пользоваться инструментами и справляться с типичными поломками.",
+    "categoryId": "home",
+    "subcategoryId": "renovation",
+    "images": [
+      "/images/skills/s22-1.jpg",
+      "/images/skills/s22-2.jpg",
+      "/images/skills/s22-3.jpg"
+    ],
+    "createdAt": "2026-04-09T08:49:00.000Z"
+  },
+  {
+    "id": "s30",
+    "title": "Тайм-менеджмент",
+    "description": "Помогу планировать день и неделю, расставлять приоритеты и не тонуть в задачах.",
+    "categoryId": "business",
+    "subcategoryId": "time-management",
+    "images": [
+      "/images/skills/s8-1.jpg",
+      "/images/skills/s8-2.jpg"
+    ],
+    "createdAt": "2025-09-20T04:08:00.000Z"
+  },
+  {
+    "id": "s31",
+    "title": "Актёрское мастерство",
+    "description": "Занимаюсь в театральной студии. Покажу упражнения на голос, внимание и работу с эмоциями.",
+    "categoryId": "creative",
+    "subcategoryId": "acting",
+    "images": [
+      "/images/skills/s26-1.jpg",
+      "/images/skills/s26-2.jpg"
+    ],
+    "createdAt": "2026-01-04T10:16:00.000Z"
+  },
+  {
+    "id": "s32",
+    "title": "Декор и DIY",
+    "description": "Делаю декор для дома своими руками. Покажу простые проекты из недорогих материалов.",
+    "categoryId": "creative",
+    "subcategoryId": "decor-diy",
+    "images": [
+      "/images/skills/s29-1.jpg",
+      "/images/skills/s29-2.jpg"
+    ],
+    "createdAt": "2026-04-20T02:19:00.000Z"
+  },
+  {
+    "id": "s33",
+    "title": "Испанский с нуля",
+    "description": "Говорю на испанском свободно. Помогу с произношением, базовой грамматикой и разговорной практикой.",
+    "categoryId": "languages",
+    "subcategoryId": "spanish",
+    "images": [
+      "/images/skills/s13-1.jpg",
+      "/images/skills/s13-2.jpg"
+    ],
+    "createdAt": "2026-08-11T23:53:00.000Z"
+  },
+  {
+    "id": "s34",
+    "title": "Акварель для начинающих",
+    "description": "Рисую акварелью и скетчи. Покажу материалы, базовые техники и первую работу за вечер.",
+    "categoryId": "creative",
+    "subcategoryId": "drawing",
+    "images": [
+      "/images/skills/s2-1.jpg",
+      "/images/skills/s2-2.jpg",
+      "/images/skills/s2-3.jpg",
+      "/images/skills/s2-4.jpg"
+    ],
+    "createdAt": "2026-02-24T21:03:00.000Z"
+  },
+  {
+    "id": "s35",
+    "title": "Функциональные тренировки",
+    "description": "Тренируюсь шесть лет и провожу групповые занятия. Составлю программу под вашу цель и уровень.",
+    "categoryId": "health",
+    "subcategoryId": "fitness",
+    "images": [
+      "/images/skills/s40-1.jpg",
+      "/images/skills/s40-2.jpg",
+      "/images/skills/s40-3.jpg"
+    ],
+    "createdAt": "2025-06-13T14:31:00.000Z"
+  },
+  {
+    "id": "s36",
+    "title": "Навыки обучения",
+    "description": "Помогу учиться быстрее: как конспектировать, запоминать и не откладывать на потом.",
+    "categoryId": "education",
+    "subcategoryId": "learning-skills",
+    "images": [
+      "/images/skills/s31-1.jpg",
+      "/images/skills/s31-2.jpg"
+    ],
+    "createdAt": "2025-08-05T13:21:00.000Z"
+  },
+  {
+    "id": "s37",
+    "title": "Коучинг",
+    "description": "Помогаю сформулировать цель и найти шаги к ней через вопросы. Работаю бережно и без советов «как надо».",
+    "categoryId": "education",
+    "subcategoryId": "coaching",
+    "images": [
+      "/images/skills/s35-1.jpg",
+      "/images/skills/s35-2.jpg"
+    ],
+    "createdAt": "2026-05-03T07:10:00.000Z"
+  },
+  {
+    "id": "s38",
+    "title": "Скорочтение",
+    "description": "Читаю в несколько раз быстрее обычного. Покажу техники чтения и как запоминать прочитанное.",
+    "categoryId": "education",
+    "subcategoryId": "speed-reading",
+    "images": [
+      "/images/skills/s33-1.jpg",
+      "/images/skills/s33-2.jpg"
+    ],
+    "createdAt": "2025-11-24T10:01:00.000Z"
+  },
+  {
+    "id": "s39",
+    "title": "Питание и ЗОЖ",
+    "description": "Помогу выстроить простой рацион без жёстких диет: как планировать меню и читать составы продуктов.",
+    "categoryId": "health",
+    "subcategoryId": "nutrition",
+    "images": [
+      "/images/skills/s37-1.jpg",
+      "/images/skills/s37-2.jpg",
+      "/images/skills/s37-3.jpg"
+    ],
+    "createdAt": "2025-07-16T16:33:00.000Z"
+  },
+  {
+    "id": "s40",
+    "title": "Уборка и организация",
+    "description": "Живу самостоятельно и держу дом в порядке без лишних усилий. Расскажу про простую систему уборки.",
+    "categoryId": "home",
+    "subcategoryId": "cleaning",
+    "images": [
+      "/images/skills/s18-1.jpg",
+      "/images/skills/s18-2.jpg",
+      "/images/skills/s18-3.jpg"
+    ],
+    "createdAt": "2025-11-03T11:34:00.000Z"
+  }
+]
