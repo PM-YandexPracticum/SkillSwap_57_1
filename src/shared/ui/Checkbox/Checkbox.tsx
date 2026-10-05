@@ -5,12 +5,8 @@ import styles from './Checkbox.module.css'
 
   const [checked, setChecked] = useState(false)
 
-  const handleAgreeChange = (value: boolean) => {
-    setChecked(value)
-  }
-
   return (
-      <Checkbox label={'123'} checked={checked} onChange={handleAgreeChange} />
+      <Checkbox label={'123'} checked={checked} onChange={setChecked} />
       )
 */
 
@@ -35,7 +31,7 @@ export const Checkbox = ({ label, checked, indeterminate, onChange, className, c
         name={category}
         value={label}
         checked={checked}
-        onChange={(e) => onChange?.(e.target.checked)}
+        onChange={() => onChange?.(indeterminate ? !indeterminate : !checked)}
       />
       <span className={boxClasses}></span>
       <span className={styles.labelText}>{label}</span>

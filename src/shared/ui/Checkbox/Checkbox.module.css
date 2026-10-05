@@ -15,7 +15,7 @@
   height: 20px;
   background-color: var(--color-border);
   margin-right: 8px;
-  mask: url("@/shared/assets/icons/checkDefault.svg") no-repeat center / contain;
+  mask-image: url("@/shared/assets/icons/checkbox-empty.svg");
 }
 
 .labelText {
@@ -28,12 +28,12 @@
   vertical-align: middle;
 }
 
-input[type="checkbox"]:checked + span {
+input[type="checkbox"]:checked + .box {
   background-color: var(--color-primary);
-  mask: url("@/shared/assets/icons/check.svg");
+  mask-image: url("@/shared/assets/icons/check.svg");
 }
 
-input[type="checkbox"]:checked + .box.indeterminate {
+.box.indeterminate{
   background-color: var(--color-primary);
-  mask-image: url("@/shared/assets/icons/minus.svg");
+  mask-image: url("@/shared/assets/icons/minus.svg") !important;
 }
