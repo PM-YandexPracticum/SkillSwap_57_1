@@ -1,0 +1,15 @@
+.container {
+  display: inline-flex;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: var(--color-bg-secondary);
+}
+
+.labelText {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 2%;
+
+}
