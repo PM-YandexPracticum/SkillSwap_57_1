@@ -90,3 +90,12 @@ button {
   background: none;
   font: inherit;
 }
+
+.visually-hidden {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
