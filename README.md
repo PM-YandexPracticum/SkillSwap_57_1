@@ -57,6 +57,10 @@ public/
 
 Файлы `public/db/skills.json` и `public/db/users.json` **пустые**.
 
+### Тестовый аккаунт
+- Email: ivan@mail.ru
+- Пароль: Baraban2024
+
 Структура объектов описана в `src/shared/types/index.ts`.
 
 ---
