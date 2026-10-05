@@ -5,8 +5,8 @@
   --color-bg-secondary: #FFF;
   --color-bg-overlay: rgb(142 142 142 / 60%);
   --color-text: #253017;
-  --color-text-secondary: #6b7280;
-  --color-text-placeholder: #69735D;
+  --color-text-secondary: #69735D;
+  --color-text-disabled: #9CA197;
   --color-primary: #ABD27A;
   --color-primary-light: #DEEBC5;
   --color-link: #508826;
@@ -14,6 +14,8 @@
   --color-border-accent: #ABD27A;
   --color-horizon-line: #E4E8DF;
   --color-error: #BF3920;
+  --color-alarm: #E0796E;
+  --color-toggle: #B2B9A9;
 
   /* Skills */
   --color-skill-business: #EEE7F7;
@@ -33,7 +35,7 @@
   --space-2xl: 48px;
 
   /* Typography */
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-sans: system-ui, -apple-system;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
@@ -49,10 +51,10 @@
 
 /* Тёмная тема — добавить поддержку через data-theme="dark" */
 [data-theme='dark'] {
-  --color-bg: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-text: #f1f5f9;
-  --color-text-secondary: #94a3b8;
+  --color-bg: #0F172A;
+  --color-bg-secondary: #1E293B;
+  --color-text: #F1F5F9;
+  --color-text-secondary: #94A3B8;
   --color-border: #334155;
 }
 
@@ -66,7 +68,7 @@
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-sans), sans-serif;
   font-size: var(--font-size-base);
   color: var(--color-text);
   background-color: var(--color-bg);

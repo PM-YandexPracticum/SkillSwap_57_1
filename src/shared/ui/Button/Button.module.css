@@ -24,7 +24,7 @@
 
   &[disabled] {
     background-color: var(--color-horizon-line);
-    color: var(--color-text-placeholder);
+    color: var(--color-text-secondary);
     cursor: not-allowed;
   }
 }
@@ -34,7 +34,7 @@
   background-color: var(--color-bg-secondary);
 
   &:hover {
-    color: var(--color-text-placeholder);
+    color: var(--color-text-secondary);
     border-color: var(--color-primary-light);
   }
 
