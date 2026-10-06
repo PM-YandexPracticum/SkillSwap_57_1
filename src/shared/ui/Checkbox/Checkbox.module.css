@@ -14,7 +14,7 @@
   width: 20px;
   height: 20px;
   background-color: var(--color-border);
-  margin-right: 8px;
+  margin-right: 10px;
   mask-image: url("@/shared/assets/icons/checkbox-empty.svg");
 }
 
