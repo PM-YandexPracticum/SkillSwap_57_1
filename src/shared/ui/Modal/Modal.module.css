@@ -9,6 +9,7 @@
 .modal {
   display: flex;
   flex-direction: column;
+  width: 556px;
   padding: 80px 60px;
   position: fixed;
   top: 50%;
@@ -60,5 +61,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 20px;
   width: 100%;
 }

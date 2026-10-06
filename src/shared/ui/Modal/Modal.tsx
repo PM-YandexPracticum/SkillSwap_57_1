@@ -1,12 +1,12 @@
 
-import * as React from 'react'
 import styles from './Modal.module.css'
+import { ReactNode } from 'react'
 
 type ModalProps = {
   title: string
   text?: string
-  icon?: React.ReactElement
-  children: React.ReactElement
+  icon?: ReactNode
+  children: ReactNode
   onClose: () => void
   className?: string
 }
