@@ -7,7 +7,7 @@
   border: 1px solid transparent;
   border-radius: 12px;
   color: currentcolor;
-  gap: 8px
+  gap: 8px;
 }
 
 .variant_primary {
@@ -73,6 +73,7 @@
 .variant_link {
   color: var(--color-link);
   padding: 0;
+  gap: 4px;
 
   &:hover {
     color: var(--color-text);
@@ -97,6 +98,6 @@
 }
 
 .iconContainer svg {
-  width: 1rem;
+  width: 1em;
   height: 1em;
 }
