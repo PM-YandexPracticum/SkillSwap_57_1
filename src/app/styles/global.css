@@ -1,6 +1,6 @@
 /* ─── CSS Custom Properties ─────────────────────────────── */
 @font-face {
-  font-family: 'Jost';
+  font-family: Jost;
   src: url('/fonts/Jost-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
@@ -8,7 +8,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   src: url('/fonts/Roboto-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
@@ -16,7 +16,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   src: url('/fonts/Roboto-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
@@ -114,25 +114,29 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/*Заголовки*/
+/* Заголовки */
 h1,
 h2,
 h3 {
   font-family: var(--font-heading);
   font-weight: var(--font-weight-medium);
 }
+
 h1 {
   font-size: var(--font-size-h1);
   line-height: var(--line-height-h1);
 }
+
 h2 {
   font-size: var(--font-size-h2);
   line-height: var(--line-height-h2);
 }
+
 h3 {
   font-size: var(--font-size-h3);
   line-height: var(--line-height-h3);
 }
+
 h4 {
   font-family: var(--font-body);
   font-weight: var(--font-weight-medium);
