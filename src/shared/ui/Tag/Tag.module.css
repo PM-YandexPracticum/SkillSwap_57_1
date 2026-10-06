@@ -1,0 +1,37 @@
+.tag {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.business {
+  background-color: var(--color-skill-business);
+}
+
+.creative {
+  background-color: var(--color-skill-creative);
+}
+
+.languages {
+  background-color: var(--color-skill-languages);
+}
+
+.education {
+  background-color: var(--color-skill-education);
+}
+
+.health {
+  background-color: var(--color-skill-health);
+}
+
+.home {
+  background-color: var(--color-skill-home);
+}
+
+.more {
+  background-color: var(--color-skill-more);
+}
