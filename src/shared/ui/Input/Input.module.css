@@ -18,13 +18,14 @@
   line-height: 1.5;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  caret-color: var(--color-link);
 
   &::placeholder {
-    color: var(--color-text-placeholder);
+    color: var(--color-text-secondary);
   }
 
   &[disabled] {
-    color: var(--color-text-sacondary);
+    color: var(--color-text-disabled);
     background-color: var(--color-bg);
     cursor: not-allowed;
     opacity: 0.7;
@@ -32,14 +33,13 @@
 }
 
 .variant_bordered {
-  border-color: var(--color-horizon-line);
+  border-color: var(--color-text-secondary);
 
   &:hover:not([disabled]) {
     border-color: var(--color-primary);
   }
 
   &:focus {
-    border-color: var(--color-link);
     box-shadow: 0 0 0 3px rgb(171 210 122 / 20%);
   }
 }
