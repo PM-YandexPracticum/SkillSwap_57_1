@@ -1,0 +1,32 @@
+.tag {
+  padding: 8px 12px;
+  border-radius: 9999px;
+}
+
+.business {
+  background-color: var(--color-skill-business);
+}
+
+.creative {
+  background-color: var(--color-skill-creative);
+}
+
+.languages {
+  background-color: var(--color-skill-languages);
+}
+
+.education {
+  background-color: var(--color-skill-education);
+}
+
+.health {
+  background-color: var(--color-skill-health);
+}
+
+.home {
+  background-color: var(--color-skill-home);
+}
+
+.more {
+  background-color: var(--color-skill-more);
+}
