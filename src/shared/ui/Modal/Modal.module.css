@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: #8E8E8E99;
+  background-color: var(--color-bg-overlay);
   backdrop-filter: blur(4px);
   z-index: 2;
 }
@@ -39,9 +39,9 @@
 }
 
 .title {
-  font-family: Jost, sans-serif;
-  font-weight: 500;
-  font-size: 24px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-h2);
   line-height: 28px;
   letter-spacing: -1.1%;
   text-align: center;
@@ -49,9 +49,9 @@
 }
 
 .text {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h4);
   letter-spacing: 2%;
   text-align: center;
   vertical-align: middle;
