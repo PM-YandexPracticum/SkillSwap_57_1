@@ -1,1 +1,1 @@
-import { Tag } from './Tag'
+export { Tag } from './Tag'
