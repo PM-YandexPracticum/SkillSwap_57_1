@@ -6,7 +6,7 @@
   padding: 12px 20px;
   border-radius: 12px;
   background-color: transparent;
-  width: 244px;
+  width: 100%;
   gap: 12px;
 
   &:hover {
@@ -29,6 +29,5 @@
 }
 
 .iconContainer svg {
-  width: 1em;
-  height: 1em;
+  width: 24px;
 }
