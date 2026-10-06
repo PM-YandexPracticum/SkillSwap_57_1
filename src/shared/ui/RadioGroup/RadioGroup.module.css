@@ -1,3 +1,9 @@
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .label {
   display: inline-flex;
   align-items: center;
@@ -28,7 +34,7 @@
 }
 
 input[type="radio"]:checked + .circle {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 input[type="radio"]:checked + .circle::after {
@@ -40,7 +46,6 @@ input[type="radio"]:checked + .circle::after {
   height: 10px;
   border-radius: 50%;
   background-color: currentcolor;
-  border-color: currentcolor;
   transform: translate(-50%, -50%);
 }
 

@@ -32,12 +32,12 @@ export const RadioGroup = ({
   onChange,
   className,
 }: RadioGroupProps) => {
-  const labelClasses = [styles.label, className].filter(Boolean).join(' ')
+  const containerClasses = [styles.container, className].filter(Boolean).join(' ')
 
   return (
-    <>
+    <div className={containerClasses}>
       {options.map((option, index) => (
-        <label className={labelClasses} key={`${option.value} - ${index + 1}`}>
+        <label className={styles.label} key={`${option.value} - ${index + 1}`}>
           <input
             type="radio"
             className={'visually-hidden'}
@@ -50,6 +50,6 @@ export const RadioGroup = ({
           <span className={styles.labelText}>{option.label}</span>
         </label>
       ))}
-    </>
+    </div>
   )
 }
