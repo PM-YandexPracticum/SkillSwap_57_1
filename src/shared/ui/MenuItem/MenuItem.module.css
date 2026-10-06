@@ -1,0 +1,33 @@
+.navLink {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background-color: transparent;
+  width: 100%;
+  gap: 12px;
+
+  &:hover {
+    background-color: var(--color-horizon-line);
+  }
+
+  &:active {
+    background-color: var(--color-primary-light);
+  }
+}
+
+.active {
+  background-color: var(--color-primary-light);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconContainer svg {
+  width: 24px;
+}
