@@ -20,8 +20,8 @@ export const Toast: FC<TToastProps> = ({ message, onClose, className = '' }) => 
     <span className={styles.closeButtonContainer}>
       <IconButton icon={<CloseIcon />} label={'Закрыть уведомление'} onClick={onClose} />
     </span>
-      <Button variant={'tertiary'} className={styles.redirectButton}>
-        Перейти
-      </Button>
+    <Button variant={'tertiary'} className={styles.redirectButton}>
+      Перейти
+    </Button>
   </div>
 )
