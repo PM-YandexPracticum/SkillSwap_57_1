@@ -1,0 +1,43 @@
+.container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  gap: 8px;
+  padding: 24px;
+  background-color: var(--color-primary-light);
+  border-radius: 12px;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconContainer svg {
+  width: 24px;
+}
+
+.closeButtonContainer {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.container .redirectButton {
+  display: none;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 20px;
+}
+
+.container:hover .redirectButton {
+  display: initial;
+}
