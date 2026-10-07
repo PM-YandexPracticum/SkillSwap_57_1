@@ -1,0 +1,25 @@
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed var(--color-text-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  height: 96px;
+  opacity: 0.8;
+}
+
+.text {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h4);
+  letter-spacing: 2%;
+  text-align: center;
+}
+
+.dragging {
+  opacity: 1;
+  box-shadow: inset 0 0 4px rgb(0 0 0 / 20%);
+}
