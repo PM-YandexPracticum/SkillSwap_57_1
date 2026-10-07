@@ -1,0 +1,8 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+}
