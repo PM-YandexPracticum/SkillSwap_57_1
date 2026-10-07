@@ -1,0 +1,23 @@
+.link {
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.accent {
+  color: var(--color-link);
+}
+
+.default {
+  color: var(--color-text);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
