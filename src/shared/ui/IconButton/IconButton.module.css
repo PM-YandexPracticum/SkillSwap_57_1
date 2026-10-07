@@ -13,8 +13,8 @@
   }
 }
 
-.iconContainer {
-  width: 100%;
+.iconButton svg {
+  width: 24px;
 }
 
 .iconButton.active {
