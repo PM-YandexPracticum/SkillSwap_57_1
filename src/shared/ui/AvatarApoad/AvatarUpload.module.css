@@ -1,0 +1,69 @@
+.container {
+  display: inline-flex;
+  position: relative;
+  padding: 0;
+}
+
+.uploadIconContainer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+}
+
+.container .uploadIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-primary-light);
+  width: 56px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+  }
+
+  &:active {
+    background-color: var(--color-link);
+    color: var(--color-bg-secondary);
+  }
+
+  &[disabled] {
+    background-color: var(--color-horizon-line);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+  }
+}
+
+.smallUploadContainer {
+  display: flex;
+  width: 72px;
+
+  .svgPlus {
+    color: var(--color-bg-secondary)
+  }
+
+  .svgAddCircle {
+    color: var(--color-primary);
+    fill: var(--color-primary);
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .svgAddCircle {
+      color: var(--color-primary-light);
+      fill: var(--color-primary-light);
+    }
+  }
+
+  &:active {
+    .svgAddCircle {
+      color: var(--color-link);
+      fill: var(--color-link);
+    }
+  }
+}
+
