@@ -10,8 +10,12 @@ type ImageUploadProps = {
   className?: string
 }
 
-export const ImageUpload = ({ multiple = true, onChange, text, className }: ImageUploadProps) => {
-
+export const ImageUpload = ({
+  multiple = true,
+  onChange,
+  text = 'Перетащите или выберите изображения навыка',
+  className,
+}: ImageUploadProps) => {
   const [isDragging, setIsDragging] = useState(false)
 
   const containerClasses = [styles.container, className, isDragging && styles.dragging]
