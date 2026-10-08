@@ -37,6 +37,7 @@
       width: 16px;
       color: var(--color-bg-secondary);
       overflow: hidden;
+      background-color: var(--color-primary);
 
       & svg {
         width: 16px;
