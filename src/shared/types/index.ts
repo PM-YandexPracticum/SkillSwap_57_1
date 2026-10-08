@@ -1,12 +1,14 @@
 // ─── Category ────────────────────────────────────────────
+
+export type TCategoryId = 'business' | 'creative' | 'languages' | 'education' | 'health' | 'home'
 export interface Subcategory {
   id: string
   name: string
-  categoryId: string
+  categoryId: TCategoryId
 }
 
 export interface Category {
-  id: string
+  id: TCategoryId
   name: string
   subcategories: Subcategory[]
 }
@@ -39,11 +41,12 @@ export interface User {
 // ─── Skill ───────────────────────────────────────────────
 // Навык, которому пользователь может научить. У каждого пользователя ровно один,
 // связь через User.teachSkillId. «Хочет научиться» хранится в User.learnSubcategoryIds.
+
 export interface Skill {
   id: string
   title: string
   description: string
-  categoryId: string
+  categoryId: TCategoryId
   subcategoryId: string
   images: string[]
   createdAt: string // ISO
