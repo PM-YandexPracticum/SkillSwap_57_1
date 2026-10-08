@@ -1,0 +1,64 @@
+.container {
+  display: inline-flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+
+  &.smallContainer {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+.container .smallAvatar {
+  width: 56px;
+}
+
+.uploadIconContainer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  &.smallUploadIconContainer {
+    bottom: 8px;
+    right: 8px;
+  }
+
+  & .uploadIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-primary-light);
+    width: 56px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+
+    &.smallUploadButton {
+      width: 16px;
+      color: var(--color-bg-secondary);
+      overflow: hidden;
+      background-color: var(--color-primary);
+
+      & svg {
+        width: 16px;
+        transform: scale(150%);
+      }
+    }
+
+    &:hover {
+      background-color: var(--color-primary);
+      color: var(--color-text);
+    }
+
+    &:active {
+      background-color: var(--color-link);
+      color: var(--color-bg-secondary);
+    }
+
+    &[disabled] {
+      background-color: var(--color-horizon-line);
+      color: var(--color-text-secondary);
+      cursor: not-allowed;
+    }
+  }
+}
