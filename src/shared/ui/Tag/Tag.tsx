@@ -1,7 +1,5 @@
+import type { TCategoryId } from '@/shared/types'
 import styles from './Tag.module.css'
-
-export type TCategoryId = 'business' | 'creative' | 'languages' | 'education' | 'health' | 'home'
-// TODO Перенести определение этого типа в src/shared/types и использовать вместо string в Skill.categoryId и Subcategory.categoryId
 
 type TagProps = {
   label: string
