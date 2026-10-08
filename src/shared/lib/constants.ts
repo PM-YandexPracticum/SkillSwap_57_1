@@ -6,6 +6,7 @@ export const ROUTES = {
   CREATE: '/create',
   LOGIN: '/login',
   REGISTER: '/register',
+  SERVER_ERROR: '/500',
 } as const
 
 export const SKILL_CATEGORIES = [
