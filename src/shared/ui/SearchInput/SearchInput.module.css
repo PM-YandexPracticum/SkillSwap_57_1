@@ -3,7 +3,7 @@
   align-items: center;
   gap: var(--space-sm);
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
+  padding: 0 var(--space-md);
   background-color: var(--color-bg-secondary);
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
@@ -27,11 +27,6 @@
   min-width: 0;
 }
 
-/* Снимаем подчёркивание borderless-варианта Input, чтобы поле фокуса подсвечивалось целиком */
-.container:focus-within .field {
-  border-bottom: none;
-}
-
 .clearButton {
   flex-shrink: 0;
   display: flex;
@@ -48,6 +43,7 @@
 }
 
 .clearIcon {
-  width: 16px;
-  height: 16px;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
