@@ -1,0 +1,28 @@
+.page {
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg) 60px;
+}
+
+.card {
+  width: 100%;
+  max-width: 1136px;
+  margin-inline: auto;
+  padding: 60px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+@media (width <= 767px) {
+  .page {
+    padding-inline: var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+  }
+}
