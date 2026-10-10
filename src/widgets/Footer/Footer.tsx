@@ -1,3 +1,4 @@
+import { ROUTES } from '@/shared/lib/constants'
 import { Logo } from '@/shared/ui/Logo'
 import { TextLink } from '@/shared/ui/TextLink'
 import styles from './Footer.module.css'
@@ -16,7 +17,7 @@ export const Footer = ({ className = '' }: { className?: string }) => (
         <ul key={column[0]} className={styles.column}>
           {column.map((label) => (
             <li key={label}>
-              <TextLink variant="default" to="#">
+              <TextLink variant="default" to={label === 'Все навыки' ? ROUTES.SKILLS : '#'}>
                 {label}
               </TextLink>
             </li>
