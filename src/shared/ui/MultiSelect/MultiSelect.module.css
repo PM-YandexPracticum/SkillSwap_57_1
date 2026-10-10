@@ -67,10 +67,6 @@
     grid-template-rows: min-content min-content;
     overflow: hidden;
   }
-
-  & .box:active {
-    background-color: var(--color-text);
-  }
 }
 
 .selectPlug {
@@ -85,8 +81,4 @@
 
 .placeholder {
   color: var(--color-text-secondary);
-}
-
-input[type="checkbox"]:checked + .box {
-  background-color: var(--color-text) !important;
 }
