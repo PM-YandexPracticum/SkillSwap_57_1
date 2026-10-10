@@ -4,8 +4,8 @@ import { RadioGroup } from "@/shared/ui/RadioGroup";
 import { Checkbox } from "@/shared/ui/Checkbox";
 import { Category, City } from "@/shared/types";
 import styles from './FiltersSidebar.module.css';
-import chevronIcon from '@/shared/assets/icons/chevron.svg';
-import closeIcon from '@/shared/assets/icons/close.svg';
+import ChevronIcon from '@/shared/assets/icons/chevron.svg?react';
+import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
 export type Filters = {
   mode: 'all' | 'learn' | 'teach'
@@ -98,9 +98,13 @@ export const FiltersSidebar: FC<FiltersSidebarProps> = ({
           {activeCount > 0 && <span className={styles.counter}> ({activeCount})</span>}
         </h2>
         {activeCount > 0 && (
-          <Button variant="link" onClick={handleReset}>
+          <Button
+            variant="link"
+            onClick={handleReset}
+            className={styles.resetButton}
+            iconRight={<CloseIcon className={styles.closeIcon} />}
+          >
             Сбросить
-            <img src={closeIcon} alt="" className={styles.closeIcon} />
           </Button>
         )}
       </div>
@@ -143,9 +147,7 @@ export const FiltersSidebar: FC<FiltersSidebarProps> = ({
                   type="button"
                   aria-expanded={isExpanded}
                 >
-                  <img
-                    src={chevronIcon}
-                    alt=""
+                  <ChevronIcon
                     className={`${styles.chevron} ${isExpanded ? styles.chevron_expanded : ''}`}
                   />
                 </button>
@@ -185,26 +187,25 @@ export const FiltersSidebar: FC<FiltersSidebarProps> = ({
 
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Город</h3>
-        {visibleCities.map(city => (
-          <Checkbox
-            key={city.id}
-            label={city.name}
-            checked={value.cityIds.includes(city.id)}
-            onChange={() => handleCityToggle(city.id)}
-            category="city"
-          />
-        ))}
+        <div className={styles.citiesList}>
+          {visibleCities.map(city => (
+            <Checkbox
+              key={city.id}
+              label={city.name}
+              checked={value.cityIds.includes(city.id)}
+              onChange={() => handleCityToggle(city.id)}
+              category="city"
+            />
+          ))}
+        </div>
         <button
           className={styles.showAllButton}
           onClick={() => setShowAllCities(!showAllCities)}
           type="button"
         >
           {showAllCities ? 'Скрыть' : 'Все города'}
-          <img
-            src={chevronIcon}
-            alt=""
+          <ChevronIcon
             className={`${styles.chevron} ${showAllCities ? styles.chevron_expanded : ''}`}
-            style={{ width: '16px', height: '16px', marginLeft: '4px' }}
           />
         </button>
       </div>
