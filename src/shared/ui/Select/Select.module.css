@@ -50,10 +50,6 @@
     color: var(--color-text) !important;
   }
 
-  &:last-child {
-    margin-bottom: 8px;
-  }
-
   &.active {
     color: var(--color-link);
   }
