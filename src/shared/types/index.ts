@@ -19,6 +19,17 @@ export interface City {
   name: string
 }
 
+// ─── Filters ─────────────────────────────────────────────
+// Фильтры каталога: режим показывает, по какой связи искать навыки,
+// `subcategoryIds`, `gender` и `cityIds` — выбранные значения соответствующих блоков.
+
+export type Filters = {
+  mode: 'all' | 'learn' | 'teach'
+  subcategoryIds: string[]
+  gender: 'any' | 'male' | 'female'
+  cityIds: string[]
+}
+
 // ─── User ────────────────────────────────────────────────
 export type Gender = 'male' | 'female' | 'unspecified'
 
