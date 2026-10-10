@@ -1,1 +1,1 @@
-export { SkillsPage as default, SkillsPage } from './CategoryPage'
+export { default } from './CategoryPage'

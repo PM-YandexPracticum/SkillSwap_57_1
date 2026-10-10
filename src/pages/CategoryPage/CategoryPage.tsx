@@ -4,7 +4,7 @@ import type { Category } from '@/shared/types'
 import { CategoryList } from '@/widgets/CategoryList'
 import styles from './CategoryPage.module.css'
 
-export const SkillsPage = () => {
+export const CategoryPage = () => {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -46,3 +46,5 @@ export const SkillsPage = () => {
     </main>
   )
 }
+
+export default CategoryPage
