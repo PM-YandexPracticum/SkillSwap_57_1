@@ -2,17 +2,12 @@ import { FC, useState } from "react";
 import { Button } from '@/shared/ui/Button';
 import { RadioGroup } from "@/shared/ui/RadioGroup";
 import { Checkbox } from "@/shared/ui/Checkbox";
-import { Category, City } from "@/shared/types";
+import { Category, City, Filters } from "@/shared/types";
 import styles from './FiltersSidebar.module.css';
 import ChevronIcon from '@/shared/assets/icons/chevron.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
-export type Filters = {
-  mode: 'all' | 'learn' | 'teach'
-  subcategoryIds: string[]
-  gender: 'any' | 'male' | 'female'
-  cityIds: string[]
-}
+export type { Filters } from '@/shared/types'
 
 interface FiltersSidebarProps {
   categories: Category[];
