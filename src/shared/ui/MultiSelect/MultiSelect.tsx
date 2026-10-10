@@ -1,12 +1,12 @@
 import { FC, useId, useState } from 'react'
 import styles from './MultiSelect.module.css'
 import ArrowIcon from '@/shared/assets/icons/chevron.svg?react'
-import { Popover } from '../Popover/Popover'
+import { Popover } from '@/shared/ui/Popover'
 import { Checkbox } from '@/shared/ui/Checkbox'
 
 type TOption = { value: string; label: string }
 
-type TSelectProps = {
+type TMultiSelectProps = {
   options: TOption[] // Массив опций
   value: string[] // Текущие выбранные значения
   onChange: (value: string[]) => void // Функция для передачи выбранных опции в родителя
@@ -16,7 +16,7 @@ type TSelectProps = {
   maxHeight?: string // Максимальная высота выпадающего списка ('100px', '20vw' и т.п.) если опций очень много
 }
 
-export const MultiSelect: FC<TSelectProps> = ({
+export const MultiSelect: FC<TMultiSelectProps> = ({
   options,
   value,
   onChange,
