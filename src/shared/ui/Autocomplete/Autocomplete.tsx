@@ -86,6 +86,21 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
     }
   }, [inputValue, filteredOptions, previousValue, onChange]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        inputRef.current?.blur();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
+
   return (
     <div
       ref={containerRef}
@@ -109,24 +124,28 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
               onChange={handleInputChange}
               onFocus={handleFocus}
               placeholder={placeholder || ''}
-              />
+              role="combobox"
+              aria-expanded={isOpen}
+              aria-haspopup="listbox"
+              aria-autocomplete="list"
+            />
 
-              <div className={styles.rightIcon}>
-                {(inputValue || selectedLabel) ? (
-                  <button
-                    type="button"
-                    className={styles.clearButton}
-                    onClick={handleClear}
-                    aria-label="Очистить"
-                  >
-                    <CloseIcon />
-                  </button>
-                ) : (
-                  <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>
-                    <ArrowIcon />
-                  </span>
-                )}
-              </div>
+            <div className={styles.rightIcon}>
+              {(inputValue || selectedLabel) ? (
+                <button
+                  type="button"
+                  className={styles.clearButton}
+                  onClick={handleClear}
+                  aria-label="Очистить"
+                >
+                  <CloseIcon />
+                </button>
+              ) : (
+                <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>
+                  <ArrowIcon />
+                </span>
+              )}
+            </div>
           </div>
         }
       >
@@ -148,5 +167,5 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
         </ul>
       </Popover>
     </div>
-  )
-}
+  );
+};
