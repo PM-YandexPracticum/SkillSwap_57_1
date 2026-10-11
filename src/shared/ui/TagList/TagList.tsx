@@ -3,7 +3,7 @@ import { TCategoryId } from '@/shared/types'
 import { Tag } from '@/shared/ui/Tag'
 import { useLayoutEffect, useRef, useState } from 'react'
 
-type TagListProps = {
+export type TagListProps = {
   title: string
   collapsed?: boolean
   tags: {
@@ -15,7 +15,7 @@ type TagListProps = {
 }
 
 export const TagList = ({ title, collapsed=false, tags, className }: TagListProps) => {
-  const tagsClasses = [styles.tags, collapsed && styles.collapsed].filter(Boolean).join(' ')
+  const tagsClasses = [styles.tags, !collapsed && styles.collapsed].filter(Boolean).join(' ')
   const containerClasses = [styles.container, className].filter(Boolean).join(' ')
 
   const tagsContainerRef = useRef<HTMLDivElement>(null)
@@ -33,7 +33,7 @@ export const TagList = ({ title, collapsed=false, tags, className }: TagListProp
       const containerWidth = container.offsetWidth
       const children = Array.from(measure.children) as HTMLElement[]
 
-      if (collapsed) {
+      if (!collapsed) {
         setVisibleTags(tags.length)
         return
       }
@@ -51,7 +51,7 @@ export const TagList = ({ title, collapsed=false, tags, className }: TagListProp
       for (const element of children) {
         const elementWidth = element.offsetWidth
 
-        if (currentWidth + elementWidth + nButtonWidth < containerWidth) {
+        if (currentWidth + elementWidth < containerWidth) {
           currentWidth += elementWidth + gap
           count++
         } else {
@@ -82,6 +82,10 @@ export const TagList = ({ title, collapsed=false, tags, className }: TagListProp
   }, [tags, collapsed])
 
   const hiddenTags = tags.length - visibleTags;
+
+  if (tags.length === 0) {
+    return null
+  }
 
   return (
     <div className={containerClasses}>
