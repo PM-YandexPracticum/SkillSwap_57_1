@@ -1,4 +1,4 @@
-import { FC, useId, useState } from 'react'
+import React, { FC, useEffect, useId, useRef, useState } from 'react'
 import styles from './MultiSelect.module.css'
 import ArrowIcon from '@/shared/assets/icons/chevron.svg?react'
 import { Popover } from '@/shared/ui/Popover'
@@ -25,38 +25,118 @@ export const MultiSelect: FC<TMultiSelectProps> = ({
   className,
   maxHeight,
 }) => {
-
   const [isOpen, setIsOpen] = useState(false)
-  const handleToggle = () => setIsOpen((prev) => !prev)
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  const id = useId()
+  const optionRefs = useRef<(HTMLLIElement | null)[]>([])
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  const handleToggle = () => {
+    if (isOpen) {
+      setIsOpen(false)
+      return
+    }
+    const selectedIndex = options.findIndex((option) => value.includes(option.value))
+    setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0)
+    setIsOpen(true)
+  }
+  const handleClose = () => {
+    setIsOpen(false)
+    triggerRef.current?.focus()
+  }
+
   const handleSelect = (optionValue: string) => {
     const next = value.includes(optionValue)
       ? value.filter((item) => item !== optionValue)
       : [...value, optionValue]
     onChange(next)
   }
-  const id = useId()
+
   const plugText = value.length ? `Выбрано: ${value.length}` : placeholder
+
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClose()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen || options.length === 0) return
+
+    optionRefs.current[activeIndex]?.focus()
+  }, [isOpen, activeIndex, options.length])
+
+  const handleArrowsMove = (event: React.KeyboardEvent<HTMLLIElement>, index: number) => {
+    if (options.length === 0) return
+
+    let nextIndex = index
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault()
+        nextIndex = (index + 1) % options.length
+        break
+
+      case 'ArrowUp':
+        event.preventDefault()
+        nextIndex = (index - 1 + options.length) % options.length
+        break
+
+      case 'Home':
+        event.preventDefault()
+        nextIndex = 0
+        break
+
+      case 'End':
+        event.preventDefault()
+        nextIndex = options.length - 1
+        break
+
+      case 'Enter':
+      case ' ':
+        event.preventDefault()
+        handleSelect(options[index].value)
+        return
+
+      default:
+        return
+    }
+
+    setActiveIndex(nextIndex)
+    optionRefs.current[nextIndex]?.focus()
+  }
+
   const trigger = (
-    <div
+    <button
+      ref={triggerRef}
       className={`${styles.select} ${isOpen ? styles.open : ''}`}
       onClick={handleToggle}
-      role="combobox"
+      type="button"
       aria-expanded={isOpen}
       aria-haspopup="listbox"
       id={id}
       aria-controls={`${id}-list`}
-      tabIndex={0}
     >
       <span className={!value.length ? styles.placeholder : ''}>{plugText}</span>
       <span className={`${styles.arrowImg} ${isOpen ? styles.open : ''}`}>
         <ArrowIcon />
       </span>
-    </div>
+    </button>
   )
 
   return (
     <div className={`${className} ${styles.container}`}>
       {label && <p>{label}</p>}
+
       <Popover
         trigger={trigger}
         open={isOpen}
@@ -72,22 +152,31 @@ export const MultiSelect: FC<TMultiSelectProps> = ({
         <ul
           className={styles.list}
           role="listbox"
-          id={`${id}-list`}
           aria-labelledby={id}
+          aria-multiselectable="true"
+          id={`${id}-list`}
           style={{ maxHeight: maxHeight }}
         >
           {options.map((option, index) => (
             <li
-              key={index}
-              className={`${styles.listItem}`}
-              onClick={() => handleSelect(option.value || '')}
+              key={option.value}
+              ref={(element) => {
+                optionRefs.current[index] = element
+              }}
+              tabIndex={index === activeIndex ? 0 : -1}
+              className={styles.listItem}
+              onClick={() => handleSelect(option.value)}
+              onKeyDown={(event) => handleArrowsMove(event, index)}
               role="option"
+              aria-selected={value.includes(option.value)}
             >
-              <span onClick={(e) => e.stopPropagation()}><Checkbox
-                label={option.label}
-                checked={value.includes(option.value)}
-                onChange={() => handleSelect(option.value || '')}
-              /></span>
+              <span onClick={(event) => event.stopPropagation()}>
+                <Checkbox
+                  label={option.label}
+                  checked={value.includes(option.value)}
+                  onChange={() => handleSelect(option.value)}
+                />
+              </span>
             </li>
           ))}
         </ul>
