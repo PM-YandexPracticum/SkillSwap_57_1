@@ -10,17 +10,20 @@ import Heart from '@/shared/assets/icons/heart.svg?react'
 import Bell from '@/shared/assets/icons/bell.svg?react'
 import Close from '@/shared/assets/icons/close.svg?react'
 import { SearchInput } from '@/shared/ui/SearchInput'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Avatar } from '@/shared/ui/Avatar'
 import { IconButton } from '@/shared/ui/IconButton'
+import { Popover } from '@/shared/ui/Popover'
 
 type HeaderProps = {
   user?: User
   variant?: 'default' | 'auth'
+  skillsPanel?: ReactNode
 }
 
-export const Header = ({ user, variant='default' }: HeaderProps) => {
+export const Header = ({ user, variant = 'default', skillsPanel }: HeaderProps) => {
   const [value, setValue] = useState('')
+  const [isSkillsOpen, setIsSkillsOpen] = useState(false)
   const navigate = useNavigate()
 
   if (variant === 'auth') {
@@ -30,11 +33,24 @@ export const Header = ({ user, variant='default' }: HeaderProps) => {
           <Logo />
         </NavLink>
         <Button variant="tertiary" iconRight={<Close />} onClick={() => navigate(ROUTES.HOME)}>
-            Закрыть
+          Закрыть
         </Button>
       </header>
     )
   }
+
+  const skillsButton = (
+    <Button
+      iconRight={
+        <Chevron className={`${styles.chevron} ${isSkillsOpen ? styles.chevronOpen : ''}`} />
+      }
+      variant="link"
+      className={styles.colorText}
+      onClick={() => setIsSkillsOpen((open) => !open)}
+    >
+      Все&nbsp;навыки
+    </Button>
+  )
 
   return (
     <header className={styles.header}>
@@ -46,13 +62,19 @@ export const Header = ({ user, variant='default' }: HeaderProps) => {
           <Button variant="link" className={styles.colorText}>
             О&nbsp;проекте
           </Button>
-          <Button
-            iconRight={<Chevron />}
-            variant="link"
-            className={styles.colorText}
-          >
-            Все&nbsp;навыки
-          </Button>
+          {skillsPanel ? (
+            <Popover
+              trigger={skillsButton}
+              open={isSkillsOpen}
+              onClose={() => setIsSkillsOpen(false)}
+              rootClassName={styles.popoverRoot}
+              className={styles.categoriesContainer}
+            >
+              {skillsPanel}
+            </Popover>
+          ) : (
+            skillsButton
+          )}
         </div>
       </nav>
       <search>
@@ -79,15 +101,12 @@ export const Header = ({ user, variant='default' }: HeaderProps) => {
         <div className={`${styles.rightHeader} ${styles.rightHeaderWithUser}`}>
           <div className={styles.svgButtons}>
             <IconButton label={'Переключить тему'} icon={<Moon />} />
+            <IconButton label={'Уведомления'} icon={<Bell />} />
             <IconButton
-              label={'Уведомления'}
-              icon={<Bell />}
+              label={'Перейти в избранное'}
+              icon={<Heart />}
+              onClick={() => navigate(ROUTES.FAVORITES)}
             />
-              <IconButton
-                label={'Перейти в избранное'}
-                icon={<Heart />}
-                onClick={() => navigate(ROUTES.FAVORITES)}
-              />
           </div>
 
           <div>
