@@ -1,0 +1,180 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 12px var(--space-bg);
+  border: 1px solid var(--color-text-secondary);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  text-align: left;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+  }
+}
+
+.placeholder {
+  color: var(--color-text-secondary);
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text);
+}
+
+.error {
+  border-color: var(--color-error);
+}
+
+.errorMessage {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-error);
+}
+
+.container .panel {
+  width: 280px;
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+}
+
+.calendar {
+  font-size: 14px;
+}
+
+.caption {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 var(--space-sm);
+}
+
+.dropdowns {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.dropdownRoot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.captionLabel {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  white-space: nowrap;
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-secondary);
+}
+
+.dropdown {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  opacity: 0;
+  appearance: none;
+  cursor: pointer;
+}
+
+.chevron {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-text);
+}
+
+.grid {
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.weekday {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--color-link);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.day {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.dayButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+}
+
+.selected .dayButton {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.outside {
+  color: var(--color-text-disabled);
+}
+
+.disabled .dayButton {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
