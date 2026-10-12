@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { lazy, Suspense } from 'react'
+import { lazy } from 'react'
 import { ROUTES } from '@/shared/lib/constants'
+import { MainLayout, AuthLayout } from '@/app/layouts'
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
@@ -17,14 +18,12 @@ const RegisterPage = lazy(() => import('@/pages/RegisterPage'))
 export function AppRouter() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Загрузка...</div>}>
-        <Routes>
-          <Route path={ROUTES.SKILLS} element={<CategoryPage />} />
+      <Routes>
+        <Route element={<MainLayout />}>
           <Route path={ROUTES.HOME} element={<CatalogPage />} />
+          <Route path={ROUTES.SKILLS} element={<CategoryPage />} />
           <Route path={ROUTES.SKILL} element={<SkillPage />} />
           <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
 
           {/* Защищённые маршруты — добавь PrivateRoute обёртку */}
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
@@ -32,8 +31,13 @@ export function AppRouter() {
 
           <Route path={ROUTES.SERVER_ERROR} element={<ServerErrorPage />} />
           <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
+        </Route>
+
+        <Route element={<AuthLayout />}>
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   )
 }

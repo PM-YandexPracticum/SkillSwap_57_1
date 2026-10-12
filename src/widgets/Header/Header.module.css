@@ -1,0 +1,96 @@
+.header {
+  position: relative;
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  width: 100%;
+  padding: 36px 36px 24px;
+  gap: 32px;
+}
+
+.headerAuth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 36px 36px 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
+}
+
+.logo {
+  display: block;
+  flex-shrink: 0;
+  width: 159px;
+  height: 40px;
+}
+
+.navText {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+}
+
+.header .colorText {
+  color: var(--color-text);
+}
+
+.header .categoriesContainer {
+  width: 1136px;
+  padding: 60px;
+  left: 36px;
+}
+
+.rightHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
+}
+
+.rightHeaderWithUser {
+  gap: 24px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.svgButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.userText {
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+}
+
+.header .popoverRoot {
+  position: static;
+}
+
+.chevron {
+  transition: transform 0.2s ease-in-out;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}

@@ -3,6 +3,11 @@
   display: inline-block;
 }
 
+.fullWidth {
+  display: block;
+  width: 100%;
+}
+
 .panel {
   position: absolute;
   top: 100%;
@@ -15,10 +20,23 @@
   z-index: 1000;
 }
 
+.attached {
+  margin-top: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 .panelLeft {
   left: 0;
 }
 
 .panelRight {
   right: 0;
+}
+
+.fullWidth .panel {
+  left: 0;
+  right: 0;
+  width: 100%;
 }
