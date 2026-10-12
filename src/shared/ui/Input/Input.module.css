@@ -9,7 +9,7 @@
   box-sizing: border-box;
   width: 100%;
   padding: 12px var(--space-md);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-body);
   border: 1px solid transparent;
   border-radius: var(--radius-lg);
   color: var(--color-text);
@@ -62,9 +62,9 @@
 }
 
 .errorMessage {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-caption);
   color: var(--color-error);
-  line-height: 1.5;
+  line-height: var(--line-height-caption);
 }
 
 .label {
