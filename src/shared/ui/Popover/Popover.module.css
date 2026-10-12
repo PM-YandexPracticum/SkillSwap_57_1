@@ -20,6 +20,13 @@
   z-index: 1000;
 }
 
+.attached {
+  margin-top: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 .panelLeft {
   left: 0;
 }

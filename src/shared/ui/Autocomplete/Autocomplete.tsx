@@ -126,9 +126,11 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
         open={shouldShowList}
         onClose={() => setIsOpen(false)}
         fullWidth
+        attached
+        className={styles.dropdownPanel}
         trigger={
           <div
-            className={styles.inputWrapper}
+            className={`${styles.inputWrapper} ${isOpen ? styles.open : ''}`}
             onClick={() => inputRef.current?.focus()}
           >
             <input
