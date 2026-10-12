@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import styles from './RegisterStepOne.module.css'
-import { AuthPanel } from '@/widgets/AuthPanel'
-import LampImg from '@/shared/assets/illustrations/login.svg?react'
 import { Button } from '@/shared/ui/Button'
 import AppleIcon from '@/shared/assets/icons/apple.svg?react'
 import GoogleIcon from '@/shared/assets/icons/google.svg?react'
 import { Divider } from '@/shared/ui/Divider'
 import { Input } from '@/shared/ui/Input'
+import { PasswordInput } from '@/shared/ui/PasswordInput'
 
 type TRegisterStepOneProps = {
   onNext: (data: { email: string; password: string }) => void
@@ -38,70 +37,57 @@ export const RegisterStepOne: FC<TRegisterStepOneProps> = ({ onNext, emailError 
   }
 
   const handleContinue = () => {
-    if (!validateEmail(email)) {
-      setEmailError('Введите корректную почту')
-      if (password.length < 8) {
-        setPasswordError(true)
-        return
-      }
+    if (!validateEmail(email) || password.length < 8) {
+      if (!validateEmail(email)) setEmailError('Введите корректную почту')
+      if (password.length < 8) setPasswordError(true)
       return
     }
     onNext({ email, password })
   }
 
   return (
-    <AuthPanel
-      illustration={<LampImg />}
-      title={'Добро пожаловать в SkillSwap!'}
-      text={'Присоединяйтесь к SkillSwap и обменивайтесь знаниями и навыками с другими людьми'}
-    >
-      <div className={styles.container}>
-        <div className={styles.smallContainer}>
-          <Button
-            iconLeft={<GoogleIcon />}
-            fullWidth
-            variant={'tertiary'}
-            className={styles.mediaButton}
-          >
-            Продолжить с&nbsp;Google
-          </Button>
-          <Button
-            iconLeft={<AppleIcon />}
-            fullWidth
-            variant={'tertiary'}
-            className={styles.mediaButton}
-          >
-            Продолжить с&nbsp;Apple
-          </Button>
-        </div>
-        <Divider>или</Divider>
-        <div className={styles.smallContainer}>
-          <Input
-            value={email}
-            onChange={handleEmailInput}
-            placeholder={'Введите email'}
-            type={'email'}
-            label={'Email'}
-            error={localEmailError}
-          />
-          <Input
-            value={password}
-            onChange={handlePasswordInput}
-            placeholder={'Придумайте надёжный пароль'}
-            type={'password'}
-            label={'Пароль'}
-            error={passwordError ? hintText : ''}
-          />
-          {!passwordError && (
-            <span className={`${styles.passwordHint} ${passwordError ? styles.errorColor : ''}`}>
-              {hintText}
-            </span>
-          )}
-        </div>
-        <Button fullWidth className={styles.continueButton} onClick={handleContinue}>
-          Далее
+    <div className={styles.container}>
+      <div className={styles.smallContainer}>
+        <Button
+          iconLeft={<GoogleIcon />}
+          fullWidth
+          variant={'tertiary'}
+          className={styles.mediaButton}
+        >
+          Продолжить с&nbsp;Google
+        </Button>
+        <Button
+          iconLeft={<AppleIcon />}
+          fullWidth
+          variant={'tertiary'}
+          className={styles.mediaButton}
+        >
+          Продолжить с&nbsp;Apple
         </Button>
       </div>
-    </AuthPanel>
+      <Divider>или</Divider>
+      <div className={styles.smallContainer}>
+        <Input
+          value={email}
+          onChange={handleEmailInput}
+          placeholder={'Введите email'}
+          type={'email'}
+          label={'Email'}
+          error={localEmailError}
+        />
+        <PasswordInput
+          value={password}
+          onChange={handlePasswordInput}
+          placeholder={'Придумайте надёжный пароль'}
+          label={'Пароль'}
+          error={passwordError ? hintText : undefined}
+          hint={hintText}
+          className={styles.passwordInput}
+        />
+      </div>
+      <Button fullWidth className={styles.continueButton} onClick={handleContinue}>
+        Далее
+      </Button>
+    </div>
   )
 }

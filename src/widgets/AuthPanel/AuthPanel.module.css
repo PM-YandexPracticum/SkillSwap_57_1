@@ -4,7 +4,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   width: clamp(720px, 304px + 57.7778vw, 1136px);
-  height: 692px;
+  min-height: 692px;
 }
 
 .aside {
@@ -34,6 +34,6 @@
 
 .contentBox {
   background-color: var(--color-bg-secondary);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 40px 60px;
 }

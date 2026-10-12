@@ -24,11 +24,6 @@
   border-color: var(--color-text-secondary);
 }
 
-.passwordHint {
-  align-self: baseline;
-  margin-top: -12px
-}
-
-.errorColor {
-  color: var(--color-error);
+.passwordInput {
+  width: 100%;
 }
