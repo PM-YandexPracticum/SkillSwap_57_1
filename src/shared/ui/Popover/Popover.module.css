@@ -3,6 +3,11 @@
   display: inline-block;
 }
 
+.fullWidth {
+  display: block;
+  width: 100%;
+}
+
 .panel {
   position: absolute;
   top: 100%;
@@ -21,4 +26,10 @@
 
 .panelRight {
   right: 0;
+}
+
+.fullWidth .panel {
+  left: 0;
+  right: 0;
+  width: 100%;
 }

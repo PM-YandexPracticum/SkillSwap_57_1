@@ -1,6 +1,6 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
 import styles from './Autocomplete.module.css';
-import { Popover } from '../Popover';
+import { Popover } from '@/shared/ui/Popover';
 import ArrowIcon from '@/shared/assets/icons/chevron.svg?react';
 import CloseIcon from '@/shared/assets/icons/close.svg?react';
 
@@ -29,10 +29,20 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [previousValue, setPreviousValue] = useState(value);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const latestInputValue = useRef(inputValue);
+  const latestPreviousValue = useRef(previousValue);
+  const latestOptions = useRef(options);
+
+  useEffect(() => { latestInputValue.current = inputValue; }, [inputValue]);
+  useEffect(() => { latestPreviousValue.current = previousValue; }, [previousValue]);
+  useEffect(() => {latestOptions.current = options; }, [options]);
+
   const selectedLabel = options.find((o) => o.value === value)?.label;
+
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().startsWith(inputValue.toLowerCase())
   );
@@ -43,7 +53,12 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
     setInputValue(newText);
     setIsOpen(true);
     setPreviousValue(value);
-  }
+
+    if (newText === '') {
+      onChange('');
+      setPreviousValue('');
+    }
+  };
 
   const handleSelectedOption = (optionValue: string) => {
     onChange(optionValue);
@@ -61,30 +76,33 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
   }
 
   const handleFocus = () => {
-    setIsOpen(true);
-    if(inputValue && !selectedLabel) {
-      setInputValue('');
+    if(selectedLabel && !inputValue && value) {
+      setInputValue(selectedLabel);
     }
+    setIsOpen(true);
   }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current?.contains(e.target as Node)) {
         setIsOpen(false);
-        if (inputValue && !filteredOptions.some(opt => opt.label === inputValue)) {
+
+        const currentInput = latestInputValue.current;
+        const prevVal = latestPreviousValue.current;
+        const opts = latestOptions.current;
+
+        if (currentInput && !opts.some(opt => opt.label.toLowerCase() === currentInput.toLowerCase())) {
           setInputValue('');
-          if (previousValue) {
-            onChange(previousValue);
+          if (prevVal) {
+            onChange(prevVal);
           }
         }
       }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
+    };
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [inputValue, filteredOptions, previousValue, onChange]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onChange]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -95,10 +113,7 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
     };
 
     document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
   return (
@@ -110,10 +125,10 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
       <Popover
         open={shouldShowList}
         onClose={() => setIsOpen(false)}
-        className={styles.popover}
+        fullWidth
         trigger={
           <div
-            className={`${styles.inputWrapper} ${isOpen ? styles.open : ''}`}
+            className={styles.inputWrapper}
             onClick={() => inputRef.current?.focus()}
           >
             <input
@@ -131,7 +146,7 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
             />
 
             <div className={styles.rightIcon}>
-              {(inputValue || selectedLabel) ? (
+              {inputValue ? (
                 <button
                   type="button"
                   className={styles.clearButton}
@@ -141,7 +156,7 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
                   <CloseIcon />
                 </button>
               ) : (
-                <span className={`${styles.arrow} ${isOpen ? styles.open : ''}`}>
+                <span className={styles.arrow}>
                   <ArrowIcon />
                 </span>
               )}
@@ -159,8 +174,7 @@ export const Autocomplete: FC<TAutocompleteProps> = ({
               className={`${styles.option} ${value === option.value ? styles.active : ''}`}
               onClick={() => handleSelectedOption(option.value)}
               role="option"
-              aria-selected={value === option.value}
-            >
+              aria-selected={value === option.value}>
               {option.label}
             </li>
           ))}

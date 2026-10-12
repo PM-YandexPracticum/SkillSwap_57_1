@@ -10,6 +10,7 @@ export type PopoverProps = {
   align?: 'left' | 'right'
   className?: string
   rootClassName?: string
+  fullWidth?: boolean
 }
 
 export function Popover({
@@ -20,6 +21,7 @@ export function Popover({
   align = 'left',
   className,
   rootClassName,
+  fullWidth = false,
 }: PopoverProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -35,16 +37,18 @@ export function Popover({
     return () => document.removeEventListener('mousedown', handler)
   }, [open, onClose])
 
+  const rootClass = `${styles.root} ${rootClassName ?? ''} ${fullWidth ? styles.fullWidth : ''}`.trim()
+
   if (!open) {
     return (
-      <div ref={containerRef} className={`${styles.root} ${rootClassName ?? ''}`}>
+      <div ref={containerRef} className={rootClass}>
         {trigger}
       </div>
     )
   }
 
   return (
-    <div ref={containerRef} className={`${styles.root} ${rootClassName ?? ''}`}>
+    <div ref={containerRef} className={rootClass}>
       {trigger}
       <div
         className={`${styles.panel} ${align === 'right' ? styles.panelRight : styles.panelLeft} ${className ?? ''}`}

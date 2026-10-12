@@ -6,8 +6,8 @@
 }
 
 .label {
-  font-size: var(--font-size-s);
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -23,15 +23,12 @@
   transition: border-color 0.2s ease;
 }
 
-.inputWrapper.open {
-  border-color: var(--color-primary);
-}
-
 .input {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: var(--font-size-m);
+  font-size: var(--font-size-body);
+  font-family: inherit;
   color: var(--color-text);
   outline: none;
   padding: 0;
@@ -53,10 +50,6 @@
   transition: transform 0.1s ease-in-out;
 }
 
-.arrow.open {
-  transform: rotate(-180deg);
-}
-
 .clearButton {
   background: none;
   border: none;
@@ -66,6 +59,13 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-secondary);
+  width: 24px;
+  height: 24px;
+}
+
+.clearButton svg {
+  width: 24px;
+  height: 24px;
 }
 
 .optionsList {
@@ -91,11 +91,4 @@
 .option.active {
   color: var(--color-link);
   font-weight: 500;
-}
-
-.popover {
-  border-radius: 12px;
-  border: 1px solid var(--color-text-secondary);
-  background-color: var(--color-bg-secondary);
-  box-shadow: 0 4px 12px rgb(37 48 23 / 8%);
 }
