@@ -31,9 +31,8 @@ const authSlice = createSlice({
       state.error = null
       clearAuthUserId()
     },
-    clearAuthError(state) {state.error = null},
   },
 })
 
 export const authReducer = authSlice.reducer
-export const { login, logout, clearAuthError } = authSlice.actions
+export const { login, logout } = authSlice.actions
