@@ -6,6 +6,7 @@ import { usersReducer } from '@/entities/user/model/usersSlice'
 import { filtersReducer } from '@/features/filters/model/filtersSlice'
 import { favoritesReducer } from '@/features/favorites/model/favoritesSlice'
 import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { authReducer } from '@/features/auth/model/authSlice.ts'
 
 /** Собирает store приложения; отдельная функция даёт тестам чистый store */
 export const createAppStore = () =>
@@ -17,6 +18,7 @@ export const createAppStore = () =>
       cities: citiesReducer,
       filters: filtersReducer,
       favorites: favoritesReducer,
+      auth: authReducer,
     },
   })
 
