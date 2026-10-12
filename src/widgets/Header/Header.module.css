@@ -37,19 +37,13 @@
 }
 
 .header .colorText {
-  color: var(--color-text) ;
+  color: var(--color-text);
 }
 
 .header .categoriesContainer {
   width: 1136px;
   padding: 60px;
   left: 36px;
-}
-
-.header .notificationContainer {
-  width: 556px;
-  padding: 60px;
-  right: 36px;
 }
 
 .rightHeader {
@@ -60,7 +54,7 @@
 }
 
 .rightHeaderWithUser {
-  gap: 24px
+  gap: 24px;
 }
 
 .buttons {
@@ -89,3 +83,14 @@
   letter-spacing: 0.02em;
 }
 
+.header .popoverRoot {
+  position: static;
+}
+
+.chevron {
+  transition: transform 0.2s ease-in-out;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
