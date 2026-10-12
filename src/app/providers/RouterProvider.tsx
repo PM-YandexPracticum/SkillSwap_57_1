@@ -13,6 +13,7 @@ const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 const ServerErrorPage = lazy(() => import('@/pages/ServerErrorPage'))
+const RegisterPage = lazy(() => import('@/pages/RegisterPage'))
 
 export function AppRouter() {
   return (
@@ -34,7 +35,7 @@ export function AppRouter() {
 
         <Route element={<AuthLayout />}>
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.REGISTER} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
