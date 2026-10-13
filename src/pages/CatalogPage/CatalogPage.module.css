@@ -30,3 +30,31 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-lg);
 }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  border: 1px solid var(--color-text-secondary);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.chipIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.empty {
+  color: var(--color-text-secondary);
+}
