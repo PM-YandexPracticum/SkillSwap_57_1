@@ -1,0 +1,72 @@
+.page {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 28px 36px 60px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 324px minmax(0, 1fr);
+  gap: var(--space-lg);
+}
+
+.card {
+  padding: 60px;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-secondary);
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: var(--space-md);
+  width: 460px;
+}
+
+.changePassword {
+  align-self: flex-start;
+}
+
+.dateRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.saveButton {
+  margin-top: var(--space-md);
+}
+
+@media (width <= 1300px) {
+  .card {
+    padding: var(--space-xl);
+  }
+
+  .content {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .form {
+    width: 100%;
+  }
+}
+
+@media (width <= 1023px) {
+  .page {
+    padding: 28px 24px 60px;
+  }
+
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
