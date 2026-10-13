@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
-import { clearAuthUserId, getAuthUserId, saveAuthUserId } from './authUtils'
+import { getAuthUserId } from './authUtils'
+import { RootState } from '@/store'
 
 interface AuthState {
   userId: string | null
@@ -24,15 +25,16 @@ const authSlice = createSlice({
         return
       }
       state.userId = action.payload
-      saveAuthUserId(action.payload)
     },
     logout(state) {
       state.userId = null
       state.error = null
-      clearAuthUserId()
     },
   },
 })
 
 export const authReducer = authSlice.reducer
 export const { login, logout } = authSlice.actions
+
+export const selectAuthUserId = (state: RootState) => state.auth.userId
+export const selectAuthError = (state: RootState) => state.auth.error
