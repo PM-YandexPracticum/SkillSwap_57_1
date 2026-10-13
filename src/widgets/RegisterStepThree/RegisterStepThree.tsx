@@ -1,5 +1,5 @@
-import { FC, useState, useEffect } from "react";
-import styles from './RegisterStepThree.module.css';
+import React, { FC, useState, useEffect, useRef } from "react";
+import styles from "./RegisterStepThree.module.css";
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
 import { Textarea } from "@/shared/ui/Textarea";
@@ -7,7 +7,9 @@ import { Select } from "@/shared/ui/Select";
 import { StepProgress } from "@/shared/ui/StepProgress";
 import { AuthPanel } from "../AuthPanel";
 import { useAppSelector } from "@/store/hooks";
-import RegisterStepThreeIllustration from '@/shared/assets/illustrations/register-skill.svg?react';
+import RegisterStepThreeIllustration from "@/shared/assets/illustrations/register-skill.svg?react";
+import CloseIcon from "@/shared/assets/icons/close.svg?react";
+import ImageAddIcon from "@/shared/assets/icons/image-add.svg?react";
 
 export type RegisterStepThreeData = {
   title: string
@@ -66,8 +68,79 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
     if (descriptionError) setDescriptionError(undefined);
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      handleImagesUpload(files)
+    };
+
+    e.target.value = '';
+  };
+
+  const handleImagesUpload = (newFiles: File[]) => {
+    const validFiles = newFiles.filter(file => {
+      const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
+      const isValidSize = file.size <= 2 * 1024 * 1024;
+      return isValidType && isValidSize;
+    });
+
+    setImages(prev => [...prev, ...validFiles]);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleContinue = () => {
-    onNext({title, categoryId, subcategoryId, description, images});
+    if (validate()) {
+      onNext({ title, categoryId, subcategoryId, description, images });
+    }
+  };
+
+  const validate = (): boolean => {
+    let isValid = true;
+
+    if (title.trim().length < 3) {
+      setTitleError('Минимум 3 символа')
+      isValid = false;
+    } else if (title.length > 50) {
+      setTitleError('Максимум 50 символов')
+      isValid = false
+    } else {
+      setTitleError(undefined)
+    };
+
+    if (!categoryId) {
+      setCategoryIdError('Выберите категорию')
+      isValid = false
+    } else {
+      setCategoryIdError(undefined)
+    };
+
+    if (!subcategoryId) {
+      setSubcategoryIdError('Выберите подкатегорию')
+      isValid = false
+    } else {
+      setSubcategoryIdError(undefined)
+    };
+
+    if (description.trim().length === 0) {
+      setDescriptionError('Добавьте описание')
+      isValid = false
+    } else if (description.length > 500) {
+      setDescriptionError('Максимум 500 символов')
+      isValid = false
+    } else {
+      setDescriptionError(undefined)
+    };
+
+    return isValid;
   };
 
   const illustration = <RegisterStepThreeIllustration />;
@@ -90,24 +163,31 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
             error={titleError}
           />
 
-          <Select
-            label="Категория навыка"
-            placeholder="Выберите категорию навыка"
-            options={categories.map(cat => ({ value: cat.id, label: cat.name }))}
-            value={categoryId}
-            onChange={handleCategoryChange}
-            error={categoryIdError}
-          />
+          <div className={styles.selectWrapper}>
+            <Select
+              label="Категория навыка"
+              placeholder="Выберите категорию навыка"
+              options={categories.map(cat => ({ value: cat.id, label: cat.name }))}
+              value={categoryId}
+              onChange={handleCategoryChange}
+            />
+            {categoryIdError && (
+              <span className={styles.errorMessage}>{categoryIdError}</span>
+            )}
+          </div>
 
-          <Select
-            label="Подкатегория навыка"
-            placeholder="Выберите подкатегорию навыка"
-            options={subcategories.map(sub => ({ value: sub.id, label: sub.name }))}
-            value={subcategoryId}
-            onChange={handleSubcategoryChange}
-            error={subcategoryIdError}
-            disabled={!categoryId}
-          />
+          <div className={styles.selectWrapper}>
+            <Select
+              label="Подкатегория навыка"
+              placeholder="Выберите подкатегорию навыка"
+              options={subcategories.map(sub => ({ value: sub.id, label: sub.name }))}
+              value={subcategoryId}
+              onChange={handleSubcategoryChange}
+            />
+            {subcategoryIdError && (
+              <span className={styles.errorMessage}>{subcategoryIdError}</span>
+            )}
+          </div>
 
           <Textarea
             label="Описание"
@@ -119,7 +199,40 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
           />
 
           <div className={styles.uploadSection}>
-            <p className={styles.uploadLabel}>Перетащите или выберите изображения навыка</p>
+            <p className={styles.uploadLabel}>Перетащите или выберите изображения навыка</p>
+
+            <div className={styles.uploadZone} onClick={handleUploadClick}>
+              <ImageAddIcon />
+              <span>Выбрать изображения</span>
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png"
+              multiple
+              onChange={handleFileChange}
+              className={styles.fileInput}
+              aria-label="Загрузка изображения"
+            />
+
+            {images.length > 0 && (
+              <ul className={styles.imageList}>
+                {images.map((file, index) => (
+                  <li key={index} className={styles.imageItem}>
+                    <span className={styles.imageName}>{file.name}</span>
+                    <button
+                      type="button"
+                      className={styles.removeButton}
+                      onClick={() => handleRemoveImage(index)}
+                      aria-label={`Удалить изображение ${file.name}`}
+                    >
+                      <CloseIcon />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
