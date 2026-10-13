@@ -15,6 +15,10 @@
   position: relative;
   background-color: var(--color-bg-secondary);
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+  }
 }
 
 .arrowImg {
@@ -33,7 +37,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow: auto;
 }
 
 .listItem {
@@ -48,6 +51,11 @@
   &:active {
     background-color: var(--color-primary);
     color: var(--color-text) !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
   }
 }
 
@@ -65,7 +73,7 @@
   &.open {
     display: grid;
     grid-template-rows: min-content min-content;
-    overflow: hidden;
+    overflow: auto;
   }
 }
 

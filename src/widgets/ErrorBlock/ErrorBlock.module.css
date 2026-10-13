@@ -6,6 +6,7 @@
   width: clamp(275px, 100%, 460px);
   gap: 32px;
   margin: 0 auto;
+  padding: 100px 0 84px;
 }
 
 .imageContainer {

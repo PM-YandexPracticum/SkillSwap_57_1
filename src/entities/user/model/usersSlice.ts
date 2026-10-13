@@ -28,7 +28,9 @@ export const loadUsers = createAsyncThunk<User[], void, { state: RootState }>(
 const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadUsers.pending, (state) => {
@@ -51,3 +53,8 @@ export const usersReducer = usersSlice.reducer
 export const selectUsers = (state: RootState) => state.users.items
 export const selectUsersStatus = (state: RootState) => state.users.status
 export const selectUsersError = (state: RootState) => state.users.error
+export const selectCurrentUser = (state: RootState): User | undefined => {
+  const userId = state.auth.userId
+  if (!userId) return undefined
+  return state.users.items.find((user) => user.id === userId)
+}

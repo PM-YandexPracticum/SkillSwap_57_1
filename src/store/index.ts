@@ -4,6 +4,10 @@ import { citiesReducer } from '@/entities/city/model/citiesSlice'
 import { skillsReducer } from '@/entities/skill/model/skillsSlice'
 import { usersReducer } from '@/entities/user/model/usersSlice'
 import { filtersReducer } from '@/features/filters/model/filtersSlice'
+import { favoritesReducer } from '@/features/favorites/model/favoritesSlice'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { authReducer } from '@/features/auth/model/authSlice.ts'
+import { clearAuthUserId, saveAuthUserId } from '@/features/auth/model/authUtils.ts'
 
 /** Собирает store приложения; отдельная функция даёт тестам чистый store */
 export const createAppStore = () =>
@@ -14,10 +18,45 @@ export const createAppStore = () =>
       categories: categoriesReducer,
       cities: citiesReducer,
       filters: filtersReducer,
+      favorites: favoritesReducer,
+      auth: authReducer,
     },
   })
 
 export const store = createAppStore()
+
+// --- избранное ---
+let previousFavoriteIds = store.getState().favorites.ids
+
+store.subscribe(() => {
+  const currentFavoriteIds = store.getState().favorites.ids
+
+  if (currentFavoriteIds === previousFavoriteIds) {
+    return
+  }
+
+  previousFavoriteIds = currentFavoriteIds
+
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(currentFavoriteIds))
+  } catch (error) {
+    console.error('Не удалось сохранить избранное', error)
+  }
+})
+
+// --- auth.userId ---
+let previousUserId = store.getState().auth.userId
+
+store.subscribe(() => {
+  const currentUserId = store.getState().auth.userId
+
+  if (currentUserId === previousUserId) {
+    return
+  }
+  previousUserId = currentUserId
+  if (currentUserId) saveAuthUserId(currentUserId)
+  if (!currentUserId) clearAuthUserId()
+})
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

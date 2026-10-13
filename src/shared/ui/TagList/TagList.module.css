@@ -1,0 +1,22 @@
+.container {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.text {
+  letter-spacing: 0.02em;
+}
+
+.tags {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 4px;
+}
+
+.collapsed {
+  flex-wrap: wrap;
+}
+

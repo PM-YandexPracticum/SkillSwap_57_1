@@ -84,12 +84,3 @@ export interface Notification {
   isRead: boolean
   createdAt: string // ISO
 }
-
-// ─── Auth ────────────────────────────────────────────────
-export interface AuthUser {
-  id: string
-  name: string
-  email: string
-  avatarUrl: string | null // аватар в шапке
-  token: string
-}
