@@ -1,0 +1,30 @@
+.container {
+  width: 100%;
+  max-width: 1136px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uploadLabel {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
