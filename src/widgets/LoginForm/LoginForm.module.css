@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  height: 100%;
+}
+
+.smallContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.loginButton {
+  margin-top: 8px;
+}
+
+.container .mediaButton {
+  border-color: var(--color-text-secondary);
+}
+
+.passwordInput {
+  width: 100%;
+}
