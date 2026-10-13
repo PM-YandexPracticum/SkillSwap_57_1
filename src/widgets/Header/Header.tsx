@@ -9,21 +9,25 @@ import Moon from '@/shared/assets/icons/moon.svg?react'
 import Heart from '@/shared/assets/icons/heart.svg?react'
 import Bell from '@/shared/assets/icons/bell.svg?react'
 import Close from '@/shared/assets/icons/close.svg?react'
+import LogoutIcon from '@/shared/assets/icons/logout.svg?react'
 import { SearchInput } from '@/shared/ui/SearchInput'
-import { useState, type ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Avatar } from '@/shared/ui/Avatar'
 import { IconButton } from '@/shared/ui/IconButton'
 import { Popover } from '@/shared/ui/Popover'
+import { TextLink } from '@/shared/ui/TextLink'
 
 type HeaderProps = {
   user?: User
   variant?: 'default' | 'auth'
   skillsPanel?: ReactNode
+  onLogout?: () => void
 }
 
-export const Header = ({ user, variant = 'default', skillsPanel }: HeaderProps) => {
+export const Header = ({ user, variant = 'default', skillsPanel, onLogout }: HeaderProps) => {
   const [value, setValue] = useState('')
   const [isSkillsOpen, setIsSkillsOpen] = useState(false)
+  const [isUserMenuOpen, setUserMenuOpen] = useState(false)
   const navigate = useNavigate()
 
   if (variant === 'auth') {
@@ -110,10 +114,37 @@ export const Header = ({ user, variant = 'default', skillsPanel }: HeaderProps) 
           </div>
 
           <div>
-            <NavLink to={ROUTES.PROFILE} className={styles.user}>
-              <h4 className={styles.userText}>{user.name}</h4>
-              <Avatar src={user.avatarUrl} alt="Пользователь" size="s" />
-            </NavLink>
+            <Popover
+              className={styles.profilePopover}
+              align={'right'}
+              trigger={
+                <button onClick={() => setUserMenuOpen(!isUserMenuOpen)} className={styles.user}>
+                  <h4 className={styles.userText}>{user.name}</h4>
+                  <Avatar src={user.avatarUrl} alt="Пользователь" size="s" />
+                </button>
+              }
+              open={isUserMenuOpen}
+              onClose={() => setUserMenuOpen(!isUserMenuOpen)}
+            >
+              <span onClick={() => setUserMenuOpen(!isUserMenuOpen)}>
+                <TextLink variant={'default'} to={ROUTES.PROFILE} className={styles.profileButtons}>
+                  Личный&nbsp;кабинет
+                </TextLink>
+              </span>
+              <Button
+                variant={'link'}
+                onClick={() => {
+                  setUserMenuOpen(!isUserMenuOpen)
+                  if (onLogout) {
+                    onLogout()
+                  }
+                }}
+                iconRight={<LogoutIcon />}
+                className={styles.profileButtons}
+              >
+                Выйти из&nbsp;аккаунта
+              </Button>
+            </Popover>
           </div>
         </div>
       )}
