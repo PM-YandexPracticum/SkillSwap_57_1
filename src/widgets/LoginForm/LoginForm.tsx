@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import styles from './LoginForm.module.css'
 import { Button } from '@/shared/ui/Button'
 import AppleIcon from '@/shared/assets/icons/apple.svg?react'
@@ -16,28 +16,22 @@ type TLoginFormProps = {
 export const LoginForm: FC<TLoginFormProps> = ({ onSubmit, emailError, passwordError }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [localEmailError, setLocalEmailError] = useState(emailError)
-  const [localPasswordError, setLocalPasswordError] = useState(passwordError)
+  const [localEmailError, setLocalEmailError] = useState('')
+  const [localPasswordError, setLocalPasswordError] = useState('')
+  // Внешнюю ошибку показываем после отправки и прячем, пока пользователь правит поля
+  const [showExternalError, setShowExternalError] = useState(false)
 
-  useEffect(() => {
-    setLocalEmailError(emailError)
-  }, [emailError])
-
-  useEffect(() => {
-    setLocalPasswordError(passwordError)
-  }, [passwordError])
-
-  const validateEmail = (email: string): boolean => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-  }
+  const validateEmail = (value: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 
   const handleEmailInput = (data: string) => {
     setLocalEmailError('')
+    setShowExternalError(false)
     setEmail(data)
   }
 
   const handlePasswordInput = (data: string) => {
     setLocalPasswordError('')
+    setShowExternalError(false)
     setPassword(data)
   }
 
@@ -46,7 +40,10 @@ export const LoginForm: FC<TLoginFormProps> = ({ onSubmit, emailError, passwordE
     const isEmailValid = validateEmail(email)
     if (!isEmailValid) setLocalEmailError('Введите корректную почту')
     if (!password) setLocalPasswordError('Введите пароль')
-    if (isEmailValid && password) onSubmit({ email, password })
+    if (isEmailValid && password) {
+      setShowExternalError(true)
+      onSubmit({ email, password })
+    }
   }
 
   return (
@@ -77,14 +74,14 @@ export const LoginForm: FC<TLoginFormProps> = ({ onSubmit, emailError, passwordE
           placeholder={'Введите email'}
           type={'email'}
           label={'Email'}
-          error={localEmailError}
+          error={localEmailError || (showExternalError ? emailError : undefined)}
         />
         <PasswordInput
           value={password}
           onChange={handlePasswordInput}
           placeholder={'Введите пароль'}
           label={'Пароль'}
-          error={localPasswordError}
+          error={localPasswordError || (showExternalError ? passwordError : undefined)}
           className={styles.passwordInput}
         />
       </div>
