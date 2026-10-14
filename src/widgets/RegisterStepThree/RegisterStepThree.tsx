@@ -185,7 +185,6 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
           />
 
           <div className={styles.uploadSection}>
-            <p className={styles.uploadLabel}>Перетащите или выберите изображения навыка</p>
 
             <ImageUpload onChange={handleImagesUpload} />
 
