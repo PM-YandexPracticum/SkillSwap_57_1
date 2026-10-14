@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import styles from "./RegisterStepThree.module.css";
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
