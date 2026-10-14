@@ -100,13 +100,20 @@ export function RegisterStepTwo({ onBack, onNext }: RegisterStepTwoProps) {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
 
-      if (!isFormComplete) return
-
-      onNext({ name, birthDate, gender, cityId, categoryId, subcategoryId, avatarFile })
+    if (!name.trim() || !birthDate || !gender || !cityId || !categoryId || !subcategoryId) {
+      return
     }
+
+    onNext({
+      name: name.trim(),
+      birthDate,
+      gender,
+      cityId,
+      categoryId,
+      subcategoryId,
+      avatarFile,
+    })
   }
 
   return (

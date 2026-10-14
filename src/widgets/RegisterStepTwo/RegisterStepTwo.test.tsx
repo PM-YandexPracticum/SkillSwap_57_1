@@ -94,7 +94,7 @@ describe('RegisterStepTwo', () => {
     const firstDay = screen.getAllByRole('button').find((button) => button.textContent === '1')
     if (!firstDay) throw new Error('День календаря не найден')
     await user.click(firstDay)
-    await user.click(screen.getByRole('button', { name: 'Выбрать', exact: true }))
+    await user.click(screen.getByRole('button', { name: 'Выбрать' }))
     await user.click(screen.getByRole('button', { name: 'Продолжить' }))
     expect(onNext).toHaveBeenCalledWith(expect.objectContaining({ birthDate: '2026-10-01' }))
   })
