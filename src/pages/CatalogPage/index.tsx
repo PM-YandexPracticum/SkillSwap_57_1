@@ -5,9 +5,10 @@ import { selectUsers, selectCurrentUser } from '@/entities/user/model/usersSlice
 import { selectCategories } from '@/entities/category/model/categoriesSlice'
 import { selectCities } from '@/entities/city/model/citiesSlice'
 import { selectSkills } from '@/entities/skill/model/skillsSlice'
-import { selectFilters, setFilters } from '@/features/filters/model/filtersSlice'
+import { selectFilters, selectSearch, setFilters } from '@/features/filters/model/filtersSlice'
 import { countActiveFilters } from '@/features/filters/lib/filterChips'
 import { filterUsers } from '@/shared/lib/filterUsers'
+import { searchUsers } from '@/shared/lib/searchUsers'
 import { getHomeSections, sortByNewest, sortByPopularity } from '@/entities/user/lib/homeSections'
 import { UserSection } from './ui/UserSection'
 import { FilterResults } from './ui/FilterResults'
@@ -23,13 +24,19 @@ export default function CatalogPage() {
   const categories = useAppSelector(selectCategories)
   const cities = useAppSelector(selectCities)
   const filters = useAppSelector(selectFilters)
+  const search = useAppSelector(selectSearch)
+
   const [expanded, setExpanded] = useState<ExpandedSection>(null)
 
   const otherUsers = users.filter((user) => user.id !== currentUser?.id)
   const sections = getHomeSections(otherUsers)
 
   const hasFilters = countActiveFilters(filters) > 0
+  const hasSearch = search.trim() !== ''
+  const showResults = hasFilters || hasSearch
+
   const filteredUsers = filterUsers(otherUsers, skills, filters)
+  const resultUsers = hasSearch ? searchUsers(filteredUsers, skills, search) : filteredUsers
 
   return (
     <div className={styles.page}>
@@ -41,8 +48,8 @@ export default function CatalogPage() {
       />
 
       <main className={styles.content}>
-        {hasFilters ? (
-          <FilterResults users={filteredUsers} />
+        {showResults ? (
+          <FilterResults users={resultUsers} />
         ) : (
           <>
             {expanded === 'popular' && (
