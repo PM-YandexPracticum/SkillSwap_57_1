@@ -22,10 +22,20 @@ type HeaderProps = {
   variant?: 'default' | 'auth'
   skillsPanel?: ReactNode
   onLogout?: () => void
+  /** Управляемое значение поискового поля (для default-варианта) */
+  searchValue?: string
+  /** Обработчик ввода в поисковое поле */
+  onSearchChange?: (value: string) => void
 }
 
-export const Header = ({ user, variant = 'default', skillsPanel, onLogout }: HeaderProps) => {
-  const [value, setValue] = useState('')
+export const Header = ({
+  user,
+  variant = 'default',
+  skillsPanel,
+  onLogout,
+  searchValue = '',
+  onSearchChange,
+}: HeaderProps) => {
   const [isSkillsOpen, setIsSkillsOpen] = useState(false)
   const [isUserMenuOpen, setUserMenuOpen] = useState(false)
   const navigate = useNavigate()
@@ -83,9 +93,9 @@ export const Header = ({ user, variant = 'default', skillsPanel, onLogout }: Hea
       </nav>
       <search>
         <SearchInput
-          value={value}
-          onChange={setValue}
-          onClear={() => setValue('')}
+          value={searchValue}
+          onChange={(text) => onSearchChange?.(text)}
+          onClear={() => onSearchChange?.('')}
           placeholder="Искать навык"
         />
       </search>
