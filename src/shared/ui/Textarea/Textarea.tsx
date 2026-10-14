@@ -10,6 +10,7 @@ type TextareaProps = {
   rows?: number
   name?: string
   className?: string
+  maxLength?: number
 }
 
 export function Textarea({
@@ -21,6 +22,7 @@ export function Textarea({
   rows = 3,
   name,
   className,
+  maxLength,
 }: TextareaProps) {
   const id = useId()
   const errorId = `${id}-error`
@@ -42,6 +44,7 @@ export function Textarea({
         className={`${styles.textarea} ${error ? styles.error : ''} ${className ? className : ''}`}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
+        maxLength={maxLength}
       />
       {error && (
         <span id={errorId} className={styles.errorText} role="alert">

@@ -13,6 +13,7 @@ type TSelectProps = {
   placeholder?: string // Плейсхолдер для показа текста, если значение нее выбрано
   className?: string
   maxHeight?: string // Максимальная высота выпадающего списка ('100px', '20vw' и т.п.) если опций очень много
+  disabled?: boolean // Блокирует взаимодействие с компонентом (например, пока не выбрана зависимая категория)
 }
 
 export const Select: FC<TSelectProps> = ({
@@ -23,6 +24,7 @@ export const Select: FC<TSelectProps> = ({
   placeholder,
   className,
   maxHeight,
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -114,6 +116,7 @@ export const Select: FC<TSelectProps> = ({
       id={id}
       aria-controls={`${id}-list`}
       tabIndex={0}
+      disabled={disabled}
     >
       <span className={!value ? styles.placeholder : ''}>{plugText}</span>
       <span className={`${styles.arrowImg} ${isOpen ? styles.open : ''}`}>

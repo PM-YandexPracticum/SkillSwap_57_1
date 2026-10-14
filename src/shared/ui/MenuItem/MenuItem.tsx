@@ -12,6 +12,7 @@ type TMenuItemProps = {
 export const MenuItem: FC<TMenuItemProps> = ({ icon, label, to, className = '' }) => (
   <NavLink
     to={to}
+    end
     className={({ isActive }) => {
       return `${styles.navLink} ${className} ${isActive ? styles.active : ''}`
     }}
