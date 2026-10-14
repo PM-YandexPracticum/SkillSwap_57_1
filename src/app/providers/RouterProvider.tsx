@@ -8,6 +8,9 @@ const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
 const CatalogPage = lazy(() => import('@/pages/CatalogPage'))
 const SkillPage = lazy(() => import('@/pages/SkillPage'))
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
+const RequestsPage = lazy(() => import('@/pages/RequestsPage'))
+const ExchangesPage = lazy(() => import('@/pages/ExchangesPage'))
+const SkillsPage = lazy(() => import('@/pages/SkillsPage'))
 const FavoritesPage = lazy(() => import('@/pages/FavoritesPage'))
 const CreateSkillPage = lazy(() => import('@/pages/CreateSkillPage'))
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
@@ -27,6 +30,9 @@ export function AppRouter() {
 
           {/* Защищённые маршруты — добавь PrivateRoute обёртку */}
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+          <Route path={ROUTES.PROFILE_REQUESTS} element={<RequestsPage />} />
+          <Route path={ROUTES.PROFILE_EXCHANGES} element={<ExchangesPage />} />
+          <Route path={ROUTES.PROFILE_SKILLS} element={<SkillsPage />} />
           <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
 
           <Route path={ROUTES.SERVER_ERROR} element={<ServerErrorPage />} />
