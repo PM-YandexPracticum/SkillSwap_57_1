@@ -9,6 +9,7 @@ import styles from './Layout.module.css'
 import { selectCurrentUser } from '@/entities/user/model/usersSlice'
 import { logout } from '@/features/auth/model/authSlice'
 import { ROUTES } from '@/shared/lib/constants'
+import { AuthRequiredModal } from '@/widgets/AuthRequiredModal'
 
 export const MainLayout = () => {
   const categories = useAppSelector(selectCategories)
@@ -24,6 +25,7 @@ export const MainLayout = () => {
 
   return (
     <div className={styles.layout}>
+      <AuthRequiredModal />
       <Header
         user={user}
         onLogout={handleLogout}
