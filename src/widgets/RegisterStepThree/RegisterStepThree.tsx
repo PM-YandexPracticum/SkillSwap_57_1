@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useRef } from "react";
+import React, { FC, useState, useEffect } from "react";
 import styles from "./RegisterStepThree.module.css";
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
@@ -9,7 +9,7 @@ import { AuthPanel } from "../AuthPanel";
 import { useAppSelector } from "@/store/hooks";
 import RegisterStepThreeIllustration from "@/shared/assets/illustrations/register-skill.svg?react";
 import CloseIcon from "@/shared/assets/icons/close.svg?react";
-import ImageAddIcon from "@/shared/assets/icons/image-add.svg?react";
+import { ImageUpload } from "@/shared/ui/ImageUpload";
 
 export type RegisterStepThreeData = {
   title: string
@@ -66,21 +66,6 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
   const handleDescriptionChange = (value: string) => {
     setDescription(value);
     if (descriptionError) setDescriptionError(undefined);
-  };
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click()
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length > 0) {
-      handleImagesUpload(files)
-    };
-
-    e.target.value = '';
   };
 
   const handleImagesUpload = (newFiles: File[]) => {
@@ -183,6 +168,7 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
               options={subcategories.map(sub => ({ value: sub.id, label: sub.name }))}
               value={subcategoryId}
               onChange={handleSubcategoryChange}
+              disabled={!categoryId}
             />
             {subcategoryIdError && (
               <span className={styles.errorMessage}>{subcategoryIdError}</span>
@@ -201,20 +187,7 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
           <div className={styles.uploadSection}>
             <p className={styles.uploadLabel}>Перетащите или выберите изображения навыка</p>
 
-            <div className={styles.uploadZone} onClick={handleUploadClick}>
-              <ImageAddIcon />
-              <span>Выбрать изображения</span>
-            </div>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png"
-              multiple
-              onChange={handleFileChange}
-              className={styles.fileInput}
-              aria-label="Загрузка изображения"
-            />
+            <ImageUpload onChange={handleImagesUpload} />
 
             {images.length > 0 && (
               <ul className={styles.imageList}>
