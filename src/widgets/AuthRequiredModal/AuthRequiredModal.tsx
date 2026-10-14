@@ -32,7 +32,7 @@ export const AuthRequiredModal = () => {
         <Button
           fullWidth={true}
           onClick={() => {
-            navigate(ROUTES.LOGIN, { state: location, replace: true })
+            navigate(ROUTES.LOGIN, { state: { from: location }, replace: true })
             closeModal()
           }}
         >
