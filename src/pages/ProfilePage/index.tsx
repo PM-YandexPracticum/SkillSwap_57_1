@@ -6,6 +6,7 @@ import { DatePicker } from '@/shared/ui/DatePicker'
 import { Input } from '@/shared/ui/Input'
 import { Select } from '@/shared/ui/Select'
 import { Textarea } from '@/shared/ui/Textarea'
+import PencilIcon from '@/shared/assets/icons/pencil.svg?react'
 import { selectCities } from '@/entities/city/model/citiesSlice'
 import { useAppSelector } from '@/store/hooks'
 import type { Gender } from '@/shared/types'
@@ -77,6 +78,7 @@ export default function ProfilePage() {
                 placeholder="Введите email"
                 type="email"
                 label="Почта"
+                rightElement={<PencilIcon />}
               />
               <Button variant="link" className={styles.changePassword}>
                 Изменить пароль
@@ -86,6 +88,7 @@ export default function ProfilePage() {
                 onChange={(value) => setField('name', value)}
                 placeholder="Введите имя"
                 label="Имя"
+                rightElement={<PencilIcon />}
               />
               <div className={styles.dateRow}>
                 <DatePicker
@@ -115,6 +118,7 @@ export default function ProfilePage() {
                 onChange={(value) => setField('about', value)}
                 label="О себе"
                 rows={4}
+                rightElement={<PencilIcon />}
               />
               <Button type="submit" fullWidth className={styles.saveButton}>
                 Сохранить

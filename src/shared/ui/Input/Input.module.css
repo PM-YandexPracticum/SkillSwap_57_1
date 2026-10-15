@@ -5,6 +5,16 @@
   width: 100%;
 }
 
+.field {
+  position: relative;
+  width: 100%;
+}
+
+/* Обёртка поля с иконкой справа — только тогда добавляем отступ */
+.fieldWithRight .input {
+  padding-right: 48px;
+}
+
 .input {
   box-sizing: border-box;
   width: 100%;
@@ -72,4 +82,22 @@
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
   color: var(--color-text);
+}
+
+.rightElement {
+  position: absolute;
+  top: 50%;
+  right: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.rightElement svg {
+  display: block;
+  width: 24px;
+  height: 24px;
 }
