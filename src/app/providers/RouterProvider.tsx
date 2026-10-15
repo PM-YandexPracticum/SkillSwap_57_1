@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
 import { ROUTES } from '@/shared/lib/constants'
 import { MainLayout, AuthLayout } from '@/app/layouts'
-import { RequireAuth } from '@/app/providers/RequireAuth'
+import { PrivateRoute } from '@/features/auth/ui'
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
@@ -29,7 +29,8 @@ export function AppRouter() {
           <Route path={ROUTES.SKILL} element={<SkillPage />} />
           <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
 
-          <Route element={<RequireAuth />}>
+          {/* Защищённые маршруты — доступны только авторизованному пользователю */}
+          <Route element={<PrivateRoute />}>
             <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
             <Route path={ROUTES.PROFILE_REQUESTS} element={<RequestsPage />} />
             <Route path={ROUTES.PROFILE_EXCHANGES} element={<ExchangesPage />} />

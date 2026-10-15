@@ -86,7 +86,8 @@ public/
 
 Lazy-загрузка уже настроена в `src/app/providers/RouterProvider.tsx`.
 
-Для защищённых маршрутов добавь компонент `PrivateRoute` в `src/features/auth/ui/`.
+Для защищённых маршрутов используй компонент `PrivateRoute` из `src/features/auth/ui/` — он
+перенаправляет неавторизованного пользователя на `/login`.
 
 ---
 
