@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
 import { ROUTES } from '@/shared/lib/constants'
 import { MainLayout, AuthLayout } from '@/app/layouts'
+import { RequireAuth } from '@/app/providers/RequireAuth'
 
 // Lazy-загрузка страниц — каждая страница грузится только при переходе на неё
 const CategoryPage = lazy(() => import('@/pages/CategoryPage'))
@@ -28,12 +29,13 @@ export function AppRouter() {
           <Route path={ROUTES.SKILL} element={<SkillPage />} />
           <Route path={ROUTES.FAVORITES} element={<FavoritesPage />} />
 
-          {/* Защищённые маршруты — добавь PrivateRoute обёртку */}
-          <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
-          <Route path={ROUTES.PROFILE_REQUESTS} element={<RequestsPage />} />
-          <Route path={ROUTES.PROFILE_EXCHANGES} element={<ExchangesPage />} />
-          <Route path={ROUTES.PROFILE_SKILLS} element={<SkillsPage />} />
-          <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
+          <Route element={<RequireAuth />}>
+            <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTES.PROFILE_REQUESTS} element={<RequestsPage />} />
+            <Route path={ROUTES.PROFILE_EXCHANGES} element={<ExchangesPage />} />
+            <Route path={ROUTES.PROFILE_SKILLS} element={<SkillsPage />} />
+            <Route path={ROUTES.CREATE} element={<CreateSkillPage />} />
+          </Route>
 
           <Route path={ROUTES.SERVER_ERROR} element={<ServerErrorPage />} />
           <Route path="*" element={<NotFoundPage />} />
