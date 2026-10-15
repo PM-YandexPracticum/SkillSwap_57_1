@@ -36,6 +36,14 @@
   align-self: flex-start;
 }
 
+.loading {
+  margin-inline: auto;
+}
+
+.error {
+  color: var(--color-error);
+}
+
 .dateRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
