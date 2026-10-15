@@ -2,14 +2,27 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--space-xl);
-  align-items: start;
 }
 
 .content {
   display: flex;
   flex-direction: column;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   gap: var(--space-md);
   min-width: 0;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .title {
@@ -42,22 +55,24 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  margin-top: var(--space-md);
 }
 
 .gallery {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: var(--space-md);
+  align-items: flex-start;
   min-width: 0;
 }
 
 .mainImage {
   position: relative;
+  flex: 1;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-radius: var(--radius-lg);
   background-color: var(--color-horizon-line);
+  min-width: 0;
 }
 
 .image {
@@ -121,13 +136,13 @@
 
 .thumbnails {
   display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
   gap: var(--space-sm);
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   list-style: none;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-horizon-line) transparent;
 }
 
 .thumbnailItem {
@@ -165,6 +180,24 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Бейдж «+N» — визуально совпадает с миниатюрой, но без картинки */
+.thumbnailMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--color-horizon-line);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  cursor: default;
 }
 
 @media (width <= 1023px) {

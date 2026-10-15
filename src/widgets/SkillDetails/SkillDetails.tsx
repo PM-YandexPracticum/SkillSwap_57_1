@@ -3,6 +3,8 @@ import ChevronIcon from '@/shared/assets/icons/chevron.svg?react'
 import styles from './SkillDetails.module.css'
 
 const PLACEHOLDER_IMAGE = '/images/skills/placeholder.jpg'
+// Ограничение видимых миниатюр — остальные показываем бейджем «+N»
+const MAX_VISIBLE_THUMBNAILS = 4
 
 export type SkillDetailsProps = {
   /** Название навыка */
@@ -48,6 +50,10 @@ export function SkillDetails({
   // Стрелки нужны только когда их явно включили и есть что переключать.
   const showArrows = showGalleryControls && images.length > 1
 
+  // Первые MAX_VISIBLE_THUMBNAILS миниатюр показываем, остальные — бейджем «+N»
+  const visibleImages = images.slice(0, MAX_VISIBLE_THUMBNAILS)
+  const hiddenCount = images.length - visibleImages.length
+
   const handlePrev = () => {
     setActiveIndex((prev) => (prev - 1 + images.length) % images.length)
   }
@@ -59,11 +65,16 @@ export function SkillDetails({
   return (
     <article className={[styles.container, className].filter(Boolean).join(' ')}>
       <div className={styles.content}>
-        <h2 className={styles.title}>{title}</h2>
-        <p className={styles.category}>
-          {categoryName} / {subcategoryName}
-        </p>
-        <p className={styles.description}>{description}</p>
+        <div className={styles.info}>
+          <div className={styles.textBlock}>
+            <h2 className={styles.title}>{title}</h2>
+            <p className={styles.category}>
+              {categoryName} / {subcategoryName}
+            </p>
+          </div>
+          <p className={styles.description}>{description}</p>
+        </div>
+
         {actions && <div className={styles.actions}>{actions}</div>}
       </div>
 
@@ -95,7 +106,7 @@ export function SkillDetails({
 
         {hasImages && (
           <ul className={styles.thumbnails}>
-            {images.map((image, index) => (
+            {visibleImages.map((image, index) => (
               <li key={`${image}-${index}`} className={styles.thumbnailItem}>
                 <button
                   type="button"
@@ -110,6 +121,14 @@ export function SkillDetails({
                 </button>
               </li>
             ))}
+
+            {hiddenCount > 0 && (
+              <li className={styles.thumbnailItem}>
+                <span className={styles.thumbnailMore} aria-hidden="true">
+                  +{hiddenCount}
+                </span>
+              </li>
+            )}
           </ul>
         )}
       </div>
