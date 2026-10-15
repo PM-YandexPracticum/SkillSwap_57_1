@@ -1,5 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { fetchSkills } from '@/api/skills'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { readList } from '@/shared/lib/storage'
 import type { LoadingStatus } from '@/store/types'
 import type { RootState } from '@/store'
 import type { Skill } from './types'
@@ -16,10 +18,13 @@ const initialState: SkillsState = {
   error: null,
 }
 
-/** Загружает навыки один раз: повторный dispatch при уже начатой загрузке пропускается */
+/**
+ * Загружает навыки один раз: повторный dispatch при уже начатой загрузке пропускается.
+ * К моковым навыкам добавляются навыки зарегистрированных пользователей (из localStorage).
+ */
 export const loadSkills = createAsyncThunk<Skill[], void, { state: RootState }>(
   'skills/loadSkills',
-  async () => fetchSkills(),
+  async () => [...(await fetchSkills()), ...readList<Skill>(LOCAL_STORAGE_KEYS.REGISTERED_SKILLS)],
   {
     condition: (_arg, { getState }) => getState().skills.status === 'idle',
   },
@@ -28,7 +33,11 @@ export const loadSkills = createAsyncThunk<Skill[], void, { state: RootState }>(
 const skillsSlice = createSlice({
   name: 'skills',
   initialState,
-  reducers: {},
+  reducers: {
+    addSkill(state, action: PayloadAction<Skill>) {
+      state.items.push(action.payload)
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadSkills.pending, (state) => {
@@ -47,6 +56,7 @@ const skillsSlice = createSlice({
 })
 
 export const skillsReducer = skillsSlice.reducer
+export const { addSkill } = skillsSlice.actions
 
 export const selectSkills = (state: RootState) => state.skills.items
 export const selectSkillsStatus = (state: RootState) => state.skills.status
