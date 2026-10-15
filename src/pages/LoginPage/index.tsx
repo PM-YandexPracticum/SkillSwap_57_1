@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { LoginForm } from '@/widgets/LoginForm'
 import { AuthPanel } from '@/widgets/AuthPanel'
 import LampImg from '@/shared/assets/illustrations/login.svg?react'
@@ -13,12 +13,14 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const users = useAppSelector(selectUsers)
   const authError = useAppSelector(selectAuthError)
+  const location = useLocation()
+  const from = location.state?.from?.pathname ?? ROUTES.HOME
 
   const handleSubmit = (data: { email: string; password: string }) => {
     const userId = findUserIdByCredentials(users, data)
     dispatch(login(userId))
     if (userId) {
-      navigate(ROUTES.HOME)
+      navigate(from, {replace: true})
     }
   }
 
