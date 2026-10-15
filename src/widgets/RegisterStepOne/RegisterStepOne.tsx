@@ -10,8 +10,15 @@ import { PasswordInput } from '@/shared/ui/PasswordInput'
 type TRegisterStepOneProps = {
   onNext: (data: { email: string; password: string }) => void
   emailError?: string
+  /** Проверка, занят ли email; если вернёт true — показываем ошибку и дальше не пускаем */
+  isEmailTaken?: (email: string) => boolean
 }
-export const RegisterStepOne: FC<TRegisterStepOneProps> = ({ onNext, emailError }) => {
+
+export const RegisterStepOne: FC<TRegisterStepOneProps> = ({
+  onNext,
+  emailError,
+  isEmailTaken,
+}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [hintText, setHintText] = useState('Пароль должен содержать не менее 8 знаков')
@@ -40,6 +47,10 @@ export const RegisterStepOne: FC<TRegisterStepOneProps> = ({ onNext, emailError 
     if (!validateEmail(email) || password.length < 8) {
       if (!validateEmail(email)) setEmailError('Введите корректную почту')
       if (password.length < 8) setPasswordError(true)
+      return
+    }
+    if (isEmailTaken?.(email)) {
+      setEmailError('Email уже используется')
       return
     }
     onNext({ email, password })
