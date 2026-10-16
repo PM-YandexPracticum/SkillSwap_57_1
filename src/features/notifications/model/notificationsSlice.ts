@@ -2,21 +2,10 @@ import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/tool
 import { fetchNotifications } from '@/api/notifications'
 import type { LoadingStatus } from '@/store/types'
 import type { RootState } from '@/store'
+import type { AppNotification } from '@/shared/types'
 
-/** Уведомление конкретного пользователя о событиях по заявкам на обмен */
-export type AppNotification = {
-  id: string
-  /** id пользователя-получателя */
-  userId: string
-  /** Основной текст уведомления */
-  text: string
-  /** Пояснение к уведомлению */
-  description: string
-  /** Дата создания в ISO-формате */
-  createdAt: string
-  /** Просмотрено ли уведомление */
-  isRead: boolean
-}
+// Реэкспорт типа — чтобы потребители могли импортировать его из фичи
+export type { AppNotification }
 
 export type NotificationsState = {
   items: AppNotification[]

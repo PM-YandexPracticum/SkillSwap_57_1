@@ -1,4 +1,4 @@
-import type { AppNotification } from '@/features/notifications/model/notificationsSlice'
+import type { AppNotification } from '@/shared/types'
 
 const BASE_URL = '/db'
 
