@@ -66,12 +66,31 @@
 }
 
 .mainImage {
-  width: 100%;
   position: relative;
+  width: 100%;
+  min-width: 0;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
   border-radius: var(--radius-lg);
   background-color: var(--color-horizon-line);
+}
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  touch-action: pan-y pinch-zoom;
+}
+
+.slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  height: 100%;
 }
 
 .image {
@@ -83,6 +102,7 @@
 
 .arrow {
   position: absolute;
+  z-index: 1;
   top: 50%;
   display: flex;
   align-items: center;
@@ -136,35 +156,33 @@
 
 .thumbnails {
   display: flex;
-  height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0;
-  list-style: none;
+  gap: var(--space-sm);
   min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .thumbnailItem {
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .thumbnail {
-  box-sizing: border-box;
   position: relative;
+  display: block;
+  box-sizing: border-box;
   width: 100%;
-  border-radius: var(--radius-md);
-  background-color: var(--color-horizon-line);
   aspect-ratio: 1 / 1;
   padding: 0;
   overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--color-horizon-line);
   cursor: pointer;
-}
-
-.thumbnailImage {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  transition: border-color 0.2s ease;
 }
 
 .thumbnail:hover {
@@ -180,7 +198,15 @@
   border-color: var(--color-primary);
 }
 
-/* Бейдж «+N» — визуально совпадает с миниатюрой, но без картинки */
+.thumbnailImage {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .thumbnailMore {
   position: absolute;
   inset: 0;
