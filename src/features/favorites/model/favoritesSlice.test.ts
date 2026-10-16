@@ -1,66 +1,52 @@
-import { describe, expect, it } from 'vitest'
-import { createAppStore } from '@/store'
-import type { User } from '@/entities/user/model/types'
-import { selectLikesCount, favoritesReducer, toggleFavorite } from './favoritesSlice'
+import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '@/store'
 
-//Тесты редьюсера
-describe('favoritesReducer', () => {
-  it('добавляет пользователя в избранное', () => {
-    const result = favoritesReducer({ ids: [] }, toggleFavorite('user-1'))
-
-    expect(result.ids).toEqual(['user-1'])
-  })
-
-  it('убирает пользователя из избранного', () => {
-    const result = favoritesReducer({ ids: ['user-1', 'user-2'] }, toggleFavorite('user-1'))
-    expect(result.ids).toEqual(['user-2'])
-  })
-
-  it('после двух переключений возвращает исходный список', () => {
-    const initialState = { ids: ['user-2'] }
-
-    const afterAdding = favoritesReducer(initialState, toggleFavorite('user-1'))
-
-    const afterRemoving = favoritesReducer(afterAdding, toggleFavorite('user-1'))
-
-    expect(afterRemoving.ids).toEqual(['user-2'])
-  })
-})
-
-//Tест selectLikesCount
-const user = {
-  id: 'user-1',
-  likesCount: 10,
-} as User
-
-const initialState = createAppStore().getState()
-
-const state = {
-  ...initialState,
-  users: {
-    ...initialState.users,
-    items: [user],
-    status: 'succeeded' as const,
-    error: null,
-  },
-  favorites: {
-    ids: [] as string[],
-  },
+export type FavoritesState = {
+  /** Id пользователей в избранном текущего авторизованного пользователя */
+  ids: string[]
 }
 
-describe('selectLikesCount', () => {
-  it('возвращает исходное количество лайков, если пользователь не в избранном', () => {
-    expect(selectLikesCount(state, 'user-1')).toBe(10)
-  })
+// initialState.ids не читается из localStorage:
+// хранение по пользователям и синхронизация с auth.userId живут в favoritesStorage.ts
+const initialState: FavoritesState = {
+  ids: [],
+}
 
-  it('прибавляет один лайк, если пользователь в избранном', () => {
-    const stateWithFavorite = {
-      ...state,
-      favorites: {
-        ids: ['user-1'],
-      },
-    }
-
-    expect(selectLikesCount(stateWithFavorite, 'user-1')).toBe(11)
-  })
+const favoritesSlice = createSlice({
+  name: 'favorites', // ← было 'favourites', исправлено по AC #171
+  initialState,
+  reducers: {
+    /** Добавляет или убирает пользователя из избранного текущего пользователя */
+    toggleFavorite(state, action: PayloadAction<string>) {
+      const userId = action.payload
+      if (state.ids.includes(userId)) {
+        state.ids = state.ids.filter((id) => id !== userId)
+      } else {
+        state.ids.push(userId)
+      }
+    },
+    /** Полностью заменяет список — используется при смене авторизованного пользователя */
+    setFavorites(state, action: PayloadAction<string[]>) {
+      state.ids = action.payload
+    },
+  },
 })
+
+export const { toggleFavorite, setFavorites } = favoritesSlice.actions
+export const favoritesReducer = favoritesSlice.reducer
+
+export const selectFavoriteIds = (state: RootState): string[] => state.favorites.ids
+
+export const selectIsFavorite = (state: RootState, userId: string): boolean =>
+  selectFavoriteIds(state).includes(userId)
+
+export const selectFavoriteUsers = createSelector(
+  [(state: RootState) => state.users.items, selectFavoriteIds],
+  (users, favoriteIds) => users.filter((user) => favoriteIds.includes(user.id)),
+)
+
+export const selectLikesCount = (state: RootState, userId: string): number => {
+  const user = state.users.items.find((item) => item.id === userId)
+  if (!user) return 0
+  return user.likesCount + (selectIsFavorite(state, userId) ? 1 : 0)
+}
