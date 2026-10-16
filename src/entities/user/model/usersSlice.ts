@@ -1,5 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { fetchUsers } from '@/api/users'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { readList } from '@/shared/lib/storage'
 import type { LoadingStatus } from '@/store/types'
 import type { RootState } from '@/store'
 import type { User } from './types'
@@ -16,10 +18,13 @@ const initialState: UsersState = {
   error: null,
 }
 
-/** Загружает пользователей один раз: повторный dispatch при уже начатой загрузке пропускается */
+/**
+ * Загружает пользователей один раз: повторный dispatch при уже начатой загрузке пропускается.
+ * К моковым пользователям добавляются зарегистрированные (из localStorage).
+ */
 export const loadUsers = createAsyncThunk<User[], void, { state: RootState }>(
   'users/loadUsers',
-  async () => fetchUsers(),
+  async () => [...(await fetchUsers()), ...readList<User>(LOCAL_STORAGE_KEYS.REGISTERED_USERS)],
   {
     condition: (_arg, { getState }) => getState().users.status === 'idle',
   },
@@ -29,7 +34,9 @@ const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-
+    addUser(state, action: PayloadAction<User>) {
+      state.items.push(action.payload)
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,6 +56,7 @@ const usersSlice = createSlice({
 })
 
 export const usersReducer = usersSlice.reducer
+export const { addUser } = usersSlice.actions
 
 export const selectUsers = (state: RootState) => state.users.items
 export const selectUsersStatus = (state: RootState) => state.users.status

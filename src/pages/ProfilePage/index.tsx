@@ -7,6 +7,7 @@ import { Input } from '@/shared/ui/Input'
 import { Select } from '@/shared/ui/Select'
 import { Spinner } from '@/shared/ui/Spinner'
 import { Textarea } from '@/shared/ui/Textarea'
+import PencilIcon from '@/shared/assets/icons/pencil.svg?react'
 import { selectCities } from '@/entities/city/model/citiesSlice'
 import { selectCurrentUser, selectUsersStatus } from '@/entities/user/model/usersSlice'
 import { useAppSelector } from '@/store/hooks'
@@ -96,6 +97,7 @@ export default function ProfilePage() {
                   placeholder="Введите email"
                   type="email"
                   label="Почта"
+                  rightElement={<PencilIcon />}
                 />
                 <Button variant="link" className={styles.changePassword}>
                   Изменить пароль
@@ -105,6 +107,7 @@ export default function ProfilePage() {
                   onChange={(value) => setField('name', value)}
                   placeholder="Введите имя"
                   label="Имя"
+                  rightElement={<PencilIcon />}
                 />
                 <div className={styles.dateRow}>
                   <DatePicker
@@ -134,6 +137,7 @@ export default function ProfilePage() {
                   onChange={(value) => setField('about', value)}
                   label="О себе"
                   rows={4}
+                  rightElement={<PencilIcon />}
                 />
                 <Button type="submit" fullWidth className={styles.saveButton}>
                   Сохранить

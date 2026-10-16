@@ -30,4 +30,6 @@ export const LOCAL_STORAGE_KEYS = {
   FAVORITES: 'skillswap_favorites',
   REQUESTS: 'skillswap_requests',
   THEME: 'skillswap_theme',
+  REGISTERED_USERS: 'skillswap_registered_users',
+  REGISTERED_SKILLS: 'skillswap_registered_skills',
 } as const
