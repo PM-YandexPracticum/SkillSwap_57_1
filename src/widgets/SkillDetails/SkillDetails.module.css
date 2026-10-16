@@ -54,28 +54,28 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm);
+  gap: var(--space-lg);
 }
 
 .gallery {
-  display: flex;
-  flex-direction: row;
-  gap: var(--space-md);
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 3.5fr) minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: stretch;
   min-width: 0;
 }
 
 .mainImage {
+  width: 100%;
   position: relative;
-  flex: 1;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: var(--radius-lg);
   background-color: var(--color-horizon-line);
-  min-width: 0;
 }
 
 .image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -136,13 +136,12 @@
 
 .thumbnails {
   display: flex;
+  height: 100%;
   flex-direction: column;
-  flex-shrink: 0;
-  gap: var(--space-sm);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+  justify-content: space-between;
+  gap: 0;
   list-style: none;
+  min-width: 0;
 }
 
 .thumbnailItem {
@@ -150,16 +149,22 @@
 }
 
 .thumbnail {
-  display: block;
-  width: 80px;
-  height: 80px;
-  padding: 0;
-  border: 2px solid transparent;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
   border-radius: var(--radius-md);
-  overflow: hidden;
   background-color: var(--color-horizon-line);
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+}
+
+.thumbnailImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .thumbnail:hover {
@@ -184,22 +189,19 @@
 
 /* Бейдж «+N» — визуально совпадает с миниатюрой, но без картинки */
 .thumbnailMore {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
-  border: 2px solid transparent;
-  border-radius: var(--radius-md);
-  background-color: var(--color-horizon-line);
+  background-color: rgb(255 255 255 / 65%);
   font-family: var(--font-body);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-body);
   color: var(--color-text);
-  cursor: default;
+  pointer-events: none;
 }
-
 @media (width <= 1023px) {
   .container {
     grid-template-columns: minmax(0, 1fr);
