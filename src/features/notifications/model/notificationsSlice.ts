@@ -19,12 +19,23 @@ const initialState: NotificationsState = {
   error: null,
 }
 
-/** Загружает моковые уведомления один раз: повторный dispatch пропускается */
+/**
+ * Загружает моковые уведомления.
+ *
+ * Повторный dispatch разрешён из статусов `idle` и `failed`:
+ * - `idle` — первая загрузка;
+ * - `failed` — повторная попытка после сетевой ошибки (кнопка «Повторить»).
+ *
+ * Из `loading` и `succeeded` повторный dispatch пропускается.
+ */
 export const loadNotifications = createAsyncThunk<AppNotification[], void, { state: RootState }>(
   'notifications/loadNotifications',
   async () => fetchNotifications(),
   {
-    condition: (_arg, { getState }) => getState().notifications.status === 'idle',
+    condition: (_arg, { getState }) => {
+      const status = getState().notifications.status
+      return status === 'idle' || status === 'failed'
+    },
   },
 )
 

@@ -1,8 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createAppStore } from '@/store'
 import type { RootState } from '@/store'
+import { fetchNotifications } from '@/api/notifications'
 import {
   clearReadNotifications,
+  loadNotifications,
   markAllNotificationsRead,
   markNotificationsRead,
   notificationsReducer,
@@ -12,6 +14,10 @@ import {
   selectReadNotifications,
   type AppNotification,
 } from './notificationsSlice'
+
+vi.mock('@/api/notifications', () => ({
+  fetchNotifications: vi.fn(),
+}))
 
 const u1New: AppNotification = {
   id: 'n1',
@@ -143,5 +149,76 @@ describe('notifications selectors', () => {
     const u1Ids = new Set(selectNewNotifications(state, 'u1').map((n) => n.id))
     const u2Ids = selectNewNotifications(state, 'u2').map((n) => n.id)
     u2Ids.forEach((id) => expect(u1Ids.has(id)).toBe(false))
+  })
+})
+
+describe('loadNotifications — повторная загрузка после ошибки', () => {
+  const mockedFetch = vi.mocked(fetchNotifications)
+
+  beforeEach(() => {
+    mockedFetch.mockReset()
+  })
+
+  it('первый dispatch из idle запускает запрос', async () => {
+    mockedFetch.mockResolvedValueOnce([u1New])
+    const store = createAppStore()
+
+    await store.dispatch(loadNotifications())
+
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+    expect(store.getState().notifications.status).toBe('succeeded')
+  })
+
+  it('повторный dispatch из succeeded не запускает запрос заново', async () => {
+    mockedFetch.mockResolvedValueOnce([u1New])
+    const store = createAppStore()
+
+    await store.dispatch(loadNotifications())
+    await store.dispatch(loadNotifications())
+
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('повторный dispatch из failed запускает запрос заново', async () => {
+    // первая попытка падает
+    mockedFetch.mockRejectedValueOnce(new Error('Сеть недоступна'))
+    // вторая — успешна
+    mockedFetch.mockResolvedValueOnce([u1New, u1New2])
+
+    const store = createAppStore()
+
+    await store.dispatch(loadNotifications())
+    expect(store.getState().notifications.status).toBe('failed')
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+
+    // ключевая проверка: после ошибки retry разрешён
+    await store.dispatch(loadNotifications())
+
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    expect(store.getState().notifications.status).toBe('succeeded')
+    expect(store.getState().notifications.items).toHaveLength(2)
+    expect(store.getState().notifications.error).toBeNull()
+  })
+
+  it('повторный dispatch во время loading не запускает второй запрос', async () => {
+    let resolveFetch: (value: AppNotification[]) => void = () => {}
+    mockedFetch.mockImplementationOnce(
+      () =>
+        new Promise<AppNotification[]>((resolve) => {
+          resolveFetch = resolve
+        }),
+    )
+
+    const store = createAppStore()
+
+    const first = store.dispatch(loadNotifications())
+    // пока первый запрос ещё не завершён — статус loading
+    expect(store.getState().notifications.status).toBe('loading')
+
+    await store.dispatch(loadNotifications())
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+
+    resolveFetch([u1New])
+    await first
   })
 })
