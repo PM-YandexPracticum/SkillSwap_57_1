@@ -1,5 +1,6 @@
 import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { useInfiniteList } from '@/shared/hooks/useInfiniteList'
 import { UserCardItem } from './UserCardItem'
 import styles from '../CatalogPage.module.css'
 
@@ -8,6 +9,8 @@ type UserSectionProps = {
   users: User[]
   onShowAll?: () => void
   showAllLabel?: string
+  /** Включает порционную догрузку (для развёрнутого режима «Смотреть все») */
+  paginate?: boolean
 }
 
 export function UserSection({
@@ -15,8 +18,16 @@ export function UserSection({
   users,
   onShowAll,
   showAllLabel = 'Смотреть все',
+  paginate = false,
 }: UserSectionProps) {
+  // Хук вызываем всегда (правила хуков). Sentinel рендерим только в paginate-режиме —
+  // тогда observer и не создаётся, если sentinel не в DOM (ref = null).
+  const { visibleItems, hasMore, sentinelRef } = useInfiniteList(users)
+
   if (users.length === 0) return null
+
+  const rendered = paginate ? visibleItems : users
+  const showSentinel = paginate && hasMore
 
   return (
     <section className={styles.section}>
@@ -29,10 +40,11 @@ export function UserSection({
         )}
       </div>
       <div className={styles.grid}>
-        {users.map((user) => (
+        {rendered.map((user) => (
           <UserCardItem key={user.id} user={user} />
         ))}
       </div>
+      {showSentinel && <div ref={sentinelRef} aria-hidden="true" />}
     </section>
   )
 }

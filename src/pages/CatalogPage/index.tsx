@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FiltersSidebar } from '@/widgets/FiltersSidebar'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectUsers, selectCurrentUser } from '@/entities/user/model/usersSlice'
@@ -28,15 +28,28 @@ export default function CatalogPage() {
 
   const [expanded, setExpanded] = useState<ExpandedSection>(null)
 
-  const otherUsers = users.filter((user) => user.id !== currentUser?.id)
-  const sections = getHomeSections(otherUsers)
+  // Мемоизируем цепочку — иначе useInfiniteList будет сбрасываться на каждом рендере.
+  const otherUsers = useMemo(
+    () => users.filter((user) => user.id !== currentUser?.id),
+    [users, currentUser?.id],
+  )
+
+  const sections = useMemo(() => getHomeSections(otherUsers), [otherUsers])
+  const popularUsers = useMemo(() => sortByPopularity(otherUsers), [otherUsers])
+  const newestUsers = useMemo(() => sortByNewest(otherUsers), [otherUsers])
 
   const hasFilters = countActiveFilters(filters) > 0
   const hasSearch = search.trim() !== ''
   const showResults = hasFilters || hasSearch
 
-  const filteredUsers = filterUsers(otherUsers, skills, filters)
-  const resultUsers = hasSearch ? searchUsers(filteredUsers, skills, search) : filteredUsers
+  const filteredUsers = useMemo(
+    () => filterUsers(otherUsers, skills, filters),
+    [otherUsers, skills, filters],
+  )
+  const resultUsers = useMemo(
+    () => (hasSearch ? searchUsers(filteredUsers, skills, search) : filteredUsers),
+    [filteredUsers, skills, search, hasSearch],
+  )
 
   return (
     <div className={styles.page}>
@@ -55,17 +68,19 @@ export default function CatalogPage() {
             {expanded === 'popular' && (
               <UserSection
                 title="Популярное"
-                users={sortByPopularity(otherUsers)}
+                users={popularUsers}
                 onShowAll={() => setExpanded(null)}
                 showAllLabel="Свернуть"
+                paginate
               />
             )}
             {expanded === 'newest' && (
               <UserSection
                 title="Новое"
-                users={sortByNewest(otherUsers)}
+                users={newestUsers}
                 onShowAll={() => setExpanded(null)}
                 showAllLabel="Свернуть"
+                paginate
               />
             )}
             {expanded === null && (

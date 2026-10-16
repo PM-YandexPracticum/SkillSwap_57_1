@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
 import CloseIcon from '@/shared/assets/icons/close.svg?react'
@@ -8,6 +8,7 @@ import { selectCities } from '@/entities/city/model/citiesSlice'
 import { selectFilters, setFilters } from '@/features/filters/model/filtersSlice'
 import { getFilterChips } from '@/features/filters/lib/filterChips'
 import { sortByNewest, sortByPopularity } from '@/entities/user/lib/homeSections'
+import { useInfiniteList } from '@/shared/hooks/useInfiniteList'
 import { UserCardItem } from './UserCardItem'
 import styles from '../CatalogPage.module.css'
 
@@ -25,7 +26,21 @@ export function FilterResults({ users }: FilterResultsProps) {
   const [sort, setSort] = useState<SortOrder>('newest')
 
   const chips = getFilterChips(filters, categories, cities)
-  const sortedUsers = sort === 'newest' ? sortByNewest(users) : sortByPopularity(users)
+
+  // Мемоизируем сортировку: иначе на каждом рендере получаем новый массив,
+  // и useInfiniteList не сможет удержать состояние.
+  const sortedUsers = useMemo(
+    () => (sort === 'newest' ? sortByNewest(users) : sortByPopularity(users)),
+    [users, sort],
+  )
+
+  // Сброс счётчика при смене фильтров или сортировки.
+  const resetKey = useMemo(
+    () => `${sort}|${JSON.stringify(filters)}`,
+    [sort, filters],
+  )
+
+  const { visibleItems, hasMore, sentinelRef } = useInfiniteList(sortedUsers, { resetKey })
 
   const toggleSort = () => setSort((prev) => (prev === 'newest' ? 'popular' : 'newest'))
 
@@ -58,11 +73,14 @@ export function FilterResults({ users }: FilterResultsProps) {
       {users.length === 0 ? (
         <p className={styles.empty}>Ничего не найдено</p>
       ) : (
-        <div className={styles.grid}>
-          {sortedUsers.map((user) => (
-            <UserCardItem key={user.id} user={user} />
-          ))}
-        </div>
+        <>
+          <div className={styles.grid}>
+            {visibleItems.map((user) => (
+              <UserCardItem key={user.id} user={user} />
+            ))}
+          </div>
+          {hasMore && <div ref={sentinelRef} aria-hidden="true" />}
+        </>
       )}
     </section>
   )
