@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { Modal } from "@/shared/ui/Modal";
 import { Button } from "@/shared/ui/Button";
 import CheckCircle from "@/shared/assets/icons/check-circle.svg?react";
