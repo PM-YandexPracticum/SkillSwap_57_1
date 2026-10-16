@@ -1,0 +1,41 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: 0 36px 60px;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 324px minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+
+.author {
+  height: 100%;
+}
+
+.details {
+  padding: var(--space-xl);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-secondary);
+}
+
+.exchangeButton {
+  min-width: 260px;
+}
+
+.loading {
+  margin: var(--space-xl) auto;
+}
+
+@media (width <= 1023px) {
+  .page {
+    padding: 28px 24px 60px;
+  }
+
+  .top {
+    grid-template-columns: 1fr;
+  }
+}
