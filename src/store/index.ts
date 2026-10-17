@@ -10,6 +10,7 @@ import { authReducer } from '@/features/auth/model/authSlice.ts'
 import { clearAuthUserId, saveAuthUserId } from '@/features/auth/model/authUtils.ts'
 import { notificationsReducer } from '@/features/notifications'
 import { requestsReducer } from '@/entities/request/model/requestsSlice'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 
 /** Собирает store приложения; отдельная функция даёт тестам чистый store */
 export const createAppStore = () =>
