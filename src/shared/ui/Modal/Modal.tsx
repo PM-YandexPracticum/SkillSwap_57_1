@@ -80,7 +80,7 @@ export const Modal = ({ title, onClose, children, text, icon, className }: Modal
   return (
     <>
       <div className={modalClasses} ref={modalRef} tabIndex={-1}>
-        <div className={styles.icon}> {icon}</div>
+        {icon && <div className={styles.icon}> {icon}</div>}
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
           <span className={styles.text}>{text}</span>
