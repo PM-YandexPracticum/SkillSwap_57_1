@@ -55,3 +55,12 @@
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
 }
+
+.about {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  white-space: pre-line;
+}

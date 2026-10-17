@@ -13,6 +13,8 @@ export type SkillDetailsProps = {
   description: string
   images: string[]
   actions?: ReactNode
+  /** Иконки в правом верхнем углу блока (избранное, «поделиться», «ещё») */
+  headerActions?: ReactNode
   showGalleryControls?: boolean
   className?: string
 }
@@ -24,6 +26,7 @@ export function SkillDetails({
   description,
   images,
   actions,
+  headerActions,
   showGalleryControls = false,
   className = '',
 }: SkillDetailsProps) {
@@ -73,115 +76,119 @@ export function SkillDetails({
   const isHiddenImageSelected = safeIndex >= MAX_VISIBLE_THUMBNAILS
 
   return (
-    <article className={[styles.container, className].filter(Boolean).join(' ')}>
-      <div className={styles.content}>
-        <div className={styles.info}>
-          <div className={styles.textBlock}>
-            <h2 className={styles.title}>{title}</h2>
-            <p className={styles.category}>
-              {categoryName} / {subcategoryName}
-            </p>
-          </div>
-          <p className={styles.description}>{description}</p>
-        </div>
+    <article className={[styles.root, className].filter(Boolean).join(' ')}>
+      {headerActions && <div className={styles.headerActions}>{headerActions}</div>}
 
-        {actions && <div className={styles.actions}>{actions}</div>}
-      </div>
-
-      <div className={styles.gallery}>
-        <div
-          className={styles.mainImage}
-          role="group"
-          aria-roledescription="карусель"
-          aria-label={`Изображения навыка «${title}»`}
-        >
-          <div className={styles.viewport} ref={emblaRef}>
-            <div className={styles.track}>
-              {slides.map((image, index) => (
-                <div
-                  className={styles.slide}
-                  key={`${image}-${index}`}
-                  aria-hidden={index !== safeIndex}
-                >
-                  <img
-                    src={image}
-                    alt={hasImages ? `${title} — изображение ${index + 1}` : 'Нет изображения'}
-                    className={styles.image}
-                    draggable={false}
-                  />
-                </div>
-              ))}
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <div className={styles.info}>
+            <div className={styles.textBlock}>
+              <h2 className={styles.title}>{title}</h2>
+              <p className={styles.category}>
+                {categoryName} / {subcategoryName}
+              </p>
             </div>
+            <p className={styles.description}>{description}</p>
           </div>
 
-          {showArrows && (
-            <>
-              <button
-                type="button"
-                className={`${styles.arrow} ${styles.arrowPrev}`}
-                onClick={() => emblaApi?.scrollPrev()}
-                aria-label="Предыдущее изображение"
-              >
-                <ChevronIcon className={styles.arrowIcon} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                className={`${styles.arrow} ${styles.arrowNext}`}
-                onClick={() => emblaApi?.scrollNext()}
-                aria-label="Следующее изображение"
-              >
-                <ChevronIcon className={styles.arrowIcon} aria-hidden="true" />
-              </button>
-            </>
-          )}
+          {actions && <div className={styles.actions}>{actions}</div>}
         </div>
 
-        {images.length > 1 && (
-          <ul className={styles.thumbnails} aria-label="Превью изображений">
-            {visibleImages.map((image, index) => {
-              const imageIndex = index + 1
-              const isActive = imageIndex === safeIndex
-
-              return (
-                <li key={`${image}-${imageIndex}`} className={styles.thumbnailItem}>
-                  <button
-                    type="button"
-                    className={`${styles.thumbnail} ${isActive ? styles.thumbnailActive : ''}`}
-                    onClick={() => emblaApi?.scrollTo(imageIndex)}
-                    aria-label={`Показать изображение ${imageIndex + 1}`}
-                    aria-pressed={isActive}
+        <div className={styles.gallery}>
+          <div
+            className={styles.mainImage}
+            role="group"
+            aria-roledescription="карусель"
+            aria-label={`Изображения навыка «${title}»`}
+          >
+            <div className={styles.viewport} ref={emblaRef}>
+              <div className={styles.track}>
+                {slides.map((image, index) => (
+                  <div
+                    className={styles.slide}
+                    key={`${image}-${index}`}
+                    aria-hidden={index !== safeIndex}
                   >
-                    <img src={image} alt="" className={styles.thumbnailImage} draggable={false} />
-                  </button>
-                </li>
-              )
-            })}
+                    <img
+                      src={image}
+                      alt={hasImages ? `${title} — изображение ${index + 1}` : 'Нет изображения'}
+                      className={styles.image}
+                      draggable={false}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            {hiddenCount > 0 && (
-              <li className={styles.thumbnailItem}>
+            {showArrows && (
+              <>
                 <button
                   type="button"
-                  className={`${styles.thumbnail} ${
-                    isHiddenImageSelected ? styles.thumbnailActive : ''
-                  }`}
-                  onClick={() => emblaApi?.scrollTo(lastImageIndex)}
-                  aria-label={`Показать последнее изображение. Ещё изображений: ${hiddenCount}`}
-                  aria-pressed={isHiddenImageSelected}
+                  className={`${styles.arrow} ${styles.arrowPrev}`}
+                  onClick={() => emblaApi?.scrollPrev()}
+                  aria-label="Предыдущее изображение"
                 >
-                  <img
-                    src={images[lastImageIndex]}
-                    alt=""
-                    className={styles.thumbnailImage}
-                    draggable={false}
-                  />
-                  <span className={styles.thumbnailMore} aria-hidden="true">
-                    +{hiddenCount}
-                  </span>
+                  <ChevronIcon className={styles.arrowIcon} aria-hidden="true" />
                 </button>
-              </li>
+                <button
+                  type="button"
+                  className={`${styles.arrow} ${styles.arrowNext}`}
+                  onClick={() => emblaApi?.scrollNext()}
+                  aria-label="Следующее изображение"
+                >
+                  <ChevronIcon className={styles.arrowIcon} aria-hidden="true" />
+                </button>
+              </>
             )}
-          </ul>
-        )}
+          </div>
+
+          {images.length > 1 && (
+            <ul className={styles.thumbnails} aria-label="Превью изображений">
+              {visibleImages.map((image, index) => {
+                const imageIndex = index + 1
+                const isActive = imageIndex === safeIndex
+
+                return (
+                  <li key={`${image}-${imageIndex}`} className={styles.thumbnailItem}>
+                    <button
+                      type="button"
+                      className={`${styles.thumbnail} ${isActive ? styles.thumbnailActive : ''}`}
+                      onClick={() => emblaApi?.scrollTo(imageIndex)}
+                      aria-label={`Показать изображение ${imageIndex + 1}`}
+                      aria-pressed={isActive}
+                    >
+                      <img src={image} alt="" className={styles.thumbnailImage} draggable={false} />
+                    </button>
+                  </li>
+                )
+              })}
+
+              {hiddenCount > 0 && (
+                <li className={styles.thumbnailItem}>
+                  <button
+                    type="button"
+                    className={`${styles.thumbnail} ${
+                      isHiddenImageSelected ? styles.thumbnailActive : ''
+                    }`}
+                    onClick={() => emblaApi?.scrollTo(lastImageIndex)}
+                    aria-label={`Показать последнее изображение. Ещё изображений: ${hiddenCount}`}
+                    aria-pressed={isHiddenImageSelected}
+                  >
+                    <img
+                      src={images[lastImageIndex]}
+                      alt=""
+                      className={styles.thumbnailImage}
+                      draggable={false}
+                    />
+                    <span className={styles.thumbnailMore} aria-hidden="true">
+                      +{hiddenCount}
+                    </span>
+                  </button>
+                </li>
+              )}
+            </ul>
+          )}
+        </div>
       </div>
     </article>
   )

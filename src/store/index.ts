@@ -8,6 +8,7 @@ import { favoritesReducer } from '@/features/favorites/model/favoritesSlice'
 import { createFavoritesSync } from '@/features/favorites/model/favoritesStorage'
 import { authReducer } from '@/features/auth/model/authSlice.ts'
 import { clearAuthUserId, saveAuthUserId } from '@/features/auth/model/authUtils.ts'
+import { notificationsReducer } from '@/features/notifications'
 
 /** Собирает store приложения; отдельная функция даёт тестам чистый store */
 export const createAppStore = () =>
@@ -20,6 +21,7 @@ export const createAppStore = () =>
       filters: filtersReducer,
       favorites: favoritesReducer,
       auth: authReducer,
+      notifications: notificationsReducer,
     },
   })
 

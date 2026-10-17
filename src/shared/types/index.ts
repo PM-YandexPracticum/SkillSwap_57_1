@@ -75,12 +75,20 @@ export interface SwapRequest {
   createdAt: string // ISO
 }
 
-// ─── Notification ────────────────────────────────────────
-export interface Notification {
+// ─── AppNotification ─────────────────────────────────────
+// Уведомление конкретного пользователя о событиях по заявкам на обмен.
+// Создаётся моком/действием, отображается в панели уведомлений в шапке.
+
+export interface AppNotification {
   id: string
-  requestId: string
-  title: string // «Олег принял ваш обмен»
+  /** id пользователя-получателя */
+  userId: string
+  /** Основной текст уведомления */
   text: string
+  /** Пояснение к уведомлению */
+  description: string
+  /** Дата создания в ISO-формате, например 2026-10-16T08:30:00.000Z */
+  createdAt: string
+  /** Просмотрено ли уведомление */
   isRead: boolean
-  createdAt: string // ISO
 }

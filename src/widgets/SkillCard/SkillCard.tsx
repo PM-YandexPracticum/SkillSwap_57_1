@@ -17,6 +17,8 @@ type SkillCardBaseProps = {
   age: number
   teachTags: SkillCardTag[]
   learnTags: SkillCardTag[]
+  /** Текст «О себе» — показывается под шапкой карточки (страница навыка) */
+  about?: string
   collapsed?: boolean
   className?: string
 }
@@ -42,7 +44,17 @@ type DetailsProps =
 export type SkillCardProps = SkillCardBaseProps & FavoriteProps & DetailsProps
 
 export const SkillCard = (props: SkillCardProps) => {
-  const { avatarUrl, name, city, age, teachTags, learnTags, collapsed = true, className } = props
+  const {
+    avatarUrl,
+    name,
+    city,
+    age,
+    teachTags,
+    learnTags,
+    about,
+    collapsed = true,
+    className,
+  } = props
 
   const favorite =
     props.showFavorite !== false
@@ -81,6 +93,8 @@ export const SkillCard = (props: SkillCardProps) => {
           </p>
         </div>
       </header>
+
+      {about && <p className={styles.about}>{about}</p>}
 
       <TagList title="Может научить:" tags={teachTags} collapsed={collapsed} />
       <TagList title="Хочет научиться:" tags={learnTags} collapsed={collapsed} />
