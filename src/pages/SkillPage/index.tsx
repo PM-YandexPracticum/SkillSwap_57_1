@@ -18,6 +18,7 @@ import { IconButton } from '@/shared/ui/IconButton'
 import { Spinner } from '@/shared/ui/Spinner'
 import { ROUTES } from '@/shared/lib/constants'
 import styles from './SkillPage.module.css'
+import { SimilarOffers } from '@/widgets/SimilarOffers'
 
 export default function SkillPage() {
   const { id } = useParams<{ id: string }>()
@@ -97,6 +98,7 @@ export default function SkillPage() {
           headerActions={headerActions}
           actions={<Button className={styles.exchangeButton}>Предложить обмен</Button>}
         />
+        <SimilarOffers currentUser={author}/>
       </section>
 
       {/* Похожие предложения — задача #163 */}
