@@ -5,7 +5,11 @@ import CloseIcon from '@/shared/assets/icons/close.svg?react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectCategories } from '@/entities/category/model/categoriesSlice'
 import { selectCities } from '@/entities/city/model/citiesSlice'
-import { selectFilters, setFilters } from '@/features/filters/model/filtersSlice'
+import {
+  selectFilters,
+  selectSearch,
+  setFilters,
+} from '@/features/filters/model/filtersSlice'
 import { getFilterChips } from '@/features/filters/lib/filterChips'
 import { sortByNewest, sortByPopularity } from '@/entities/user/lib/homeSections'
 import { useInfiniteList } from '@/shared/hooks/useInfiniteList'
@@ -21,6 +25,7 @@ type FilterResultsProps = {
 export function FilterResults({ users }: FilterResultsProps) {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
+  const search = useAppSelector(selectSearch)
   const categories = useAppSelector(selectCategories)
   const cities = useAppSelector(selectCities)
   const [sort, setSort] = useState<SortOrder>('newest')
@@ -34,10 +39,10 @@ export function FilterResults({ users }: FilterResultsProps) {
     [users, sort],
   )
 
-  // Сброс счётчика при смене фильтров или сортировки.
+  // Сброс счётчика при смене фильтров, поиска или сортировки.
   const resetKey = useMemo(
-    () => `${sort}|${JSON.stringify(filters)}`,
-    [sort, filters],
+    () => `${sort}|${JSON.stringify(filters)}|${search}`,
+    [sort, filters, search],
   )
 
   const { visibleItems, hasMore, sentinelRef } = useInfiniteList(sortedUsers, { resetKey })

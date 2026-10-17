@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-/** Порция карточек по умолчанию для каталога (см. #175) */
-export const DEFAULT_PAGE_SIZE = 6
+/** Порция карточек по умолчанию для каталога (см. AC #175 — 20 карточек) */
+export const DEFAULT_PAGE_SIZE = 20
 
 export type UseInfiniteListOptions = {
   /** Сколько элементов показывать за раз. По умолчанию DEFAULT_PAGE_SIZE */
