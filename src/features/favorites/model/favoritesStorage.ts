@@ -5,38 +5,40 @@ import { setFavorites } from './favoritesSlice'
 
 const FAVORITES_KEY = LOCAL_STORAGE_KEYS.FAVORITES
 
+/** Читает всю карту избранного; при повреждённых данных возвращает пустой объект */
+function readFavoritesMap(): Record<string, string[]> {
+  try {
+    const raw = localStorage.getItem(FAVORITES_KEY)
+    if (!raw) return {}
+
+    const parsed: unknown = JSON.parse(raw)
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {}
+
+    const map: Record<string, string[]> = {}
+    for (const [key, value] of Object.entries(parsed)) {
+      if (Array.isArray(value)) {
+        // Нестроковые элементы отбрасываем точечно, а не всю запись пользователя
+        map[key] = value.filter((item): item is string => typeof item === 'string')
+      }
+    }
+    return map
+  } catch {
+    return {}
+  }
+}
+
 /** Читает избранное указанного пользователя; при повреждённых данных возвращает [] */
 export function readFavoritesForUser(userId: string | null): string[] {
   if (!userId) return []
-  try {
-    const raw = localStorage.getItem(FAVORITES_KEY)
-    if (!raw) return []
-    const parsed: unknown = JSON.parse(raw)
-    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return []
-    const list = (parsed as Record<string, unknown>)[userId]
-    if (!Array.isArray(list)) return []
-    return list.filter((id): id is string => typeof id === 'string')
-  } catch {
-    return []
-  }
+  return readFavoritesMap()[userId] ?? []
 }
 
 /** Сохраняет избранное пользователя, не затирая данные остальных */
 export function writeFavoritesForUser(userId: string, ids: readonly string[]): void {
+  const map = readFavoritesMap()
+  map[userId] = [...ids]
+
   try {
-    const raw = localStorage.getItem(FAVORITES_KEY)
-    const map: Record<string, string[]> = {}
-    if (raw) {
-      const parsed: unknown = JSON.parse(raw)
-      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
-        for (const [key, value] of Object.entries(parsed)) {
-          if (Array.isArray(value) && value.every((x) => typeof x === 'string')) {
-            map[key] = value as string[]
-          }
-        }
-      }
-    }
-    map[userId] = [...ids]
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(map))
   } catch (error) {
     console.error('Не удалось сохранить избранное', error)

@@ -80,6 +80,13 @@ describe('favoritesStorage.writeFavoritesForUser', () => {
     const parsed = JSON.parse(storage.getItem(FAVORITES_KEY) as string)
     expect(parsed).toEqual({ u1: ['c'], u2: ['b'] })
   })
+
+  it('после повреждённого значения сохраняет новый список и не падает', () => {
+    storage.setItem(FAVORITES_KEY, '{{{broken')
+    writeFavoritesForUser('u1', ['u3'])
+
+    expect(JSON.parse(storage.getItem(FAVORITES_KEY) as string)).toEqual({ u1: ['u3'] })
+  })
 })
 
 describe('favorites per-user sync', () => {
@@ -151,6 +158,22 @@ describe('favorites per-user sync', () => {
       store.dispatch(toggleFavorite('u3'))
     }).not.toThrow()
 
+    expect(selectFavoriteIds(store.getState())).toEqual(['u3'])
+  })
+
+  it('после повреждённого значения сохраняет новый список и восстанавливает его при повторном входе', () => {
+    storage.setItem(FAVORITES_KEY, '{{{broken')
+    const store = createSyncedStore()
+
+    store.dispatch(login('u1'))
+    store.dispatch(toggleFavorite('u3'))
+
+    expect(JSON.parse(storage.getItem(FAVORITES_KEY) as string)).toEqual({ u1: ['u3'] })
+
+    store.dispatch(logout())
+    expect(selectFavoriteIds(store.getState())).toEqual([])
+
+    store.dispatch(login('u1'))
     expect(selectFavoriteIds(store.getState())).toEqual(['u3'])
   })
 
