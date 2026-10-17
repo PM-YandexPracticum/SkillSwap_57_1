@@ -5,7 +5,7 @@ import { skillsReducer } from '@/entities/skill/model/skillsSlice'
 import { usersReducer } from '@/entities/user/model/usersSlice'
 import { filtersReducer } from '@/features/filters/model/filtersSlice'
 import { favoritesReducer } from '@/features/favorites/model/favoritesSlice'
-import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { createFavoritesSync } from '@/features/favorites/model/favoritesStorage'
 import { authReducer } from '@/features/auth/model/authSlice.ts'
 import { clearAuthUserId, saveAuthUserId } from '@/features/auth/model/authUtils.ts'
 import { notificationsReducer } from '@/features/notifications'
@@ -27,24 +27,13 @@ export const createAppStore = () =>
 
 export const store = createAppStore()
 
-// --- избранное ---
-let previousFavoriteIds = store.getState().favorites.ids
-
-store.subscribe(() => {
-  const currentFavoriteIds = store.getState().favorites.ids
-
-  if (currentFavoriteIds === previousFavoriteIds) {
-    return
-  }
-
-  previousFavoriteIds = currentFavoriteIds
-
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.FAVORITES, JSON.stringify(currentFavoriteIds))
-  } catch (error) {
-    console.error('Не удалось сохранить избранное', error)
-  }
-})
+// --- избранное (per-user) ---
+// В localStorage лежит { [userId]: string[] }. Синк подписан на store:
+// при смене auth.userId подгружаем список пользователя (или очищаем),
+// при изменении списка — сохраняем под ключом текущего пользователя.
+const syncFavorites = createFavoritesSync(store)
+syncFavorites()
+store.subscribe(syncFavorites)
 
 // --- auth.userId ---
 let previousUserId = store.getState().auth.userId
@@ -52,13 +41,12 @@ let previousUserId = store.getState().auth.userId
 store.subscribe(() => {
   const currentUserId = store.getState().auth.userId
 
-  if (currentUserId === previousUserId) {
-    return
-  }
+  if (currentUserId === previousUserId) return
   previousUserId = currentUserId
   if (currentUserId) saveAuthUserId(currentUserId)
   if (!currentUserId) clearAuthUserId()
 })
 
+export type AppStore = ReturnType<typeof createAppStore>
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
