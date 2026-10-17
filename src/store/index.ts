@@ -9,6 +9,7 @@ import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
 import { authReducer } from '@/features/auth/model/authSlice.ts'
 import { clearAuthUserId, saveAuthUserId } from '@/features/auth/model/authUtils.ts'
 import { notificationsReducer } from '@/features/notifications'
+import { requestsReducer } from '@/entities/request/model/requestsSlice'
 
 /** Собирает store приложения; отдельная функция даёт тестам чистый store */
 export const createAppStore = () =>
@@ -22,6 +23,7 @@ export const createAppStore = () =>
       favorites: favoritesReducer,
       auth: authReducer,
       notifications: notificationsReducer,
+      requests: requestsReducer,
     },
   })
 
@@ -58,6 +60,24 @@ store.subscribe(() => {
   previousUserId = currentUserId
   if (currentUserId) saveAuthUserId(currentUserId)
   if (!currentUserId) clearAuthUserId()
+})
+
+let previousRequests = store.getState().requests.items
+
+store.subscribe(() => {
+  const currentRequests = store.getState().requests.items
+
+  if (currentRequests === previousRequests) {
+    return
+  }
+
+  previousRequests = currentRequests
+
+  try {
+    localStorage.setItem(LOCAL_STORAGE_KEYS.REQUESTS, JSON.stringify(currentRequests))
+  } catch (error) {
+    console.error('Не удалось сохранить заявки в localStorage', error)
+  }
 })
 
 export type RootState = ReturnType<typeof store.getState>

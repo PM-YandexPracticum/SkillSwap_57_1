@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button'
 import { IconButton } from '@/shared/ui/IconButton'
 import { Spinner } from '@/shared/ui/Spinner'
 import { ROUTES } from '@/shared/lib/constants'
+import { SwapRequestButton } from '@/features/swap-request/ui/SwapRequestButton'
 import styles from './SkillPage.module.css'
 
 export default function SkillPage() {
@@ -95,7 +96,13 @@ export default function SkillPage() {
           images={skill.images}
           showGalleryControls
           headerActions={headerActions}
-          actions={<Button className={styles.exchangeButton}>Предложить обмен</Button>}
+          actions={
+            <SwapRequestButton
+              className={styles.exchangeButton}
+              skillId={skill.id}
+              ownerId={author.id}
+            />
+          }
         />
       </section>
 
