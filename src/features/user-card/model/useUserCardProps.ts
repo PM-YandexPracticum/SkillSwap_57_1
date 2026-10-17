@@ -11,6 +11,7 @@ import {
   selectLikesCount,
   toggleFavorite,
 } from '@/features/favorites/model/favoritesSlice'
+import { useRequireAuth } from '@/features/auth/model/useRequireAuth'   // ← новое
 import { ROUTES } from '@/shared/lib/constants'
 
 /**
@@ -22,6 +23,7 @@ import { ROUTES } from '@/shared/lib/constants'
 export function useUserCardProps(user: User): SkillCardProps {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const requireAuth = useRequireAuth()   // ← новое
 
   const skills = useAppSelector(selectSkills)
   const categories = useAppSelector(selectCategories)
@@ -40,7 +42,8 @@ export function useUserCardProps(user: User): SkillCardProps {
     learnTags: card.learnTags,
     likesCount,
     isFavorite,
-    onToggleFavorite: () => dispatch(toggleFavorite(user.id)),
+    // ↓ клик без авторизации открывает модалку вместо изменения state
+    onToggleFavorite: () => requireAuth(() => dispatch(toggleFavorite(user.id))),
     onDetails: () => navigate(generatePath(ROUTES.SKILL, { id: user.teachSkillId })),
   }
 }
