@@ -4,10 +4,6 @@ import { DEFAULT_PAGE_SIZE, useInfiniteList } from './useInfiniteList'
 
 const makeItems = (count: number) => Array.from({ length: count }, (_, id) => ({ id }))
 
-/**
- * Мок IntersectionObserver: складывает инстансы в статический массив,
- * чтобы тест мог «вручную» дёрнуть пересечение через `trigger()`.
- */
 class MockIntersectionObserver {
   static instances: MockIntersectionObserver[] = []
 
@@ -46,15 +42,25 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+const latestObserver = () =>
+  MockIntersectionObserver.instances[MockIntersectionObserver.instances.length - 1]
+
+/** Эмулирует первый скролл — observer создастся только после него */
+const simulateFirstScroll = () => {
+  act(() => {
+    window.dispatchEvent(new Event('scroll'))
+  })
+}
+
 describe('useInfiniteList', () => {
-  it('DEFAULT_PAGE_SIZE = 20 (AC #175)', () => {
-    expect(DEFAULT_PAGE_SIZE).toBe(20)
+  it('DEFAULT_PAGE_SIZE = 6', () => {
+    expect(DEFAULT_PAGE_SIZE).toBe(6)
   })
 
-  it('показывает первую страницу из 20 элементов', () => {
+  it('показывает первую страницу из 6 элементов', () => {
     const { result } = renderHook(() => useInfiniteList(makeItems(50)))
 
-    expect(result.current.visibleItems).toHaveLength(20)
+    expect(result.current.visibleItems).toHaveLength(6)
     expect(result.current.hasMore).toBe(true)
   })
 
@@ -66,9 +72,9 @@ describe('useInfiniteList', () => {
   })
 
   it('если элементов ровно страница — hasMore = false', () => {
-    const { result } = renderHook(() => useInfiniteList(makeItems(20)))
+    const { result } = renderHook(() => useInfiniteList(makeItems(6)))
 
-    expect(result.current.visibleItems).toHaveLength(20)
+    expect(result.current.visibleItems).toHaveLength(6)
     expect(result.current.hasMore).toBe(false)
   })
 
@@ -78,46 +84,68 @@ describe('useInfiniteList', () => {
     expect(result.current.visibleItems).toHaveLength(5)
   })
 
-  it('догружает по 20 при срабатывании IntersectionObserver', async () => {
+  it('не догружает без скролла пользователя', async () => {
     const { result } = renderHook(() => useInfiniteList(makeItems(50)))
 
     act(() => {
       result.current.sentinelRef({} as HTMLElement)
     })
 
-    await waitFor(() => {
-      expect(MockIntersectionObserver.instances.length).toBeGreaterThan(0)
-    })
+    // observer ещё не создан — скролла не было
+    expect(MockIntersectionObserver.instances.length).toBe(0)
 
-    const observer =
-      MockIntersectionObserver.instances[MockIntersectionObserver.instances.length - 1]
-
-    act(() => {
-      observer.trigger(true)
-    })
-
-    expect(result.current.visibleItems).toHaveLength(40)
-    expect(result.current.hasMore).toBe(true)
+    // ждём дольше LOAD_DELAY_MS — спиннер не должен «мигнуть» и ничего не грузится
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    expect(result.current.visibleItems).toHaveLength(6)
   })
 
-  it('останавливается, когда элементы закончились', async () => {
-    const { result } = renderHook(() => useInfiniteList(makeItems(30)))
+  it('догружает ещё 6 после первого скролла и появления sentinel', async () => {
+    const { result } = renderHook(() => useInfiniteList(makeItems(50)))
 
     act(() => {
       result.current.sentinelRef({} as HTMLElement)
     })
 
+    simulateFirstScroll()
+
     await waitFor(() => {
-      expect(MockIntersectionObserver.instances.length).toBeGreaterThan(0)
+      expect(MockIntersectionObserver.instances.length).toBe(1)
     })
 
     act(() => {
-      MockIntersectionObserver.instances[
-        MockIntersectionObserver.instances.length - 1
-      ].trigger(true)
+      latestObserver().trigger(true)
     })
 
-    expect(result.current.visibleItems).toHaveLength(30)
+    // Сразу после trigger — ещё 6 (задержка работает)
+    expect(result.current.visibleItems).toHaveLength(6)
+
+    await waitFor(
+      () => expect(result.current.visibleItems).toHaveLength(12),
+      { timeout: 1000 },
+    )
+    expect(result.current.hasMore).toBe(true)
+  })
+
+  it('останавливается, когда элементы закончились', async () => {
+    const { result } = renderHook(() => useInfiniteList(makeItems(10)))
+
+    act(() => {
+      result.current.sentinelRef({} as HTMLElement)
+    })
+    simulateFirstScroll()
+
+    await waitFor(() => {
+      expect(MockIntersectionObserver.instances.length).toBe(1)
+    })
+
+    act(() => {
+      latestObserver().trigger(true)
+    })
+
+    await waitFor(
+      () => expect(result.current.visibleItems).toHaveLength(10),
+      { timeout: 1000 },
+    )
     expect(result.current.hasMore).toBe(false)
   })
 
@@ -132,23 +160,22 @@ describe('useInfiniteList', () => {
     act(() => {
       result.current.sentinelRef({} as HTMLElement)
     })
+    simulateFirstScroll()
 
     await waitFor(() => {
-      expect(MockIntersectionObserver.instances.length).toBeGreaterThan(0)
+      expect(MockIntersectionObserver.instances.length).toBe(1)
     })
 
-    // догружаем до 40
     act(() => {
-      MockIntersectionObserver.instances[
-        MockIntersectionObserver.instances.length - 1
-      ].trigger(true)
+      latestObserver().trigger(true)
     })
-    expect(result.current.visibleItems).toHaveLength(40)
+    await waitFor(
+      () => expect(result.current.visibleItems).toHaveLength(12),
+      { timeout: 1000 },
+    )
 
-    // имитируем смену фильтров — начинаем заново
     rerender({ resetKey: 'b' })
-
-    expect(result.current.visibleItems).toHaveLength(20)
+    expect(result.current.visibleItems).toHaveLength(6)
   })
 
   it('при уменьшении массива hasMore становится false', () => {
@@ -158,9 +185,31 @@ describe('useInfiniteList', () => {
     )
 
     expect(result.current.hasMore).toBe(true)
-
-    rerender({ items: makeItems(10) })
-
+    rerender({ items: makeItems(3) })
     expect(result.current.hasMore).toBe(false)
+  })
+
+  it('не запускает параллельные таймеры при повторном isIntersecting', async () => {
+    const { result } = renderHook(() => useInfiniteList(makeItems(50)))
+
+    act(() => {
+      result.current.sentinelRef({} as HTMLElement)
+    })
+    simulateFirstScroll()
+
+    await waitFor(() => {
+      expect(MockIntersectionObserver.instances.length).toBe(1)
+    })
+
+    act(() => {
+      latestObserver().trigger(true)
+      latestObserver().trigger(true)
+    })
+
+    await waitFor(
+      () => expect(result.current.visibleItems).toHaveLength(12),
+      { timeout: 1000 },
+    )
+    expect(result.current.visibleItems).toHaveLength(12)
   })
 })

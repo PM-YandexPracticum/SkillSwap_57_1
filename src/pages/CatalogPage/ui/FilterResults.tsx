@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { Spinner } from '@/shared/ui/Spinner'
 import CloseIcon from '@/shared/assets/icons/close.svg?react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectCategories } from '@/entities/category/model/categoriesSlice'
@@ -84,7 +85,11 @@ export function FilterResults({ users }: FilterResultsProps) {
               <UserCardItem key={user.id} user={user} />
             ))}
           </div>
-          {hasMore && <div ref={sentinelRef} aria-hidden="true" />}
+          {hasMore && (
+            <div ref={sentinelRef} className={styles.loader} aria-hidden="true">
+              <Spinner />
+            </div>
+          )}
         </>
       )}
     </section>

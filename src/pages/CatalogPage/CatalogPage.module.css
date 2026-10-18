@@ -58,3 +58,10 @@
 .empty {
   color: var(--color-text-secondary);
 }
+
+/* Sentinel под списком: контейнер для спиннера догрузки */
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg) 0;
+}

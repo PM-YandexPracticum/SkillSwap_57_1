@@ -1,5 +1,6 @@
 import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { Spinner } from '@/shared/ui/Spinner'
 import { useInfiniteList } from '@/shared/hooks/useInfiniteList'
 import { UserCardItem } from './UserCardItem'
 import styles from '../CatalogPage.module.css'
@@ -44,7 +45,11 @@ export function UserSection({
           <UserCardItem key={user.id} user={user} />
         ))}
       </div>
-      {showSentinel && <div ref={sentinelRef} aria-hidden="true" />}
+      {showSentinel && (
+        <div ref={sentinelRef} className={styles.loader} aria-hidden="true">
+          <Spinner />
+        </div>
+      )}
     </section>
   )
 }

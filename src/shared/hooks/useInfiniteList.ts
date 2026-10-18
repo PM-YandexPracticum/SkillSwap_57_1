@@ -1,38 +1,35 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-/** Порция карточек по умолчанию для каталога (см. AC #175 — 20 карточек) */
-export const DEFAULT_PAGE_SIZE = 20
+/** Порция карточек по умолчанию для каталога (см. #175) */
+export const DEFAULT_PAGE_SIZE = 6
+
+/**
+ * Задержка перед догрузкой. Данные у нас локальные, поэтому без неё
+ * спиннер был бы незаметен — визуально догрузка выглядит «мгновенно».
+ */
+const LOAD_DELAY_MS = 400
 
 export type UseInfiniteListOptions = {
-  /** Сколько элементов показывать за раз. По умолчанию DEFAULT_PAGE_SIZE */
   pageSize?: number
-  /**
-   * Ключ сброса. При изменении значения счётчик видимых элементов
-   * возвращается к pageSize, а observer пересоздаётся.
-   * Удобно передавать «сериализованное» состояние фильтров/сортировки.
-   */
   resetKey?: unknown
-  /** Отступ, за которым observer считает sentinel видимым (по умолчанию 200px) */
   rootMargin?: string
 }
 
 export type UseInfiniteListResult<T> = {
-  /** Видимый срез элементов */
   visibleItems: T[]
-  /** true, если есть ещё элементы, которые не показаны */
   hasMore: boolean
-  /** ref-callback: повесить на пустой div под списком */
   sentinelRef: (node: HTMLElement | null) => void
 }
 
 /**
  * Возвращает видимый срез массива и догружает по pageSize,
- * когда sentinel попадает в зону видимости.
+ * когда sentinel попадает в зону видимости (с задержкой LOAD_DELAY_MS).
  *
- * Особенности:
- * - при смене resetKey счётчик сбрасывается к pageSize (AC «список начинается сначала»);
- * - при достижении конца массива observer отключается (AC «догрузка останавливается»);
- * - количество уже видимых элементов хранится в state и не откатывается при ререндере.
+ * Важно: observer включается только после первого скролла пользователя.
+ * Иначе на высоком вьюпорте (и при rootMargin > 0) sentinel попадает
+ * в зону пре-триггера сразу при монтировании, и каскад из
+ * setTimeout'ов загружает все карточки без участия пользователя —
+ * спиннер при этом не успевает быть замеченным.
  */
 export function useInfiniteList<T>(
   items: T[],
@@ -40,9 +37,8 @@ export function useInfiniteList<T>(
 ): UseInfiniteListResult<T> {
   const [visibleCount, setVisibleCount] = useState(pageSize)
   const [sentinel, setSentinel] = useState<HTMLElement | null>(null)
+  const [hasScrolled, setHasScrolled] = useState(false)
 
-  // Храним актуальную длину items в ref: колбэк observer не должен зависеть от неё,
-  // иначе при каждом изменении длины observer будет пересоздаваться.
   const itemsLengthRef = useRef(items.length)
   useEffect(() => {
     itemsLengthRef.current = items.length
@@ -60,23 +56,43 @@ export function useInfiniteList<T>(
 
   const hasMore = visibleCount < items.length
 
+  // Ждём первый скролл пользователя — до него observer не включаем.
   useEffect(() => {
-    if (!sentinel || !hasMore) return
+    if (hasScrolled) return
+
+    const onScroll = () => setHasScrolled(true)
+    window.addEventListener('scroll', onScroll, { once: true, passive: true })
+
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [hasScrolled])
+
+  useEffect(() => {
+    if (!sentinel || !hasMore || !hasScrolled) return
+
+    let timer: ReturnType<typeof setTimeout> | null = null
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
+        if (!entries.some((entry) => entry.isIntersecting)) return
+        if (timer !== null) return
+
+        timer = setTimeout(() => {
+          timer = null
           setVisibleCount((count) =>
             Math.min(count + pageSize, itemsLengthRef.current),
           )
-        }
+        }, LOAD_DELAY_MS)
       },
       { rootMargin },
     )
 
     observer.observe(sentinel)
-    return () => observer.disconnect()
-  }, [sentinel, hasMore, pageSize, rootMargin])
+
+    return () => {
+      observer.disconnect()
+      if (timer !== null) clearTimeout(timer)
+    }
+  }, [sentinel, hasMore, hasScrolled, pageSize, rootMargin])
 
   const sentinelRef = useCallback((node: HTMLElement | null) => {
     setSentinel(node)
