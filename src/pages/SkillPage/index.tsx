@@ -18,6 +18,7 @@ import { Spinner } from '@/shared/ui/Spinner'
 import { ROUTES } from '@/shared/lib/constants'
 import { SwapRequestButton } from '@/features/swap-request/ui/SwapRequestButton'
 import styles from './SkillPage.module.css'
+import { SimilarOffers } from '@/widgets/SimilarOffers'
 
 export default function SkillPage() {
   const { id } = useParams<{ id: string }>()
@@ -104,8 +105,7 @@ export default function SkillPage() {
           }
         />
       </section>
-
-      {/* Похожие предложения — задача #163 */}
+        <SimilarOffers currentUser={author}/>
     </div>
   )
 }
