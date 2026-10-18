@@ -68,14 +68,33 @@ export function createRegisteredUser(
   return { user, skill }
 }
 
-/** Сохраняет нового пользователя и навык; если картинки не влезли в localStorage — без них */
+/** Сохраняет пару пользователь/навык; при нехватке места пробует запись без изображений. */
 export function saveRegistered(user: User, skill: Skill): void {
   const { REGISTERED_USERS, REGISTERED_SKILLS } = LOCAL_STORAGE_KEYS
+  const previousUsers = localStorage.getItem(REGISTERED_USERS)
+  const previousSkills = localStorage.getItem(REGISTERED_SKILLS)
 
-  if (!appendToList(REGISTERED_USERS, user)) {
-    appendToList(REGISTERED_USERS, { ...user, avatarUrl: null })
-  }
-  if (!appendToList(REGISTERED_SKILLS, skill)) {
-    appendToList(REGISTERED_SKILLS, { ...skill, images: [] })
+  try {
+    const userSaved =
+      appendToList(REGISTERED_USERS, user) ||
+      appendToList(REGISTERED_USERS, { ...user, avatarUrl: null })
+    if (!userSaved) throw new Error('Не удалось сохранить пользователя')
+
+    const skillSaved =
+      appendToList(REGISTERED_SKILLS, skill) ||
+      appendToList(REGISTERED_SKILLS, { ...skill, images: [] })
+    if (!skillSaved) throw new Error('Не удалось сохранить навык')
+  } catch (error) {
+    // Если вторая запись не удалась, не оставляем в хранилище неполный аккаунт.
+    // Возвращаем прежние значения; исходная ошибка попадёт в обработчик страницы.
+    try {
+      if (previousUsers === null) localStorage.removeItem(REGISTERED_USERS)
+      else localStorage.setItem(REGISTERED_USERS, previousUsers)
+      if (previousSkills === null) localStorage.removeItem(REGISTERED_SKILLS)
+      else localStorage.setItem(REGISTERED_SKILLS, previousSkills)
+    } catch {
+      // Хранилище может быть полностью недоступно. Успех всё равно не показываем.
+    }
+    throw error
   }
 }
