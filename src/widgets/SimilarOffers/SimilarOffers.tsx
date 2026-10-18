@@ -4,13 +4,19 @@ import { getSimilarUsers } from '@/entities/user/lib/getSimilarUsers.ts'
 import ChevronIcon from '@/shared/assets/icons/chevron.svg?react'
 import styles from './SimilarOffers.module.css'
 import useEmblaCarousel from 'embla-carousel-react'
-import { UserCardItem } from '@/pages/CatalogPage/ui/UserCardItem.tsx'
 import { useAppSelector } from '@/store/hooks.ts'
 import { selectUsers } from '@/entities/user/model/usersSlice.ts'
 import { selectSkills } from '@/entities/skill/model/skillsSlice.ts'
+import { SkillCard } from '@/widgets/SkillCard'
+import { useUserCardProps } from '@/features/user-card'
 
 type TSimilarOffersProps = {
   currentUser: User
+}
+
+const SimilarCard = ({ user }: { user: User }) => {
+  const cardProps = useUserCardProps(user)
+  return <SkillCard {...cardProps} />
 }
 
 export const SimilarOffers: FC<TSimilarOffersProps> = ({ currentUser }) => {
@@ -21,7 +27,6 @@ export const SimilarOffers: FC<TSimilarOffersProps> = ({ currentUser }) => {
   const filteredUsers: User[] = getSimilarUsers(users, skills, skillId).filter(
     (user) => user.id !== currentUser.id,
   )
-
   const shouldShowArrows = filteredUsers.length > 4
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -59,7 +64,7 @@ export const SimilarOffers: FC<TSimilarOffersProps> = ({ currentUser }) => {
           <ul className={`${styles.list}`}>
             {filteredUsers.map((user) => (
               <li key={user.id} className={`${styles.listItem}`}>
-                <UserCardItem user={user} />
+                <SimilarCard user={user} />
               </li>
             ))}
           </ul>

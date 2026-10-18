@@ -104,10 +104,8 @@ export default function SkillPage() {
             />
           }
         />
-        <SimilarOffers currentUser={author}/>
       </section>
-
-      {/* Похожие предложения — задача #163 */}
+        <SimilarOffers currentUser={author}/>
     </div>
   )
 }
