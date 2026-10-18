@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { User } from '@/shared/types'
 import { Button } from '@/shared/ui/Button'
+import { Spinner } from '@/shared/ui/Spinner'
 import CloseIcon from '@/shared/assets/icons/close.svg?react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { selectCategories } from '@/entities/category/model/categoriesSlice'
 import { selectCities } from '@/entities/city/model/citiesSlice'
-import { selectFilters, setFilters } from '@/features/filters/model/filtersSlice'
+import {
+  selectFilters,
+  selectSearch,
+  setFilters,
+} from '@/features/filters/model/filtersSlice'
 import { getFilterChips } from '@/features/filters/lib/filterChips'
 import { sortByNewest, sortByPopularity } from '@/entities/user/lib/homeSections'
+import { useInfiniteList } from '@/shared/hooks/useInfiniteList'
 import { UserCardItem } from './UserCardItem'
 import styles from '../CatalogPage.module.css'
 
@@ -20,12 +26,27 @@ type FilterResultsProps = {
 export function FilterResults({ users }: FilterResultsProps) {
   const dispatch = useAppDispatch()
   const filters = useAppSelector(selectFilters)
+  const search = useAppSelector(selectSearch)
   const categories = useAppSelector(selectCategories)
   const cities = useAppSelector(selectCities)
   const [sort, setSort] = useState<SortOrder>('newest')
 
   const chips = getFilterChips(filters, categories, cities)
-  const sortedUsers = sort === 'newest' ? sortByNewest(users) : sortByPopularity(users)
+
+  // Мемоизируем сортировку: иначе на каждом рендере получаем новый массив,
+  // и useInfiniteList не сможет удержать состояние.
+  const sortedUsers = useMemo(
+    () => (sort === 'newest' ? sortByNewest(users) : sortByPopularity(users)),
+    [users, sort],
+  )
+
+  // Сброс счётчика при смене фильтров, поиска или сортировки.
+  const resetKey = useMemo(
+    () => `${sort}|${JSON.stringify(filters)}|${search}`,
+    [sort, filters, search],
+  )
+
+  const { visibleItems, hasMore, sentinelRef } = useInfiniteList(sortedUsers, { resetKey })
 
   const toggleSort = () => setSort((prev) => (prev === 'newest' ? 'popular' : 'newest'))
 
@@ -58,11 +79,18 @@ export function FilterResults({ users }: FilterResultsProps) {
       {users.length === 0 ? (
         <p className={styles.empty}>Ничего не найдено</p>
       ) : (
-        <div className={styles.grid}>
-          {sortedUsers.map((user) => (
-            <UserCardItem key={user.id} user={user} />
-          ))}
-        </div>
+        <>
+          <div className={styles.grid}>
+            {visibleItems.map((user) => (
+              <UserCardItem key={user.id} user={user} />
+            ))}
+          </div>
+          {hasMore && (
+            <div ref={sentinelRef} className={styles.loader} aria-hidden="true">
+              <Spinner />
+            </div>
+          )}
+        </>
       )}
     </section>
   )

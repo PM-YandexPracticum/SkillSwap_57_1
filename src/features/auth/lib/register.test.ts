@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { User } from '@/shared/types'
-import { createRegisteredUser, isEmailTaken } from './register'
+import { LOCAL_STORAGE_KEYS } from '@/shared/lib/constants'
+import { createRegisteredUser, isEmailTaken, saveRegistered } from './register'
 
 const account = { email: 'new@mail.ru', password: 'Password123' }
 const profile = {
@@ -75,4 +76,83 @@ describe('createRegisteredUser', () => {
       createdAt: now.toISOString(),
     })
   })
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
+  localStorage.clear()
+})
+
+describe('saveRegistered', () => {
+  it('сохраняет пользователя и его навык', () => {
+    const { user, skill } = createRegisteredUser(
+      account,
+      profile,
+      skillData,
+      now,
+    )
+    saveRegistered(user, skill)
+    expect(localStorage.getItem(LOCAL_STORAGE_KEYS.REGISTERED_USERS)).toContain(
+      user.id,
+    )
+    expect(
+      localStorage.getItem(LOCAL_STORAGE_KEYS.REGISTERED_SKILLS),
+    ).toContain(skill.id)
+  })
+
+  it('сообщает об ошибке, если localStorage недоступен', () => {
+    const { user, skill } = createRegisteredUser(
+      account,
+      profile,
+      skillData,
+      now,
+    )
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('Нет доступа')
+    })
+    expect(() => saveRegistered(user, skill)).toThrow()
+  })
+
+  it('откатывает запись пользователя, если навык сохранить не удалось', () => {
+    const { user, skill } = createRegisteredUser(
+      account,
+      profile,
+      skillData,
+      now,
+    )
+    const originalSetItem = Storage.prototype.setItem
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (
+      this: Storage,
+      key: string,
+      value: string,
+    ) {
+      if (key === LOCAL_STORAGE_KEYS.REGISTERED_SKILLS)
+        throw new Error('Нет места')
+      originalSetItem.call(this, key, value)
+    })
+    expect(() => saveRegistered(user, skill)).toThrow()
+    expect(localStorage.getItem(LOCAL_STORAGE_KEYS.REGISTERED_USERS)).toBeNull()
+  })
+})
+
+it('при нехватке места повторяет запись без изображений', () => {
+  const { user, skill } = createRegisteredUser(account, profile, skillData, now)
+  const originalSetItem = Storage.prototype.setItem
+  vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (
+    this: Storage,
+    key: string,
+    value: string,
+  ) {
+    if (
+      key === LOCAL_STORAGE_KEYS.REGISTERED_SKILLS &&
+      value.includes('data:image')
+    ) {
+      throw new Error('Нет места для изображений')
+    }
+    originalSetItem.call(this, key, value)
+  })
+  saveRegistered(user, skill)
+  expect(
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.REGISTERED_SKILLS)!),
+  ).toEqual([{ ...skill, images: [] }])
 })
