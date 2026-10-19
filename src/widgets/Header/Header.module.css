@@ -71,6 +71,14 @@
   gap: 20px;
 }
 
+.notificationsPanel {
+  position: fixed;
+  top: 104px;
+  right: 36px;
+  width: min(556px, calc(100vw - 72px));
+  z-index: 1000;
+}
+
 .user {
   display: flex;
   flex-direction: row;
