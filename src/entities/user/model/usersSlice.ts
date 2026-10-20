@@ -19,12 +19,23 @@ const initialState: UsersState = {
 }
 
 /**
- * Загружает пользователей один раз: повторный dispatch при уже начатой загрузке пропускается.
- * К моковым пользователям добавляются зарегистрированные (из localStorage).
+ * Загружает пользователей один раз.
+ *
+ * Логика слияния моков и localStorage:
+ *  - если id мок-пользователя уже есть в REGISTERED_USERS (например, его отредактировали
+ *    на странице профиля), берём сохранённую версию, а мок-версию отбрасываем;
+ *  - это гарантирует, что после перезагрузки страницы изменения из localStorage
+ *    перекрывают исходные данные из public/db/users.json.
  */
 export const loadUsers = createAsyncThunk<User[], void, { state: RootState }>(
   'users/loadUsers',
-  async () => [...(await fetchUsers()), ...readList<User>(LOCAL_STORAGE_KEYS.REGISTERED_USERS)],
+  async () => {
+    const baseUsers = await fetchUsers()
+    const registeredUsers = readList<User>(LOCAL_STORAGE_KEYS.REGISTERED_USERS)
+    const registeredIds = new Set(registeredUsers.map((user) => user.id))
+    const visibleBaseUsers = baseUsers.filter((user) => !registeredIds.has(user.id))
+    return [...visibleBaseUsers, ...registeredUsers]
+  },
   {
     condition: (_arg, { getState }) => getState().users.status === 'idle',
   },
@@ -36,6 +47,16 @@ const usersSlice = createSlice({
   reducers: {
     addUser(state, action: PayloadAction<User>) {
       state.items.push(action.payload)
+    },
+    /**
+     * Обновляет существующего пользователя по id, сохраняя остальные поля.
+     * Никаких новых записей не создаёт.
+     */
+    updateUser(state, action: PayloadAction<User>) {
+      const index = state.items.findIndex((user) => user.id === action.payload.id)
+      if (index >= 0) {
+        state.items[index] = action.payload
+      }
     },
   },
   extraReducers: (builder) => {
@@ -56,7 +77,7 @@ const usersSlice = createSlice({
 })
 
 export const usersReducer = usersSlice.reducer
-export const { addUser } = usersSlice.actions
+export const { addUser, updateUser } = usersSlice.actions
 
 export const selectUsers = (state: RootState) => state.users.items
 export const selectUsersStatus = (state: RootState) => state.users.status

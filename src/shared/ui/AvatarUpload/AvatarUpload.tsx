@@ -10,6 +10,8 @@ type TAvatarUploadProps = {
   onChange: (file: File) => void
   size?: 's' | 'l'
   className?: string
+  /** aria-label для кнопки загрузки. По умолчанию «Загрузить новое фото». */
+  uploadLabel?: string
 }
 
 export const AvatarUpload: FC<TAvatarUploadProps> = ({
@@ -17,18 +19,23 @@ export const AvatarUpload: FC<TAvatarUploadProps> = ({
   onChange,
   size = 's',
   className = '',
+  uploadLabel,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
+
   const buttonClick = () => {
     inputRef.current?.click()
   }
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       onChange(file)
     }
+    // Сбрасываем input, чтобы повторный выбор того же файла сработал
     e.target.value = ''
   }
+
   return (
     <div
       className={`${className} ${styles.container} ${size === 's' ? styles.smallContainer : ''}`}
@@ -38,8 +45,8 @@ export const AvatarUpload: FC<TAvatarUploadProps> = ({
         className={`${styles.uploadIconContainer} ${size === 's' ? styles.smallUploadIconContainer : ''}`}
       >
         <IconButton
-          icon={size === 's' ? <PlusIcon/> : <EditImageIcon />}
-          label={'Загрузить новое фото'}
+          icon={size === 's' ? <PlusIcon /> : <EditImageIcon />}
+          label={uploadLabel ?? 'Загрузить новое фото'}
           className={`${styles.uploadIcon} ${size === 's' ? styles.smallUploadButton : ''}`}
           onClick={buttonClick}
         />

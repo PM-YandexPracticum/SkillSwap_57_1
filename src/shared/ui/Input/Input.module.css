@@ -96,6 +96,11 @@
   pointer-events: none;
 }
 
+/* Когда элемент справа — интерактивная кнопка (карандаш) */
+.rightElement.rightElementInteractive {
+  pointer-events: auto;
+}
+
 .rightElement svg {
   display: block;
   width: 24px;

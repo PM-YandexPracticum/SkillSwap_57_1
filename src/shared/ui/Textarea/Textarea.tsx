@@ -9,10 +9,15 @@ type TextareaProps = {
   error?: string
   rows?: number
   name?: string
+  id?: string
   className?: string
   maxLength?: number
-  /** Иконка или кнопка справа сверху. Декоративная — не перехватывает клики. */
+  /** Режим чтения: поле отображается, но недоступно для ввода */
+  readOnly?: boolean
+  /** Иконка или кнопка справа сверху. */
   rightElement?: ReactNode
+  /** Делает элемент справа интерактивным (кнопка-карандаш). */
+  rightElementInteractive?: boolean
 }
 
 export function Textarea({
@@ -23,17 +28,21 @@ export function Textarea({
   error,
   rows = 3,
   name,
+  id,
   className,
   maxLength,
+  readOnly = false,
   rightElement,
+  rightElementInteractive = false,
 }: TextareaProps) {
-  const id = useId()
-  const errorId = `${id}-error`
+  const generatedId = useId()
+  const textareaId = id ?? generatedId
+  const errorId = `${textareaId}-error`
 
   return (
     <div className={styles.container}>
       {label && (
-        <label className={styles.label} htmlFor={id}>
+        <label className={styles.label} htmlFor={textareaId}>
           {label}
         </label>
       )}
@@ -41,7 +50,7 @@ export function Textarea({
         className={`${styles.field} ${rightElement ? styles.fieldWithRight : ''}`.trim()}
       >
         <textarea
-          id={id}
+          id={textareaId}
           name={name}
           rows={rows}
           value={value}
@@ -51,9 +60,15 @@ export function Textarea({
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
           maxLength={maxLength}
+          readOnly={readOnly}
         />
         {rightElement && (
-          <span className={styles.rightElement} aria-hidden="true">
+          <span
+            className={`${styles.rightElement} ${
+              rightElementInteractive ? styles.rightElementInteractive : ''
+            }`.trim()}
+            aria-hidden={rightElementInteractive ? undefined : true}
+          >
             {rightElement}
           </span>
         )}
