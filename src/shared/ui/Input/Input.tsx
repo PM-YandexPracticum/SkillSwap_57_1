@@ -10,6 +10,8 @@ export type TInputProps = {
   error?: string
   variant?: 'bordered' | 'borderless'
   disabled?: boolean
+  /** Режим чтения: поле отображается, но недоступно для ввода */
+  readOnly?: boolean
   className?: string
   name?: string
   id?: string
@@ -17,8 +19,13 @@ export type TInputProps = {
   maxLength?: number
   minLength?: number
   label?: string
-  /** Иконка или кнопка справа внутри поля. Декоративная — не перехватывает клики. */
+  /** Иконка или кнопка справа внутри поля. */
   rightElement?: ReactNode
+  /**
+   * Делает элемент справа интерактивным (например, кнопка-карандаш).
+   * В этом случае убираем aria-hidden и pointer-events: none.
+   */
+  rightElementInteractive?: boolean
 }
 
 export const Input: FC<TInputProps> = ({
@@ -29,6 +36,7 @@ export const Input: FC<TInputProps> = ({
   error,
   variant = 'bordered',
   disabled = false,
+  readOnly = false,
   className = '',
   name,
   id,
@@ -37,6 +45,7 @@ export const Input: FC<TInputProps> = ({
   minLength,
   label,
   rightElement,
+  rightElementInteractive = false,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)
@@ -64,6 +73,7 @@ export const Input: FC<TInputProps> = ({
           onChange={handleChange}
           placeholder={placeholder}
           disabled={disabled}
+          readOnly={readOnly}
           name={name}
           id={inputId}
           autoComplete={autoComplete}
@@ -71,7 +81,12 @@ export const Input: FC<TInputProps> = ({
           minLength={minLength}
         />
         {rightElement && (
-          <span className={styles.rightElement} aria-hidden="true">
+          <span
+            className={`${styles.rightElement} ${
+              rightElementInteractive ? styles.rightElementInteractive : ''
+            }`.trim()}
+            aria-hidden={rightElementInteractive ? undefined : true}
+          >
             {rightElement}
           </span>
         )}

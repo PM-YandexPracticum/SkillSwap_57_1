@@ -54,6 +54,23 @@
   margin-top: var(--space-md);
 }
 
+/* Баннеры сохранения */
+.successMessage {
+  padding: 12px var(--space-md);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-primary-light);
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.errorMessage {
+  padding: 12px var(--space-md);
+  border-radius: var(--radius-lg);
+  background-color: rgb(191 57 32 / 10%);
+  color: var(--color-error);
+  margin-bottom: var(--space-sm);
+}
+
 @media (width <= 1300px) {
   .card {
     padding: var(--space-xl);
