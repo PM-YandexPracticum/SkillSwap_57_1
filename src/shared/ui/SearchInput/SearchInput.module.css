@@ -10,8 +10,12 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+.container:hover {
+  border-color: var(--color-primary);
+}
+
 .container:focus-within {
-  border-color: var(--color-link);
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgb(171 210 122 / 20%);
 }
 
