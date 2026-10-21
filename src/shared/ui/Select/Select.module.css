@@ -15,9 +15,18 @@
   position: relative;
   background-color: var(--color-bg-secondary);
   cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
-  &:focus-visible {
-    outline: 2px solid var(--color-primary);
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+  }
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(171 210 122 / 20%);
+    outline: none;
   }
 }
 
@@ -78,6 +87,8 @@
   &.open {
     display: grid;
     grid-template-rows: min-content min-content;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(171 210 122 / 20%);
   }
 }
 
