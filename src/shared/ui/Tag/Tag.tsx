@@ -10,7 +10,7 @@ type TagProps = {
 export function Tag({ label, categoryId, className }: TagProps) {
   return (
     <span
-      className={`${styles.tag} ${categoryId ? styles[categoryId] : styles.more} ${className ? className : ''}`}
+      className={`caption ${styles.tag} ${categoryId ? styles[categoryId] : styles.more} ${className ? className : ''}`}
     >
       {label}
     </span>

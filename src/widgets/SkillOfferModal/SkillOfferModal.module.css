@@ -4,6 +4,13 @@
   padding: 44px 60px 72px;
 }
 
+.modal span {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
 .content {
   width: 100%;
   height: 100%;
