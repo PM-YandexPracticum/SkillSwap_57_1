@@ -82,7 +82,7 @@ export const SkillCard = (props: SkillCardProps) => {
             )}
           </div>
 
-          <p className={styles.meta}>
+          <p className="caption">
             {city}, {formatAge(age)}
           </p>
         </div>

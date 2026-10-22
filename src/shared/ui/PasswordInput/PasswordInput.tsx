@@ -61,7 +61,7 @@ export const PasswordInput = ({
           onClick={toggleVisibility}
           type="button"
         />
-        {!error && hint && <span className={styles.hint}>{hint}</span>}
+        {!error && hint && <span className="caption">{hint}</span>}
       </div>
     </div>
   )

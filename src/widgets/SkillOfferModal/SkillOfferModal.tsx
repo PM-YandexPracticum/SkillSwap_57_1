@@ -5,16 +5,16 @@ import Pencil from '@/shared/assets/icons/pencil.svg?react'
 import styles from './SkillOfferModal.module.css'
 
 type SkillOfferModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onEdit: () => void;
-  onConfirm: () => void;
+  isOpen: boolean
+  onClose: () => void
+  onEdit: () => void
+  onConfirm: () => void
   skillDetails: {
-    name: string;
-    category: string;
-    subcategory: string;
-    description: string;
-    images: string[];
+    name: string
+    category: string
+    subcategory: string
+    description: string
+    images: string[]
   }
 }
 
@@ -23,8 +23,8 @@ export function SkillOfferModal({
   onClose,
   onEdit,
   onConfirm,
-  skillDetails }: SkillOfferModalProps) {
-
+  skillDetails,
+}: SkillOfferModalProps) {
   if (isOpen) {
     return (
       <Modal
@@ -55,5 +55,4 @@ export function SkillOfferModal({
       </Modal>
     )
   }
-
 }

@@ -37,12 +37,6 @@
   overflow-wrap: anywhere;
 }
 
-.meta {
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-caption);
-  color: var(--color-text-secondary);
-}
-
 .about {
   margin: 0;
   font-family: var(--font-body);
