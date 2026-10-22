@@ -9,6 +9,8 @@ import { PasswordInput } from '@/shared/ui/PasswordInput'
 
 type TRegisterStepOneProps = {
   onNext: (data: { email: string; password: string }) => void
+  initialData?: { email: string; password: string }
+  onDraftChange?: (data: { email: string; password: string }) => void
   emailError?: string
   /** Проверка, занят ли email; если вернёт true — показываем ошибку и дальше не пускаем */
   isEmailTaken?: (email: string) => boolean
@@ -16,18 +18,26 @@ type TRegisterStepOneProps = {
 
 export const RegisterStepOne: FC<TRegisterStepOneProps> = ({
   onNext,
+  initialData,
+  onDraftChange,
   emailError,
   isEmailTaken,
 }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [hintText, setHintText] = useState('Пароль должен содержать не менее 8 знаков')
+  const [email, setEmail] = useState(initialData?.email ?? '')
+  const [password, setPassword] = useState(initialData?.password ?? '')
+  const [hintText, setHintText] = useState(
+    password.length >= 8 ? 'Надёжный' : 'Пароль должен содержать не менее 8 знаков',
+  )
   const [localEmailError, setEmailError] = useState(emailError)
   const [passwordError, setPasswordError] = useState(false)
 
   useEffect(() => {
     setEmailError(emailError)
   }, [emailError])
+
+  useEffect(() => {
+    onDraftChange?.({ email, password })
+  }, [email, password, onDraftChange])
 
   const validateEmail = (email: string): boolean => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

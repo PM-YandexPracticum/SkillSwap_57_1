@@ -1,15 +1,15 @@
-import { FC, useState, useEffect } from "react";
-import styles from "./RegisterStepThree.module.css";
-import { Button } from "@/shared/ui/Button";
-import { Input } from "@/shared/ui/Input";
-import { Textarea } from "@/shared/ui/Textarea";
-import { Select } from "@/shared/ui/Select";
-import { StepProgress } from "@/shared/ui/StepProgress";
-import { AuthPanel } from "../AuthPanel";
-import { useAppSelector } from "@/store/hooks";
-import RegisterStepThreeIllustration from "@/shared/assets/illustrations/register-skill.svg?react";
-import CloseIcon from "@/shared/assets/icons/close.svg?react";
-import { ImageUpload } from "@/shared/ui/ImageUpload";
+import { FC, useState, useEffect } from 'react'
+import styles from './RegisterStepThree.module.css'
+import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
+import { Textarea } from '@/shared/ui/Textarea'
+import { Select } from '@/shared/ui/Select'
+import { StepProgress } from '@/shared/ui/StepProgress'
+import { AuthPanel } from '../AuthPanel'
+import { useAppSelector } from '@/store/hooks'
+import RegisterStepThreeIllustration from '@/shared/assets/illustrations/register-skill.svg?react'
+import CloseIcon from '@/shared/assets/icons/close.svg?react'
+import { ImageUpload } from '@/shared/ui/ImageUpload'
 
 export type RegisterStepThreeData = {
   title: string
@@ -17,103 +17,108 @@ export type RegisterStepThreeData = {
   subcategoryId: string
   description: string
   images: File[]
-};
+}
 
 type TRegisterStepThreeProps = {
+  initialData?: RegisterStepThreeData
+  onDraftChange?: (data: RegisterStepThreeData) => void
   onBack: () => void
   onNext: (data: RegisterStepThreeData) => void
-};
+}
 
 export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
   onBack,
-  onNext
+  initialData,
+  onDraftChange,
+  onNext,
 }) => {
-  const [title, setTitle] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [subcategoryId, setSubcategoryId] = useState('');
-  const [description, setDescription] = useState('');
-  const [images, setImages] = useState<File[]>([]);
+  const [title, setTitle] = useState(initialData?.title ?? '')
+  const [categoryId, setCategoryId] = useState(initialData?.categoryId ?? '')
+  const [subcategoryId, setSubcategoryId] = useState(initialData?.subcategoryId ?? '')
+  const [description, setDescription] = useState(initialData?.description ?? '')
+  const [images, setImages] = useState<File[]>(initialData?.images ?? [])
 
-  const [titleError, setTitleError] = useState<string | undefined>();
-  const [categoryIdError, setCategoryIdError] = useState<string | undefined>();
-  const [subcategoryIdError, setSubcategoryIdError] = useState<string | undefined>();
-  const [descriptionError, setDescriptionError] = useState<string | undefined>();
+  const [titleError, setTitleError] = useState<string | undefined>()
+  const [categoryIdError, setCategoryIdError] = useState<string | undefined>()
+  const [subcategoryIdError, setSubcategoryIdError] = useState<string | undefined>()
+  const [descriptionError, setDescriptionError] = useState<string | undefined>()
 
-  const categories = useAppSelector(state => state.categories.items);
-  const selectedCategory = categories.find(c => c.id === categoryId);
-  const subcategories = selectedCategory?.subcategories || [];
+  const categories = useAppSelector((state) => state.categories.items)
+  const selectedCategory = categories.find((c) => c.id === categoryId)
+  const subcategories = selectedCategory?.subcategories || []
 
   useEffect(() => {
-    setSubcategoryId('');
-    setSubcategoryIdError(undefined);
-  }, [categoryId]);
+    onDraftChange?.({ title, categoryId, subcategoryId, description, images })
+  }, [title, categoryId, subcategoryId, description, images, onDraftChange])
 
   const handleTitleChange = (value: string) => {
-    setTitle(value);
-    if (titleError) setTitleError(undefined);
-  };
+    setTitle(value)
+    if (titleError) setTitleError(undefined)
+  }
 
   const handleCategoryChange = (value: string) => {
-    setCategoryId(value);
-    if (categoryIdError) setCategoryIdError(undefined);
-  };
+    setCategoryId(value)
+    setSubcategoryId('')
+    setSubcategoryIdError(undefined)
+    if (categoryIdError) setCategoryIdError(undefined)
+  }
 
   const handleSubcategoryChange = (value: string) => {
-    setSubcategoryId(value);
-    if (subcategoryIdError) setSubcategoryIdError(undefined);
-  };
+    setSubcategoryId(value)
+    if (subcategoryIdError) setSubcategoryIdError(undefined)
+  }
 
   const handleDescriptionChange = (value: string) => {
-    setDescription(value);
-    if (descriptionError) setDescriptionError(undefined);
-  };
+    setDescription(value)
+    if (descriptionError) setDescriptionError(undefined)
+  }
 
   const handleImagesUpload = (newFiles: File[]) => {
-    const validFiles = newFiles.filter(file => {
-      const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
-      const isValidSize = file.size <= 2 * 1024 * 1024;
-      return isValidType && isValidSize;
-    });
+    const validFiles = newFiles.filter((file) => {
+      const isValidType = ['image/jpeg', 'image/png'].includes(file.type)
+      const isValidSize = file.size <= 2 * 1024 * 1024
+      return isValidType && isValidSize
+    })
 
-    setImages(prev => [...prev, ...validFiles]);
-  };
+    setImages((prev) => [...prev, ...validFiles])
+  }
 
   const handleRemoveImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-  };
+    setImages((prev) => prev.filter((_, i) => i !== index))
+  }
 
   const handleContinue = () => {
     if (validate()) {
-      onNext({ title, categoryId, subcategoryId, description, images });
+      onNext({ title, categoryId, subcategoryId, description, images })
     }
-  };
+  }
 
   const validate = (): boolean => {
-    let isValid = true;
+    let isValid = true
 
     if (title.trim().length < 3) {
       setTitleError('Минимум 3 символа')
-      isValid = false;
+      isValid = false
     } else if (title.length > 50) {
       setTitleError('Максимум 50 символов')
       isValid = false
     } else {
       setTitleError(undefined)
-    };
+    }
 
     if (!categoryId) {
       setCategoryIdError('Выберите категорию')
       isValid = false
     } else {
       setCategoryIdError(undefined)
-    };
+    }
 
     if (!subcategoryId) {
       setSubcategoryIdError('Выберите подкатегорию')
       isValid = false
     } else {
       setSubcategoryIdError(undefined)
-    };
+    }
 
     if (description.trim().length === 0) {
       setDescriptionError('Добавьте описание')
@@ -123,12 +128,12 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
       isValid = false
     } else {
       setDescriptionError(undefined)
-    };
+    }
 
-    return isValid;
-  };
+    return isValid
+  }
 
-  const illustration = <RegisterStepThreeIllustration />;
+  const illustration = <RegisterStepThreeIllustration />
 
   return (
     <div className={styles.container}>
@@ -152,20 +157,18 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
             <Select
               label="Категория навыка"
               placeholder="Выберите категорию навыка"
-              options={categories.map(cat => ({ value: cat.id, label: cat.name }))}
+              options={categories.map((cat) => ({ value: cat.id, label: cat.name }))}
               value={categoryId}
               onChange={handleCategoryChange}
             />
-            {categoryIdError && (
-              <span className={styles.errorMessage}>{categoryIdError}</span>
-            )}
+            {categoryIdError && <span className={styles.errorMessage}>{categoryIdError}</span>}
           </div>
 
           <div className={styles.selectWrapper}>
             <Select
               label="Подкатегория навыка"
               placeholder="Выберите подкатегорию навыка"
-              options={subcategories.map(sub => ({ value: sub.id, label: sub.name }))}
+              options={subcategories.map((sub) => ({ value: sub.id, label: sub.name }))}
               value={subcategoryId}
               onChange={handleSubcategoryChange}
               disabled={!categoryId}
@@ -185,7 +188,6 @@ export const RegisterStepThree: FC<TRegisterStepThreeProps> = ({
           />
 
           <div className={styles.uploadSection}>
-
             <ImageUpload onChange={handleImagesUpload} />
 
             {images.length > 0 && (

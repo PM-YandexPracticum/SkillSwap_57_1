@@ -1,13 +1,10 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  cleanup,
-} from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor, cleanup } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import RegisterPage from './index'
+import {
+  createEmptyRegistrationDraft,
+  type RegistrationDraft,
+} from '@/features/auth/lib/registrationDraft'
 
 const mocks = vi.hoisted(() => ({
   dispatch: vi.fn(),
@@ -15,8 +12,20 @@ const mocks = vi.hoisted(() => ({
   create: vi.fn(),
   save: vi.fn(),
   fileToDataUrl: vi.fn(),
+  readDraft: vi.fn(),
+  writeDraft: vi.fn(),
+  clearDraft: vi.fn(),
 }))
 
+vi.mock('@/features/auth/lib/registrationDraft', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/features/auth/lib/registrationDraft')>()
+  return {
+    ...actual,
+    readRegistrationDraft: mocks.readDraft,
+    saveRegistrationDraft: mocks.writeDraft,
+    clearRegistrationDraft: mocks.clearDraft,
+  }
+})
 vi.mock('react-router-dom', () => ({ useNavigate: () => mocks.navigate }))
 vi.mock('@/store/hooks', () => ({
   useAppDispatch: () => mocks.dispatch,
@@ -44,8 +53,7 @@ vi.mock('@/entities/skill/model/skillsSlice', () => ({
   addSkill: (payload: unknown) => ({ type: 'skills/add', payload }),
 }))
 vi.mock('@/entities/category/model/categoriesSlice', () => ({
-  selectCategories: (state: { categories: { items: unknown[] } }) =>
-    state.categories.items,
+  selectCategories: (state: { categories: { items: unknown[] } }) => state.categories.items,
 }))
 vi.mock('@/features/auth/model/authSlice', () => ({
   login: (payload: string) => ({ type: 'auth/login', payload }),
@@ -64,16 +72,11 @@ vi.mock('@/shared/assets/illustrations/login.svg?react', () => ({
 }))
 vi.mock('@/shared/ui/StepProgress', () => ({ StepProgress: () => null }))
 vi.mock('@/widgets/AuthPanel', () => ({
-  AuthPanel: ({ children }: { children: import('react').ReactNode }) =>
-    children,
+  AuthPanel: ({ children }: { children: import('react').ReactNode }) => children,
 }))
 vi.mock('@/widgets/RegisterStepOne', () => ({
   RegisterStepOne: ({ onNext }: { onNext: (data: unknown) => void }) => (
-    <button
-      onClick={() => onNext({ email: 'new@mail.ru', password: 'Password123' })}
-    >
-      Шаг 1
-    </button>
+    <button onClick={() => onNext({ email: 'new@mail.ru', password: 'Password123' })}>Шаг 1</button>
   ),
 }))
 vi.mock('@/widgets/RegisterStepTwo', () => ({
@@ -85,6 +88,7 @@ vi.mock('@/widgets/RegisterStepTwo', () => ({
           birthDate: '1995-05-10',
           gender: 'female',
           cityId: 'c1',
+          categoryId: 'creative',
           subcategoryId: 'music',
           avatarFile: new File(['avatar'], 'avatar.png'),
         })
@@ -95,9 +99,24 @@ vi.mock('@/widgets/RegisterStepTwo', () => ({
   ),
 }))
 vi.mock('@/widgets/RegisterStepThree', () => ({
-  RegisterStepThree: ({ onNext }: { onNext: (data: unknown) => void }) => (
+  RegisterStepThree: ({
+    onNext,
+    initialData,
+    onDraftChange,
+  }: {
+    onNext: (data: unknown) => void
+    initialData: RegistrationDraft['skill']
+    onDraftChange: (data: RegistrationDraft['skill']) => void
+  }) => (
     <div>
-      <input aria-label="Описание навыка" defaultValue="Мой текст" />
+      <input
+        aria-label="Описание навыка"
+        defaultValue={initialData.description || 'Мой текст'}
+        onChange={(event) => onDraftChange({ ...initialData, description: event.target.value })}
+      />
+      <span data-testid="restored-images">
+        {initialData.images.map((file) => file.name).join(', ')}
+      </span>
       <button
         onClick={() =>
           onNext({
@@ -136,8 +155,7 @@ vi.mock('@/widgets/SkillOfferModal', () => ({
     isOpen ? (
       <section aria-label="Предложение">
         <p>
-          {skillDetails.name} / {skillDetails.category} /{' '}
-          {skillDetails.subcategory}
+          {skillDetails.name} / {skillDetails.category} / {skillDetails.subcategory}
         </p>
         <img src={skillDetails.images[0]} alt="Предпросмотр" />
         <button onClick={onEdit}>Редактировать</button>
@@ -166,7 +184,7 @@ vi.mock('@/widgets/RegistrationSuccessModal', () => ({
 
 async function openOffer() {
   render(<RegisterPage />)
-  fireEvent.click(screen.getByRole('button', { name: 'Шаг 1' }))
+  fireEvent.click(await screen.findByRole('button', { name: 'Шаг 1' }))
   fireEvent.click(screen.getByRole('button', { name: 'Шаг 2' }))
   fireEvent.click(screen.getByRole('button', { name: 'Шаг 3' }))
   await screen.findByRole('region', { name: 'Предложение' })
@@ -174,6 +192,9 @@ async function openOffer() {
 
 beforeEach(() => {
   vi.clearAllMocks()
+  mocks.readDraft.mockResolvedValue(null)
+  mocks.writeDraft.mockResolvedValue(undefined)
+  mocks.clearDraft.mockResolvedValue(undefined)
   mocks.create.mockReturnValue({
     user: { id: 'new-user' },
     skill: { id: 'new-skill' },
@@ -198,11 +219,9 @@ describe('регистрация с модальными окнами', () => {
       await openOffer()
       const input = screen.getByRole('textbox', { name: 'Описание навыка' })
       fireEvent.change(input, { target: { value: 'Изменённый текст' } })
-      fireEvent.click(screen.getByRole('button', { name: button }))
+      await act(async () => fireEvent.click(screen.getByRole('button', { name: button })))
       expect(screen.queryByRole('region', { name: 'Предложение' })).toBeNull()
-      expect(screen.getByRole('textbox', { name: 'Описание навыка' })).toBe(
-        input,
-      )
+      expect(screen.getByRole('textbox', { name: 'Описание навыка' })).toBe(input)
       expect((input as HTMLInputElement).value).toBe('Изменённый текст')
       expect(mocks.create).not.toHaveBeenCalled()
     },
@@ -254,16 +273,14 @@ describe('регистрация с модальными окнами', () => {
     await screen.findByRole('alert')
     expect(screen.queryByRole('region', { name: 'Успех' })).toBeNull()
     expect(mocks.save).not.toHaveBeenCalled()
-    expect(mocks.dispatch).not.toHaveBeenCalledWith(
-      expect.objectContaining({ type: 'auth/login' }),
-    )
+    expect(mocks.dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'auth/login' }))
     expect(mocks.navigate).not.toHaveBeenCalled()
   })
 
   it('при ошибке подготовки изображений не открывает предложение', async () => {
     mocks.fileToDataUrl.mockRejectedValue(new Error('Ошибка чтения'))
     render(<RegisterPage />)
-    fireEvent.click(screen.getByRole('button', { name: 'Шаг 1' }))
+    fireEvent.click(await screen.findByRole('button', { name: 'Шаг 1' }))
     fireEvent.click(screen.getByRole('button', { name: 'Шаг 2' }))
     fireEvent.click(screen.getByRole('button', { name: 'Шаг 3' }))
     await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy())
@@ -280,10 +297,82 @@ it('не добавляет аккаунт в store и не показывает
   fireEvent.click(screen.getByRole('button', { name: 'Подтвердить' }))
   await screen.findByRole('alert')
   expect(screen.queryByRole('region', { name: 'Успех' })).toBeNull()
-  expect(mocks.dispatch).not.toHaveBeenCalledWith(
-    expect.objectContaining({ type: 'users/add' }),
-  )
-  expect(mocks.dispatch).not.toHaveBeenCalledWith(
-    expect.objectContaining({ type: 'auth/login' }),
-  )
+  expect(mocks.dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'users/add' }))
+  expect(mocks.dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'auth/login' }))
+})
+
+describe('черновик регистрации', () => {
+  it('ждёт восстановления перед монтированием пустых форм', async () => {
+    let resolve!: (draft: RegistrationDraft | null) => void
+    mocks.readDraft.mockImplementation(
+      () =>
+        new Promise((done) => {
+          resolve = done
+        }),
+    )
+    render(<RegisterPage />)
+    expect(screen.queryByRole('button', { name: 'Шаг 1' })).toBeNull()
+    expect(mocks.writeDraft).not.toHaveBeenCalled()
+    await act(async () => resolve(null))
+    expect(await screen.findByRole('button', { name: 'Шаг 1' })).toBeTruthy()
+  })
+
+  it('восстанавливает шаг 3, незавершённый текст и файлы после пересоздания страницы', async () => {
+    const saved = createEmptyRegistrationDraft()
+    saved.step = 3
+    saved.account = { email: 'new@mail.ru', password: 'Password123' }
+    saved.profile = {
+      ...saved.profile,
+      name: 'Анна',
+      gender: 'female',
+      avatarFile: new File(['avatar'], 'avatar.png'),
+    }
+    saved.skill = {
+      title: 'Гитара',
+      categoryId: 'creative',
+      subcategoryId: 'music',
+      description: 'Черновик',
+      images: [new File(['image'], 'skill.png')],
+    }
+    mocks.readDraft.mockResolvedValue(saved)
+    const first = render(<RegisterPage />)
+    const input = await screen.findByRole('textbox', { name: 'Описание навыка' })
+    expect((input as HTMLInputElement).value).toBe('Черновик')
+    expect(screen.getByTestId('restored-images').textContent).toBe('skill.png')
+    fireEvent.change(input, { target: { value: 'Изменено до нажатия Продолжить' } })
+    await waitFor(() => expect(mocks.writeDraft).toHaveBeenCalled())
+    const lastSaved = mocks.writeDraft.mock.lastCall?.[0]
+    expect(lastSaved.profile.avatarFile.name).toBe('avatar.png')
+    first.unmount()
+    mocks.readDraft.mockResolvedValue(lastSaved)
+    render(<RegisterPage />)
+    const restored = await screen.findByRole('textbox', { name: 'Описание навыка' })
+    expect((restored as HTMLInputElement).value).toBe('Изменено до нажатия Продолжить')
+    expect(screen.queryByRole('button', { name: 'Шаг 1' })).toBeNull()
+  })
+
+  it('очищает черновик после сохранения аккаунта', async () => {
+    await openOffer()
+    fireEvent.click(screen.getByRole('button', { name: 'Подтвердить' }))
+    await screen.findByRole('region', { name: 'Успех' })
+    expect(mocks.clearDraft).toHaveBeenCalledTimes(1)
+  })
+
+  it('сохраняет черновик при неудачном создании аккаунта', async () => {
+    await openOffer()
+    mocks.save.mockImplementation(() => {
+      throw new Error('Нет места')
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Подтвердить' }))
+    await screen.findByRole('alert')
+    expect(mocks.clearDraft).not.toHaveBeenCalled()
+  })
+
+  it('показывает ошибку сохранения и оставляет форму доступной', async () => {
+    mocks.writeDraft.mockRejectedValue(new Error('Хранилище недоступно'))
+    render(<RegisterPage />)
+    fireEvent.click(await screen.findByRole('button', { name: 'Шаг 1' }))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Шаг 2' })).toBeTruthy()
+  })
 })
