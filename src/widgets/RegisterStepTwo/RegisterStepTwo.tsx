@@ -27,7 +27,11 @@ export type RegisterStepTwoData = {
   avatarFile: File | null
 }
 
+export type RegisterStepTwoDraft = Omit<RegisterStepTwoData, 'gender'> & { gender: Gender | '' }
+
 type RegisterStepTwoProps = {
+  initialData?: RegisterStepTwoDraft
+  onDraftChange?: (data: RegisterStepTwoDraft) => void
   onBack: () => void
   onNext: (data: RegisterStepTwoData) => void
 }
@@ -38,20 +42,25 @@ const genderOptions: { value: Gender; label: string }[] = [
   { value: 'male', label: 'Мужской' },
 ]
 
-export function RegisterStepTwo({ onBack, onNext }: RegisterStepTwoProps) {
+export function RegisterStepTwo({
+  onBack,
+  onNext,
+  initialData,
+  onDraftChange,
+}: RegisterStepTwoProps) {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
   const cities = useAppSelector(selectCities)
   const categoriesError = useAppSelector(selectCategoriesError)
   const citiesError = useAppSelector(selectCitiesError)
 
-  const [name, setName] = useState('')
-  const [birthDate, setBirthDate] = useState('')
-  const [gender, setGender] = useState<Gender | ''>('')
-  const [cityId, setCityId] = useState('')
-  const [categoryId, setCategoryId] = useState<TCategoryId | ''>('')
-  const [subcategoryId, setSubcategoryId] = useState('')
-  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [name, setName] = useState(initialData?.name ?? '')
+  const [birthDate, setBirthDate] = useState(initialData?.birthDate ?? '')
+  const [gender, setGender] = useState<Gender | ''>(initialData?.gender ?? '')
+  const [cityId, setCityId] = useState(initialData?.cityId ?? '')
+  const [categoryId, setCategoryId] = useState<TCategoryId | ''>(initialData?.categoryId ?? '')
+  const [subcategoryId, setSubcategoryId] = useState(initialData?.subcategoryId ?? '')
+  const [avatarFile, setAvatarFile] = useState<File | null>(initialData?.avatarFile ?? null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
 
   useEffect(() => {
@@ -67,6 +76,10 @@ export function RegisterStepTwo({ onBack, onNext }: RegisterStepTwoProps) {
 
     return () => URL.revokeObjectURL(previewUrl)
   }, [avatarFile])
+
+  useEffect(() => {
+    onDraftChange?.({ name, birthDate, gender, cityId, categoryId, subcategoryId, avatarFile })
+  }, [name, birthDate, gender, cityId, categoryId, subcategoryId, avatarFile, onDraftChange])
 
   const isFormComplete =
     name.trim() !== '' &&

@@ -7,6 +7,7 @@ import { ROUTES } from '@/shared/lib/constants'
 import { findUserIdByCredentials } from '@/shared/lib/findUserIdByCredentials'
 import { selectUsers } from '@/entities/user/model/usersSlice'
 import { login, selectAuthError } from '@/features/auth/model/authSlice'
+import { clearRegistrationDraft } from '@/features/auth/lib/registrationDraft'
 
 export default function LoginPage() {
   const dispatch = useAppDispatch()
@@ -16,12 +17,22 @@ export default function LoginPage() {
   const location = useLocation()
   const from = location.state?.from?.pathname ?? ROUTES.HOME
 
-  const handleSubmit = (data: { email: string; password: string }) => {
+  const handleSubmit = async (data: { email: string; password: string }) => {
     const userId = findUserIdByCredentials(users, data)
-    dispatch(login(userId))
-    if (userId) {
-      navigate(from, {replace: true})
+
+    if (!userId) {
+      dispatch(login(userId))
+      return
     }
+
+    try {
+      await clearRegistrationDraft() //удаляем черновики с данными пользователя
+    } catch {
+      console.warn('Не удалось полностью удалить черновик регистрации')
+    }
+
+    dispatch(login(userId))
+    navigate(from, { replace: true })
   }
 
   return (
