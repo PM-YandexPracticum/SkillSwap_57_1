@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import HeartIcon from '@/shared/assets/icons/heart.svg?react'
-import HeartFilledIcon from '@/shared/assets/icons/heart-filled.svg?react'
 import ShareIcon from '@/shared/assets/icons/share.svg?react'
 import MoreIcon from '@/shared/assets/icons/more.svg?react'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
@@ -10,10 +8,15 @@ import { loadSkills, selectSkills, selectSkillsStatus } from '@/entities/skill/m
 import { loadCategories, selectCategories } from '@/entities/category/model/categoriesSlice'
 import { loadCities, selectCities } from '@/entities/city/model/citiesSlice'
 import { getUserCardData } from '@/entities/user/lib/getUserCardData'
-import { selectIsFavorite, toggleFavorite } from '@/features/favorites/model/favoritesSlice'
+import {
+  selectIsFavorite,
+  toggleFavorite,
+  selectLikesCount,
+} from '@/features/favorites/model/favoritesSlice'
 import { SkillCard } from '@/widgets/SkillCard'
 import { SkillDetails } from '@/widgets/SkillDetails'
 import { IconButton } from '@/shared/ui/IconButton'
+import { FavoriteButton } from '@/shared/ui/FavoriteButton'
 import { Spinner } from '@/shared/ui/Spinner'
 import { ROUTES } from '@/shared/lib/constants'
 import { SwapRequestButton } from '@/features/swap-request/ui/SwapRequestButton'
@@ -44,6 +47,7 @@ export default function SkillPage() {
   const isFavorite = useAppSelector((state) =>
     author ? selectIsFavorite(state, author.id) : false,
   )
+  const likesCount = useAppSelector((state) => (author ? selectLikesCount(state, author.id) : 0))
 
   if (usersStatus === 'failed' || skillsStatus === 'failed') {
     return <Navigate to={ROUTES.SERVER_ERROR} replace />
@@ -63,11 +67,10 @@ export default function SkillPage() {
 
   const headerActions = (
     <>
-      <IconButton
-        icon={isFavorite ? <HeartFilledIcon /> : <HeartIcon />}
-        label={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+      <FavoriteButton
         active={isFavorite}
-        onClick={() => dispatch(toggleFavorite(author.id))}
+        likesCount={likesCount}
+        onToggle={() => dispatch(toggleFavorite(author.id))}
       />
       {/* «Поделиться» и «Ещё» — заглушки по макету */}
       <IconButton icon={<ShareIcon />} label="Поделиться" onClick={() => undefined} />
@@ -105,7 +108,7 @@ export default function SkillPage() {
           }
         />
       </section>
-        <SimilarOffers currentUser={author}/>
+      <SimilarOffers currentUser={author} />
     </div>
   )
 }

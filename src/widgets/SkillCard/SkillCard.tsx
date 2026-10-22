@@ -1,9 +1,7 @@
 import { formatAge } from '@/shared/lib/age'
-import HeartIcon from '@/shared/assets/icons/heart.svg?react'
-import HeartFilledIcon from '@/shared/assets/icons/heart-filled.svg?react'
 import { Avatar } from '@/shared/ui/Avatar'
 import { Button } from '@/shared/ui/Button'
-import { IconButton } from '@/shared/ui/IconButton'
+import { FavoriteButton } from '@/shared/ui/FavoriteButton'
 import { TagList } from '@/shared/ui/TagList'
 import type { TagListProps } from '@/shared/ui/TagList'
 import styles from './SkillCard.module.css'
@@ -76,15 +74,11 @@ export const SkillCard = (props: SkillCardProps) => {
             <h3 className={styles.name}>{name}</h3>
 
             {favorite && (
-              <div className={styles.favorite}>
-                <IconButton
-                  icon={favorite.isFavorite ? <HeartFilledIcon /> : <HeartIcon />}
-                  label={favorite.isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
-                  active={favorite.isFavorite}
-                  onClick={() => favorite.onToggle()}
-                />
-                <span className={styles.likes}>{favorite.likesCount}</span>
-              </div>
+              <FavoriteButton
+                active={favorite.isFavorite}
+                likesCount={favorite.likesCount}
+                onToggle={favorite.onToggle}
+              />
             )}
           </div>
 

@@ -43,19 +43,6 @@
   color: var(--color-text-secondary);
 }
 
-.favorite {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: var(--space-sm);
-  margin-left: auto;
-}
-
-.likes {
-  font-size: var(--font-size-body);
-  line-height: var(--line-height-body);
-}
-
 .about {
   margin: 0;
   font-family: var(--font-body);
